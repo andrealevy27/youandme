@@ -7,16 +7,10 @@ import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Field, Input, NativeSelect } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { STAGE_LABELS, STARTUP_STAGES } from "@/lib/domain";
+import { FILTER_KEYS } from "./filter-keys";
 
 type Option = { slug: string; name: string };
 export type FilterOptions = { categories: Option[]; industries: Option[]; languages: string[] };
-
-const FILTER_KEYS = ["q", "category", "industry", "maxPrice", "minRating", "stage", "language", "remote", "week"] as const;
-
-export function activeFilterCount(params: URLSearchParams | Record<string, string | undefined>) {
-  const get = (k: string) => (params instanceof URLSearchParams ? params.get(k) : params[k]);
-  return FILTER_KEYS.filter((k) => !!get(k)).length;
-}
 
 /** Filters are plain URL state: server-rendered results, shareable links, back button works. */
 function FilterForm({ options, idPrefix, onDone }: { options: FilterOptions; idPrefix: string; onDone?: () => void }) {

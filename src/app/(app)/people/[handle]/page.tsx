@@ -109,11 +109,11 @@ export default async function PersonPage({ params }: Props) {
       {/* Header */}
       <Card className="overflow-hidden">
         <div className="h-24 bg-brand-gradient opacity-90 sm:h-32" aria-hidden />
-        <CardContent className="-mt-14 sm:-mt-16">
-          <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-end">
-              <Avatar name={p.displayName} src={p.avatarUrl} size="2xl" rounded="xl" className="ring-4 ring-card" />
-              <div className="min-w-0 pb-1">
+        <CardContent>
+          <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
+              <Avatar name={p.displayName} src={p.avatarUrl} size="2xl" rounded="xl" className="-mt-20 shrink-0 ring-4 ring-card sm:-mt-16" />
+              <div className="min-w-0">
                 <div className="flex flex-wrap items-center gap-2">
                   <h1 className="text-2xl font-semibold tracking-tight sm:text-[28px]">{p.displayName}</h1>
                   {summary.verified.length > 0 && (

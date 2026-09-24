@@ -14,6 +14,7 @@ const weightsInput = z.object(Object.fromEntries(FACTOR_KEYS.map((k) => [k, weig
 
 async function save<K extends SettingKey>(viewer: Viewer, key: K, value: Parameters<typeof setSetting<K>>[1]) {
   const before = await getSetting(key);
+  if (JSON.stringify(before) === JSON.stringify(value)) return;
   await setSetting(key, value, viewer.userId);
   await audit({ actorId: viewer.userId, action: "settings.updated", targetType: "setting", targetId: key, metadata: { before, after: value } });
 }

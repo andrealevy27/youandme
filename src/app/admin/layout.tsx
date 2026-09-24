@@ -53,8 +53,9 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
       <header className="sticky top-0 z-30 border-b border-border bg-background/90 px-4 pt-3 backdrop-blur-md lg:hidden">
         <div className="mb-3 flex items-center justify-between">
+          {/* Text wordmark: LogoMark's gradient id lives in the (hidden) desktop sidebar. */}
           <Link href={items[0]?.href ?? "/admin"} className="flex items-center gap-2 font-semibold tracking-tight">
-            <LogoMark className="size-6" />
+            <span className="text-[15px]">You&amp;Me</span>
             <span className="rounded-full bg-ink px-2 py-0.5 text-[11px] font-semibold text-ink-foreground">Admin</span>
           </Link>
           <div className="flex items-center gap-1">
