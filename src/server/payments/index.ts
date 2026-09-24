@@ -6,7 +6,7 @@ import { audit } from "../audit";
 import { logger } from "../logger";
 import { getSetting } from "../settings";
 import { applyBookingEvent, confirmPayment, lockBooking, notifyAll, setLatestPaymentStatus } from "../bookings/lifecycle";
-import { PENDING_PAYMENT_TTL_MINUTES } from "../bookings/state";
+import { canTransition, PENDING_PAYMENT_TTL_MINUTES } from "../bookings/state";
 import { DevPaymentProvider } from "./dev";
 import { StripePaymentProvider } from "./stripe";
 import { paymentAvailability, paymentMode } from "./availability";
@@ -125,6 +125,33 @@ export async function refundLatestPayment(bookingId: string) {
     .set({ status: "refunded", metadata: { ...(payment.metadata ?? {}), refundId: refundId ?? "" } })
     .where(eq(payments.id, payment.id));
   return { refunded: true as const, refundId };
+}
+
+/**
+ * Full refund of a booking: refunds the latest payment through its provider, moves the
+ * booking (and payment) to `refunded` via the state machine, notifies participants and
+ * writes an audit entry. Authorization is the CALLER's job (admin: `payments.refund`;
+ * consultant: see bookings.refundBooking).
+ */
+export async function refundBooking(bookingId: string, actorId: string, opts: { reason?: string | null } = {}) {
+  const [b] = await db.select().from(bookings).where(eq(bookings.id, bookingId)).limit(1);
+  if (!b) throw notFound("That booking");
+  if (!canTransition(b.status, "refund")) throw new AppError("CONFLICT", "This booking can't be refunded.");
+  const result = await refundLatestPayment(b.id);
+  if (!result.refunded) throw new AppError("CONFLICT", "There's no completed payment to refund on this booking.");
+  const updated = await db.transaction(async (tx) => {
+    const locked = await lockBooking(tx, b.id);
+    return locked.status === "refunded" ? locked : applyBookingEvent(tx, locked, "refund");
+  });
+  await audit({
+    actorId,
+    action: "payment.refund",
+    targetType: "booking",
+    targetId: b.id,
+    metadata: { amountCents: b.amountCents, currency: b.currency, refundId: result.refundId ?? null, reason: opts.reason ?? null, previousStatus: b.status },
+  });
+  await notifyAll(updated, { title: `Refund issued: ${b.serviceTitle}`, body: opts.reason ?? "A full refund has been issued to the original payment method.", actorId, exclude: [actorId] });
+  return updated;
 }
 
 /** Apply a verified provider event. Every branch is idempotent (state-checked) so webhook retries are safe. */

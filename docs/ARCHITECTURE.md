@@ -126,3 +126,20 @@ See `.env.example`. Missing optional integrations are **hidden or clearly labell
 - No `ANTHROPIC_API_KEY` → AI shows "basic mode" label.
 - No Stripe → paid booking disabled with an explanation; `PAYMENTS_PROVIDER=dev` (refused in production) completes bookings with a visible "test mode — no charge" banner.
 - No Resend → emails logged server-side.
+
+## 10. Status & known follow-ups
+
+Verified: `tsc` strict (0 errors), ESLint (0 problems), 131 unit + 26 integration tests (real Postgres), 9 Playwright E2E tests, `next build`.
+
+Not yet exercised against live providers (no credentials in the build environment): Stripe Checkout/Connect/webhooks, Claude (AI concierge full mode, AI-written explanations), Resend, S3, Google/Apple/LinkedIn OAuth. Each is implemented behind its interface and degrades honestly when unconfigured.
+
+Follow-ups:
+- Schema: `payment_events` table (unique provider event id) for strict webhook de-duplication; `bookings.group_chat` and `bookings.billing_interval` snapshots (currently in payment metadata / read from the service).
+- Realtime: Pusher (or similar) transport behind `server/realtime` — messaging currently short-polls.
+- Rate limiting is in-memory per instance; move the store to Redis for multi-instance deploys.
+- Calendar sync (Google) is a documented stub; bookings offer `.ics` downloads today.
+- Admin: dispute resolution screen (the `resolve_dispute` transition exists), detail views for startups/reports/bookings.
+- Hourly services book one hour at a time; multi-hour quantity is not exposed yet.
+- Consultants whose profile visibility is "members" still appear in the public marketplace (only "hidden" is excluded) — decide the intended policy.
+- Semantic search: `SemanticIndex` seam exists (`server/search/semantic.ts`); add pgvector embeddings for bios, startup descriptions, expertise and needs.
+- You&Me Pro entitlements are gated off (`pro_enabled`); no paid features are active.

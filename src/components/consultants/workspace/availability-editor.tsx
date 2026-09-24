@@ -49,13 +49,13 @@ export function AvailabilityEditor({ initial, save }: { initial: Rule[]; save: (
                 <div className="flex flex-1 flex-col gap-2">
                   {ranges.map(({ r, i }) => (
                     <div key={i} className="flex items-center gap-2">
-                      <Input type="time" step={900} aria-label={`${DAYS[d]} start`} className="h-10 w-32" value={toTime(r.startMinute)} onChange={(e) => update(i, { startMinute: toMinute(e.target.value) })} />
+                      <Input type="time" step={900} aria-label={`${DAYS[d]} start`} className="h-10 w-36" value={toTime(r.startMinute)} onChange={(e) => update(i, { startMinute: toMinute(e.target.value) })} />
                       <span className="text-muted">–</span>
                       <Input
                         type="time"
                         step={900}
                         aria-label={`${DAYS[d]} end`}
-                        className="h-10 w-32"
+                        className="h-10 w-36"
                         value={toTime(Math.min(r.endMinute, 1439))}
                         onChange={(e) => update(i, { endMinute: toMinute(e.target.value) || 1440 })}
                       />

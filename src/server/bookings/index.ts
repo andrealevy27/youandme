@@ -28,7 +28,7 @@ import { isSlotAvailable } from "../consultants/slots";
 import { isValidTimeZone } from "../consultants/tz";
 import { bookingAmount, computePlatformFee } from "../payments/fees";
 import { paymentAvailability } from "../payments/availability";
-import { refundLatestPayment } from "../payments";
+import { refundBooking as refundBookingPayment, refundLatestPayment } from "../payments";
 import type { AdminRole, BookingStatus } from "@/lib/domain";
 import { applyBookingEvent, expireStaleBookings, formatSessionTime, isPaidStatus, lockBooking, notifyAll, setLatestPaymentStatus, type BookingRow } from "./lifecycle";
 import { checkCancellation, canTransition, DISPUTE_WINDOW_DAYS, PENDING_PAYMENT_TTL_MINUTES } from "./state";
@@ -373,20 +373,10 @@ export const refundBookingInput = z.object({ bookingId: z.string().uuid(), reaso
 /** Full refund: by the consultant (goodwill) or an admin with `payments.refund`. */
 export async function refundBooking(actor: { userId: string; adminRole?: AdminRole | null }, raw: z.input<typeof refundBookingInput>) {
   const { bookingId, reason } = refundBookingInput.parse(raw);
-  const [b] = await db.select().from(bookings).where(eq(bookings.id, bookingId)).limit(1);
+  const [b] = await db.select({ consultantId: bookings.consultantId }).from(bookings).where(eq(bookings.id, bookingId)).limit(1);
   if (!b) throw notFound("That booking");
-  const isAdmin = hasAdminPermission(actor.adminRole ?? null, "payments.refund");
-  if (b.consultantId !== actor.userId && !isAdmin) throw forbidden();
-  if (!canTransition(b.status, "refund")) throw new AppError("CONFLICT", "This booking can't be refunded.");
-  const result = await refundLatestPayment(b.id);
-  if (!result.refunded) throw new AppError("CONFLICT", "There's no completed payment to refund on this booking.");
-  const updated = await db.transaction(async (tx) => {
-    const locked = await lockBooking(tx, b.id);
-    return locked.status === "refunded" ? locked : applyBookingEvent(tx, locked, "refund");
-  });
-  await audit({ actorId: actor.userId, action: "booking.refunded", targetType: "booking", targetId: b.id, metadata: { reason: reason ?? null, byAdmin: isAdmin && b.consultantId !== actor.userId, amountCents: b.amountCents } });
-  await notifyAll(updated, { title: `Refund issued: ${b.serviceTitle}`, body: reason ?? undefined, actorId: actor.userId, exclude: [actor.userId] });
-  return updated;
+  if (b.consultantId !== actor.userId && !hasAdminPermission(actor.adminRole ?? null, "payments.refund")) throw forbidden();
+  return refundBookingPayment(bookingId, actor.userId, { reason: reason ?? null });
 }
 
 // ── Booking form context ───────────────────────────────────────────────────
