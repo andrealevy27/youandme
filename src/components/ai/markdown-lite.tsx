@@ -1,5 +1,5 @@
 import * as React from "react";
-import { cn } from "../../lib/utils"; // relative so unit tests run without path aliases
+import { cn } from "@/lib/utils";
 
 /**
  * Tiny, safe renderer for assistant text: paragraphs, line breaks, "- " / "* " bullets,

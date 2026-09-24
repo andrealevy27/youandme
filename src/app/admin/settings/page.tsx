@@ -87,7 +87,7 @@ export default async function AdminSettingsPage() {
                   </p>
                 )}
               </div>
-              <AdminActionSwitch action={setProEnabledAction} payload={{}} checked={pro} label="Enable You&Me Pro" success={(on) => (on ? "Pro enabled" : "Pro disabled")} />
+              <AdminActionSwitch action={setProEnabledAction} payload={{}} checked={pro} label="Enable You&Me Pro" success={{ on: "Pro enabled", off: "Pro disabled" }} />
             </CardContent>
           </Card>
         </div>

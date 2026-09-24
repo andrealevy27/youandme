@@ -76,7 +76,7 @@ export default async function AdminCategoriesPage() {
                         payload={{ id: c.id }}
                         checked={c.active}
                         label={`${c.name} active`}
-                        success={(on) => (on ? `${c.name} activated` : `${c.name} deactivated`)}
+                        success={{ on: `${c.name} activated`, off: `${c.name} deactivated` }}
                       />
                     </div>
                     <details className="mt-2">

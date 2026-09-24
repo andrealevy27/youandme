@@ -12,6 +12,7 @@ import { NeedsManager } from "@/components/startups/needs-manager";
 import { OpenRolesManager } from "@/components/startups/open-roles";
 import { TeamChatButton } from "@/components/startups/team-chat-button";
 import { SaveButton } from "@/components/saved/save-button";
+import { isSaved } from "@/server/saved";
 import { TeamGapsCard } from "@/components/ai/team-gaps-card";
 import { Avatar } from "@/components/ui/avatar";
 import { Badge, DemoBadge } from "@/components/ui/badge";
@@ -62,6 +63,7 @@ export default async function StartupPage({ params }: Props) {
         db.select({ id: skills.id, name: skills.name }).from(skills).orderBy(asc(skills.name)),
       ])
     : [[], []];
+  const saved = membership ? false : await isSaved(viewer.userId, "startup", s.id);
   const founders = members.filter((m) => m.role === "founder" || m.role === "cofounder");
   const website = safeUrl(s.websiteUrl);
   const deck = safeUrl(s.pitchDeckUrl);
@@ -124,7 +126,7 @@ export default async function StartupPage({ params }: Props) {
                   )}
                 </>
               ) : (
-                <SaveButton targetType="startup" targetId={s.id} initialSaved={false} />
+                <SaveButton targetType="startup" targetId={s.id} initialSaved={saved} />
               )}
             </div>
           </div>

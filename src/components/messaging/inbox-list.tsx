@@ -71,7 +71,7 @@ export function InboxList({ initial }: { initial: InboxItemDTO[] }) {
 
   return (
     <div className="flex min-h-0 flex-1 flex-col">
-      <div role="tablist" aria-label="Filter conversations" className="scrollbar-none -mx-1 flex gap-1.5 overflow-x-auto px-1 pb-3">
+      <div role="tablist" aria-label="Filter conversations" className="scrollbar-none -mx-1 flex gap-1 overflow-x-auto px-1 pb-3">
         {FILTERS.map((f) => {
           const n = unreadByFilter(f.key);
           const selected = filter === f.key;
@@ -82,7 +82,7 @@ export function InboxList({ initial }: { initial: InboxItemDTO[] }) {
               aria-selected={selected}
               onClick={() => setFilter(f.key)}
               className={cn(
-                "inline-flex h-8 shrink-0 items-center gap-1.5 rounded-full px-3 text-[13px] font-medium transition-colors",
+                "inline-flex h-8 shrink-0 items-center gap-1.5 rounded-full px-2.5 text-[13px] font-medium transition-colors",
                 selected ? "bg-ink text-ink-foreground" : "bg-surface text-muted hover:text-foreground",
               )}
             >

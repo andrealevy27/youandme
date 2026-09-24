@@ -141,8 +141,8 @@ export function SavedBoard({
   }
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[220px_minmax(0,1fr)] lg:gap-10">
-      <nav aria-label="Collections">
+    <div className="grid grid-cols-[minmax(0,1fr)] gap-6 lg:grid-cols-[220px_minmax(0,1fr)] lg:gap-10">
+      <nav aria-label="Collections" className="min-w-0">
         <div className="mb-2 hidden items-center justify-between px-1 lg:flex">
           <span className="text-xs font-medium tracking-wide text-subtle uppercase">Collections</span>
         </div>

@@ -26,7 +26,7 @@ export function LinkifiedText({ text, own }: { text: string; own: boolean }) {
             href={s.href}
             target="_blank"
             rel="noopener noreferrer nofollow"
-            className={cn("break-all underline underline-offset-2", own ? "decoration-white/50 hover:decoration-white" : "text-brand-ink decoration-brand/40 hover:decoration-brand")}
+            className={cn("[overflow-wrap:anywhere] underline underline-offset-2", own ? "decoration-white/50 hover:decoration-white" : "text-brand-ink decoration-brand/40 hover:decoration-brand")}
           >
             {s.value}
           </a>

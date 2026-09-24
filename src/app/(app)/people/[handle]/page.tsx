@@ -36,6 +36,8 @@ import type { DimensionKey } from "@/lib/personality";
 import { safeUrl } from "@/lib/utils";
 import { getWorkingStyle } from "@/server/personality";
 import { listMyStartups } from "@/server/startups";
+import { isSaved } from "@/server/saved";
+import { hasBlocked } from "@/server/moderation";
 
 type Props = { params: Promise<{ handle: string }> };
 
@@ -83,6 +85,9 @@ export default async function PersonPage({ params }: Props) {
     isSelf ? [] : listMyStartups(viewer.userId).then((rows) => rows.filter((r) => r.isAdmin || r.role === "founder").map((r) => ({ startupId: r.startup.id, name: r.startup.name }))),
   ]);
 
+  const [saved, blocked] = isSelf
+    ? [false, false]
+    : await Promise.all([isSaved(viewer.userId, full.consultant ? "consultant" : "user", targetId), hasBlocked(viewer.userId, targetId)]);
   const teammateIds = viewerAdminStartups.length
     ? await db
         .select({ startupId: startupMembers.startupId })
@@ -161,6 +166,8 @@ export default async function PersonPage({ params }: Props) {
                 matchConversationId={relationship?.match?.conversationId ?? null}
                 connection={connection?.state ?? "none"}
                 connectionId={connection?.id ?? null}
+                saved={saved}
+                blocked={blocked}
                 inviteStartups={viewerAdminStartups
                   .filter((s) => !teammateIds.some((t) => t.startupId === s.startupId))
                   .map((s) => ({ id: s.startupId, name: s.name }))}

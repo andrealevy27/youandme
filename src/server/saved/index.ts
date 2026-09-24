@@ -107,18 +107,21 @@ export async function moveSavedItem(userId: string, itemId: string, collectionId
 
 export async function listCollections(userId: string) {
   const def = await ensureDefaultCollection(userId);
-  const rows = await db
-    .select({
-      id: savedCollections.id,
-      name: savedCollections.name,
-      isDefault: savedCollections.isDefault,
-      createdAt: savedCollections.createdAt,
-      count: sql<number>`(select count(*)::int from ${savedItems} si where si.user_id = ${userId} and (si.collection_id = ${savedCollections.id} or (${savedCollections.id} = ${def.id} and si.collection_id is null)))`,
-    })
-    .from(savedCollections)
-    .where(eq(savedCollections.userId, userId))
-    .orderBy(desc(savedCollections.isDefault), asc(savedCollections.createdAt));
-  return rows.map((r) => ({ ...r, isDefault: r.id === def.id }));
+  const [rows, counts] = await Promise.all([
+    db
+      .select({ id: savedCollections.id, name: savedCollections.name, createdAt: savedCollections.createdAt })
+      .from(savedCollections)
+      .where(eq(savedCollections.userId, userId))
+      .orderBy(desc(savedCollections.isDefault), asc(savedCollections.createdAt)),
+    db
+      .select({ collectionId: savedItems.collectionId, n: sql<number>`count(*)::int` })
+      .from(savedItems)
+      .where(eq(savedItems.userId, userId))
+      .groupBy(savedItems.collectionId),
+  ]);
+  const countFor = (id: string) =>
+    counts.filter((c) => c.collectionId === id || (id === def.id && c.collectionId === null)).reduce((s, c) => s + c.n, 0);
+  return rows.map((r) => ({ ...r, isDefault: r.id === def.id, count: countFor(r.id) }));
 }
 
 export async function createCollection(userId: string, rawName: string) {

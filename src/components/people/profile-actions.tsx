@@ -33,6 +33,8 @@ export function ProfileActions(props: {
   connection: ConnectionState;
   connectionId: string | null;
   inviteStartups: { id: string; name: string }[];
+  saved: boolean;
+  blocked: boolean;
 }) {
   const router = useRouter();
   const [busy, setBusy] = React.useState<string | null>(null);
@@ -133,7 +135,7 @@ export function ProfileActions(props: {
           <span className="sm:hidden lg:inline">Message</span>
         </Button>
       )}
-      <SaveButton targetType={props.isConsultant ? "consultant" : "user"} targetId={props.targetId} initialSaved={false} />
+      <SaveButton targetType={props.isConsultant ? "consultant" : "user"} targetId={props.targetId} initialSaved={props.saved} />
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" size="icon" aria-label="More actions">
@@ -148,7 +150,7 @@ export function ProfileActions(props: {
           )}
           <DropdownMenuItem onSelect={() => setReportOpen(true)}>Report</DropdownMenuItem>
           <div className="px-1 py-0.5">
-            <BlockButton userId={props.targetId} name={props.name} variant="ghost" size="sm" className="w-full justify-start" />
+            <BlockButton userId={props.targetId} name={props.name} initialBlocked={props.blocked} variant="ghost" size="sm" className="w-full justify-start" />
           </div>
         </DropdownMenuContent>
       </DropdownMenu>

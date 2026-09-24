@@ -11,7 +11,7 @@ export function MessagesShell({ list, children }: { list: React.ReactNode; child
   const segment = useSelectedLayoutSegment();
   const inThread = segment !== null;
   return (
-    <div className="lg:-mt-2 lg:grid lg:h-[calc(100dvh-4.5rem)] lg:grid-cols-[340px_minmax(0,1fr)] lg:overflow-hidden lg:rounded-[20px] lg:border lg:border-border lg:bg-card lg:shadow-soft xl:grid-cols-[360px_minmax(0,1fr)]">
+    <div className="lg:-mt-2 lg:grid lg:h-[calc(100dvh-4.5rem)] lg:grid-cols-[360px_minmax(0,1fr)] lg:overflow-hidden lg:rounded-[20px] lg:border lg:border-border lg:bg-card lg:shadow-soft xl:grid-cols-[380px_minmax(0,1fr)]">
       <section
         aria-label="Inbox"
         className={cn("flex min-h-0 flex-col lg:border-r lg:border-border lg:px-4 lg:pt-5", inThread && "hidden lg:flex")}

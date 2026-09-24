@@ -29,6 +29,8 @@ export const auth = betterAuth({
   appName: "You&Me",
   baseURL: env.BETTER_AUTH_URL ?? env.NEXT_PUBLIC_APP_URL,
   secret: env.BETTER_AUTH_SECRET,
+  // Extra origins allowed to call auth endpoints (e.g. preview deploys, alternate local ports).
+  trustedOrigins: env.TRUSTED_ORIGINS.split(",").map((o) => o.trim()).filter(Boolean),
   database: drizzleAdapter(db, {
     provider: "pg",
     schema: { user: schema.user, session: schema.session, account: schema.account, verification: schema.verification },

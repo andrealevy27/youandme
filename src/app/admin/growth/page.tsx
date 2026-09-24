@@ -49,7 +49,7 @@ export default async function AdminGrowthPage({ searchParams }: { searchParams: 
               payload={{ key: "invite_only" }}
               checked={inviteOnly}
               label="Invite-only mode"
-              success={(on) => (on ? "Invite-only is on" : "Signups are open")}
+              success={{ on: "Invite-only is on", off: "Signups are open" }}
             />
           </CardContent>
         </Card>
@@ -65,7 +65,7 @@ export default async function AdminGrowthPage({ searchParams }: { searchParams: 
               checked={waitlistEnabled}
               disabled={!canWaitlist}
               label="Waitlist enabled"
-              success={(on) => (on ? "Waitlist is open" : "Waitlist is closed")}
+              success={{ on: "Waitlist is open", off: "Waitlist is closed" }}
             />
           </CardContent>
         </Card>

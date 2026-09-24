@@ -153,11 +153,12 @@ export function ProfileEditor(props: {
     await save("photo", { avatarUrl: json.url });
   }
 
+  const allSkills = props.skills;
   const grouped = React.useMemo(() => {
-    const map = new Map<string, typeof props.skills>();
-    for (const s of props.skills) map.set(s.category, [...(map.get(s.category) ?? []), s]);
+    const map = new Map<string, typeof allSkills>();
+    for (const s of allSkills) map.set(s.category, [...(map.get(s.category) ?? []), s]);
     return [...map.entries()];
-  }, [props.skills]);
+  }, [allSkills]);
 
   const [exp, setExp] = React.useState({ title: "", company: "", startYear: "", endYear: "", isCurrent: false });
   const [edu, setEdu] = React.useState({ school: "", degree: "", field: "", endYear: "" });

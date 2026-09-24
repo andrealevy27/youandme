@@ -267,6 +267,7 @@ export async function listInbox(userId: string, opts: { type?: ConversationType;
         and(
           inArray(messages.conversationId, ids),
           isNull(messages.deletedAt),
+          ne(messages.kind, "system"),
           sql`${messages.senderId} is distinct from ${userId}`,
           sql`${messages.createdAt} > coalesce(${conversationMembers.lastReadAt}, 'epoch'::timestamptz)`,
         ),
@@ -335,7 +336,7 @@ export async function totalUnreadConversations(userId: string) {
     select count(distinct m.conversation_id)::int as n from ${messages} m
     join ${conversationMembers} cm on cm.conversation_id = m.conversation_id and cm.user_id = ${userId} and cm.left_at is null
     join ${conversations} c on c.id = m.conversation_id
-    where m.sender_id is distinct from ${userId} and m.deleted_at is null
+    where m.sender_id is distinct from ${userId} and m.deleted_at is null and m.kind <> 'system'
       and m.created_at > coalesce(cm.last_read_at, 'epoch'::timestamptz)
       and (c.direct_key is null or not exists (
         select 1 from blocks b where (b.blocker_id = ${userId} and c.direct_key like '%' || b.blocked_id || '%')
@@ -400,7 +401,9 @@ export async function getThread(conversationId: string, viewerId: string): Promi
   }
   const isGroup = convo.type === "startup_group" || members.length > 1;
   const subtitle = isGroup
-    ? `${members.length + 1} members`
+    ? members.length === 0
+      ? "Just you for now"
+      : `${members.length + 1} members`
     : convo.type === "booking"
       ? "Booking thread"
       : convo.type === "consultant"

@@ -9,6 +9,7 @@ import {
   consultantProfiles,
   consultantServices,
   consultantTimeOff,
+  personalityProfiles,
   profiles,
   userRoles,
 } from "../db/schema";
@@ -65,7 +66,7 @@ export async function getConsultantWorkspace(userId: string) {
   const [c] = await db.select().from(consultantProfiles).where(eq(consultantProfiles.userId, userId)).limit(1);
   if (!c) return null;
   const today = toLocalDate(new Date(), c.timezone);
-  const [cats, services, rules, timeOff, portfolio] = await Promise.all([
+  const [cats, services, rules, timeOff, portfolio, personality] = await Promise.all([
     db
       .select({ slug: consultantCategories.slug, name: consultantCategories.name })
       .from(consultantProfileCategories)
@@ -75,8 +76,9 @@ export async function getConsultantWorkspace(userId: string) {
     db.select().from(consultantAvailability).where(eq(consultantAvailability.consultantId, userId)).orderBy(asc(consultantAvailability.weekday), asc(consultantAvailability.startMinute)),
     db.select().from(consultantTimeOff).where(and(eq(consultantTimeOff.consultantId, userId), gte(consultantTimeOff.day, today))).orderBy(asc(consultantTimeOff.day)),
     db.select().from(consultantPortfolioItems).where(eq(consultantPortfolioItems.consultantId, userId)).orderBy(asc(consultantPortfolioItems.sortOrder), asc(consultantPortfolioItems.createdAt)),
+    db.select({ userId: personalityProfiles.userId }).from(personalityProfiles).where(eq(personalityProfiles.userId, userId)).limit(1),
   ]);
-  return { profile: c, categories: cats, services, rules, timeOff, portfolio };
+  return { profile: c, categories: cats, services, rules, timeOff, portfolio, hasWorkingStyle: personality.length > 0 };
 }
 
 /** Start the consultant application: profile row in `pending_review` + the consultant role. */

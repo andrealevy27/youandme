@@ -94,7 +94,8 @@ export function AdminActionSwitch({
   checked: boolean;
   label: string;
   disabled?: boolean;
-  success?: (next: boolean) => string;
+  /** Toast messages after turning on / off. */
+  success?: { on: string; off: string };
 }) {
   const router = useRouter();
   const [value, setOptimistic] = React.useOptimistic(checked);
@@ -113,7 +114,7 @@ export function AdminActionSwitch({
             toast.error(res.error);
             return;
           }
-          if (success) toast.success(success(next));
+          if (success) toast.success(next ? success.on : success.off);
           router.refresh();
         });
       }}

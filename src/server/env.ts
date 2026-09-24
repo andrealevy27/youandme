@@ -11,6 +11,7 @@ const schema = z.object({
   BETTER_AUTH_SECRET: z.string().min(16).optional(),
   BETTER_AUTH_URL: z.string().url().optional(),
   NEXT_PUBLIC_APP_URL: z.string().url().default("http://localhost:3000"),
+  TRUSTED_ORIGINS: z.string().default(""),
   GOOGLE_CLIENT_ID: z.string().optional(),
   GOOGLE_CLIENT_SECRET: z.string().optional(),
   APPLE_CLIENT_ID: z.string().optional(),

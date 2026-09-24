@@ -155,7 +155,8 @@ export function DangerZone() {
                   return toast.error(res.error);
                 }
                 await authClient.signOut().catch(() => undefined);
-                window.location.href = "/";
+                // Full reload clears all client state after the account is gone.
+                window.location.assign(new URL("/", window.location.origin).toString());
               }}
             >
               Delete permanently
