@@ -7,7 +7,7 @@ import { db } from "../db";
 import * as schema from "../db/schema";
 import { emailLayout, sendEmail } from "../email";
 import { env, features } from "../env";
-import { onUserCreated, assertSignupAllowed, INVITE_COOKIE } from "./lifecycle";
+import { onUserCreated, assertSignupAllowed, INVITE_COOKIE, recordVerification } from "./lifecycle";
 
 const socialProviders = {
   ...(features.google && { google: { clientId: env.GOOGLE_CLIENT_ID!, clientSecret: env.GOOGLE_CLIENT_SECRET! } }),
@@ -91,6 +91,20 @@ export const auth = betterAuth({
         },
         async after(user, ctx) {
           await onUserCreated(user, readCookie(ctx?.request?.headers ?? ctx?.headers, INVITE_COOKIE));
+          if (user.emailVerified) await recordVerification(user.id, "email", user.email);
+        },
+      },
+      update: {
+        async after(user) {
+          if (user.emailVerified) await recordVerification(user.id, "email", user.email);
+        },
+      },
+    },
+    account: {
+      create: {
+        // Signing in with LinkedIn proves control of that LinkedIn account — nothing more.
+        async after(account) {
+          if (account.providerId === "linkedin") await recordVerification(account.userId, "linkedin", null);
         },
       },
     },

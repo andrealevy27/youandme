@@ -1,10 +1,11 @@
 import { and, desc, eq, isNull, lt, sql } from "drizzle-orm";
+import { z } from "zod";
 import { db, type DbOrTx } from "../db";
-import { notificationPreferences, notifications, user } from "../db/schema";
+import { notificationPreferences, notifications, profiles, user } from "../db/schema";
 import { emailLayout, sendEmail } from "../email";
 import { env } from "../env";
 import { logger } from "../logger";
-import type { NotificationType } from "@/lib/domain";
+import { NOTIFICATION_TYPES, type NotificationType } from "@/lib/domain";
 
 /** Types that default to email-on. Everything else is in-app only unless the user opts in. */
 const EMAIL_DEFAULT_ON: NotificationType[] = ["new_match", "booking", "booking_reminder", "startup_invite", "system"];
@@ -100,6 +101,79 @@ export async function setNotificationPreference(
     .insert(notificationPreferences)
     .values({ userId, type, ...channels })
     .onConflictDoUpdate({ target: [notificationPreferences.userId, notificationPreferences.type], set: channels });
+}
+
+/** Notifications joined with the actor's public profile (name/avatar/handle) for the notifications page and API. */
+export async function listNotificationsWithActors(userId: string, opts: { cursor?: Date; limit?: number; unreadOnly?: boolean } = {}) {
+  const limit = Math.min(opts.limit ?? 30, 100);
+  const rows = await db
+    .select({
+      n: notifications,
+      actor: { userId: profiles.userId, name: profiles.displayName, handle: profiles.handle, avatarUrl: profiles.avatarUrl },
+    })
+    .from(notifications)
+    .leftJoin(profiles, eq(profiles.userId, notifications.actorId))
+    .where(
+      and(
+        eq(notifications.userId, userId),
+        opts.cursor ? lt(notifications.createdAt, opts.cursor) : undefined,
+        opts.unreadOnly ? isNull(notifications.readAt) : undefined,
+      ),
+    )
+    .orderBy(desc(notifications.createdAt))
+    .limit(limit);
+  return rows.map(({ n, actor }) => ({
+    id: n.id,
+    type: n.type,
+    title: n.title,
+    body: n.body,
+    href: n.href && n.href.startsWith("/") && !n.href.startsWith("//") ? n.href : null,
+    read: !!n.readAt,
+    createdAt: n.createdAt.toISOString(),
+    actor: actor?.userId ? actor : null,
+  }));
+}
+export type NotificationDTO = Awaited<ReturnType<typeof listNotificationsWithActors>>[number];
+
+/** Mark notifications pointing at a page as read (e.g. opening a conversation clears its message notification). */
+export async function markNotificationsReadByHref(userId: string, href: string) {
+  await db
+    .update(notifications)
+    .set({ readAt: new Date() })
+    .where(and(eq(notifications.userId, userId), isNull(notifications.readAt), eq(notifications.href, href)));
+}
+
+export type PreferenceRow = { type: NotificationType; inApp: boolean; email: boolean; push: boolean; mandatory: boolean };
+
+/** Every notification type with the user's stored choice or the default. */
+export async function getNotificationPreferenceMatrix(userId: string): Promise<PreferenceRow[]> {
+  const stored = await getNotificationPreferences(userId);
+  return NOTIFICATION_TYPES.map((type) => {
+    const row = stored.find((r) => r.type === type);
+    return {
+      type,
+      inApp: row?.inApp ?? true,
+      email: row?.email ?? EMAIL_DEFAULT_ON.includes(type),
+      push: false,
+      mandatory: type === "system",
+    };
+  });
+}
+
+export const preferenceInput = z.object({
+  type: z.enum(NOTIFICATION_TYPES),
+  channel: z.enum(["inApp", "email"]),
+  enabled: z.boolean(),
+});
+
+/** Toggle one channel for one type. Push stays off until push delivery exists. */
+export async function updateNotificationPreference(userId: string, raw: z.input<typeof preferenceInput>) {
+  const input = preferenceInput.parse(raw);
+  const matrix = await getNotificationPreferenceMatrix(userId);
+  const current = matrix.find((r) => r.type === input.type)!;
+  const next = { inApp: current.inApp, email: current.email, push: false, [input.channel]: input.enabled };
+  await setNotificationPreference(userId, input.type, next);
+  return { type: input.type, inApp: next.inApp, email: next.email };
 }
 
 export { EMAIL_DEFAULT_ON };

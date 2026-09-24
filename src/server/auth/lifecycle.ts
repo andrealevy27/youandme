@@ -1,7 +1,7 @@
 import { and, eq, gt, isNull, lt, or, sql } from "drizzle-orm";
 import { APIError } from "better-auth/api";
 import { db } from "../db";
-import { adminUsers, platformInvites, profiles, savedCollections, waitlistEntries } from "../db/schema";
+import { adminUsers, identityVerifications, platformInvites, profiles, savedCollections, waitlistEntries } from "../db/schema";
 import { adminBootstrapEmails } from "../env";
 import { getSetting } from "../settings";
 import { track } from "../analytics";
@@ -75,4 +75,15 @@ export async function onUserCreated(user: { id: string; name: string; email: str
     await audit({ actorId: null, action: "admin.bootstrap_grant", targetType: "user", targetId: user.id });
   }
   track("signup_completed", user.id, { viaInvite: !!invite });
+}
+
+/** Idempotently record a verified signal (email confirmed, LinkedIn account linked). */
+export async function recordVerification(userId: string, type: "email" | "linkedin", subject: string | null) {
+  const [existing] = await db
+    .select({ id: identityVerifications.id })
+    .from(identityVerifications)
+    .where(and(eq(identityVerifications.userId, userId), eq(identityVerifications.type, type), eq(identityVerifications.status, "verified")))
+    .limit(1);
+  if (existing) return;
+  await db.insert(identityVerifications).values({ userId, type, status: "verified", subject, verifiedAt: new Date() });
 }
