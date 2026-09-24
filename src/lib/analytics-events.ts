@@ -1,0 +1,26 @@
+/** The single catalogue of tracked product events. Add events here, never inline strings. */
+export const ANALYTICS_EVENTS = [
+  "signup_started",
+  "signup_completed",
+  "onboarding_step_completed",
+  "profile_completed",
+  "startup_created",
+  "quiz_completed",
+  "recommendation_viewed",
+  "recommendation_passed",
+  "recommendation_saved",
+  "profile_liked",
+  "match_created",
+  "message_sent",
+  "consultant_viewed",
+  "consultant_search",
+  "service_selected",
+  "booking_started",
+  "booking_completed",
+  "review_submitted",
+  "ai_query",
+  "need_created",
+  "connection_requested",
+  "invite_sent",
+] as const;
+export type AnalyticsEvent = (typeof ANALYTICS_EVENTS)[number];
