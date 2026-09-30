@@ -66,13 +66,13 @@ describe("ics", () => {
       description: "With Maya",
       startsAt: new Date("2026-10-01T15:00:00Z"),
       endsAt: new Date("2026-10-01T16:30:00Z"),
-      url: "https://youandme.app/bookings/abc",
+      url: "https://youandme.company/bookings/abc",
       organizerName: "Maya",
       now: new Date("2026-09-24T00:00:00Z"),
     });
     expect(ics).toContain("DTSTART:20261001T150000Z");
     expect(ics).toContain("DTEND:20261001T163000Z");
-    expect(ics).toContain("UID:abc@youandme.app");
+    expect(ics).toContain("UID:abc@youandme.company");
     expect(ics.split("\r\n").every((l) => l.length <= 75)).toBe(true);
   });
 });

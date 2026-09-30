@@ -25,7 +25,7 @@ const schema = z.object({
   STRIPE_WEBHOOK_SECRET: z.string().optional(),
   PAYMENTS_PROVIDER: z.enum(["stripe", "dev"]).default("stripe"),
   RESEND_API_KEY: z.string().optional(),
-  EMAIL_FROM: z.string().default("You&Me <hello@youandme.app>"),
+  EMAIL_FROM: z.string().default("You&Me <hello@youandme.company>"),
   STORAGE_DRIVER: z.enum(["local", "s3"]).default("local"),
   S3_BUCKET: z.string().optional(),
   S3_REGION: z.string().optional(),

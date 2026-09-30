@@ -188,7 +188,7 @@ export function ProfileEditor(props: {
           <Field label="Full name" htmlFor="displayName" error={errors.displayName?.[0]}>
             <Input id="displayName" value={p.displayName} onChange={(e) => set("displayName", e.target.value)} maxLength={80} />
           </Field>
-          <Field label="Handle" htmlFor="handle" hint="youandme.app/people/your-handle">
+          <Field label="Handle" htmlFor="handle" hint="youandme.company/people/your-handle">
             <div className="flex gap-2">
               <Input id="handle" value={p.handle} onChange={(e) => set("handle", e.target.value.toLowerCase())} maxLength={30} />
               <Button

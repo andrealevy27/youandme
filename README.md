@@ -44,6 +44,22 @@ Every integration is optional in development and is hidden or clearly labelled w
 | S3-compatible storage | `STORAGE_DRIVER=s3`, `S3_*` | Local `./uploads` (dev) |
 | PostHog | `POSTHOG_KEY`, `POSTHOG_HOST` | Events still stored in `analytics_events` |
 
+## Deploying to youandme.company
+
+1. Create a Postgres database (e.g. Neon or Supabase).
+2. Import the GitHub repo into Vercel and set these environment variables:
+   - `DATABASE_URL`: the database connection string.
+   - `BETTER_AUTH_SECRET`: output of `openssl rand -base64 32`.
+   - `BETTER_AUTH_URL` and `NEXT_PUBLIC_APP_URL`: `https://youandme.company`.
+   - `ADMIN_EMAILS`: the founders' emails; these accounts get the admin dashboard.
+   - `RESEND_API_KEY`: from Resend, after verifying `youandme.company` as a sending domain there.
+   - `EMAIL_FROM`: `You&Me <hello@youandme.company>`.
+3. In Vercel → Domains, add `youandme.company` and update the DNS records it shows.
+4. Run `npm run db:migrate` once against the production `DATABASE_URL`.
+5. Sign up at `/signup` with an `ADMIN_EMAILS` address **before** turning on invite-only.
+
+Links once live: waitlist at https://youandme.company/waitlist, admin at https://youandme.company/admin/growth.
+
 ## Pre-launch waitlist
 
 Run You&Me as a waitlist until launch, from **Admin → Growth**:
