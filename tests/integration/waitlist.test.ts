@@ -5,6 +5,8 @@ import * as s from "@/server/db/schema";
 import { joinWaitlist } from "@/server/waitlist";
 import { exportWaitlist, inviteNextFromWaitlist } from "@/server/admin/growth";
 import { loadViewer } from "@/server/auth/session";
+import { assertSignupAllowed } from "@/server/auth/lifecycle";
+import { setSetting } from "@/server/settings";
 import { createUser, resetDatabase } from "../support/db";
 
 const sent = vi.hoisted(() => [] as { to: string; subject: string }[]);
@@ -78,5 +80,13 @@ describe("waitlist", () => {
       ["grace@example.com", "joined"],
       ["linus@example.com", "waiting"],
     ]);
+  });
+
+  it("requires an invite to sign up while the site is waitlist-only", async () => {
+    await expect(assertSignupAllowed(undefined)).resolves.toBeUndefined();
+    await setSetting("waitlist_only", true, null);
+    await expect(assertSignupAllowed(undefined)).rejects.toThrow(/invite-only/);
+    await db.insert(s.platformInvites).values({ code: "WAVE1", maxUses: 1 });
+    await expect(assertSignupAllowed("wave1")).resolves.toBeUndefined();
   });
 });

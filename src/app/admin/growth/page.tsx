@@ -27,11 +27,12 @@ export default async function AdminGrowthPage({ searchParams }: { searchParams: 
   const wStatus = pickEnum(param(sp, "wstatus"), WAITLIST_STATUSES, "waiting");
   const wPage = parsePage(sp.page);
   const iPage = parsePage(sp.ipage);
-  const [waitlist, invites, inviteOnly, waitlistEnabled] = await Promise.all([
+  const [waitlist, invites, inviteOnly, waitlistEnabled, waitlistOnly] = await Promise.all([
     canWaitlist ? listWaitlist({ status: wStatus, page: wPage }) : null,
     listInvites(iPage),
     getSetting("invite_only"),
     getSetting("waitlist_enabled"),
+    getSetting("waitlist_only"),
   ]);
   const now = new Date();
 
@@ -39,7 +40,23 @@ export default async function AdminGrowthPage({ searchParams }: { searchParams: 
     <>
       <PageHeader title="Growth" description="Control who can join: invite-only mode, the waitlist, and invite codes." />
 
-      <div className="grid gap-3 sm:grid-cols-2">
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        <Card>
+          <CardContent className="flex items-start justify-between gap-4">
+            <div>
+              <p className="font-medium">Waitlist-only site</p>
+              <p className="mt-0.5 text-[13px] text-muted">Before launch: visitors only see the waitlist form, and sign-up needs an invite. Members and admins can still sign in.</p>
+            </div>
+            <AdminActionSwitch
+              action={setGrowthToggleAction}
+              payload={{ key: "waitlist_only" }}
+              checked={waitlistOnly}
+              disabled={!canWaitlist}
+              label="Waitlist-only site"
+              success={{ on: "Visitors now only see the waitlist", off: "The full site is visible" }}
+            />
+          </CardContent>
+        </Card>
         <Card>
           <CardContent className="flex items-start justify-between gap-4">
             <div>
@@ -111,7 +128,7 @@ export default async function AdminGrowthPage({ searchParams }: { searchParams: 
           <DataTable<WaitRow>
             rows={waitlist.rows}
             rowKey={(r) => r.id}
-            empty={<EmptyState icon={<Mail />} title={`No one ${wStatus === "waiting" ? "waiting" : wStatus}`} description={waitlistEnabled ? "Sign-ups from the waitlist page appear here." : "Turn on the waitlist to start collecting sign-ups."} />}
+            empty={<EmptyState icon={<Mail />} title={`No one ${wStatus === "waiting" ? "waiting" : wStatus}`} description={waitlistEnabled || waitlistOnly ? "Sign-ups from the waitlist page appear here." : "Turn on the waitlist to start collecting sign-ups."} />}
             columns={[
               {
                 key: "who",

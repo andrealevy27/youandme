@@ -71,10 +71,10 @@ export async function revokeInviteAction(raw: unknown) {
   });
 }
 
-/** invite_only is gated by invites.manage, waitlist_enabled by waitlist.manage. */
+/** invite_only is gated by invites.manage, waitlist_enabled and waitlist_only by waitlist.manage. */
 export async function setGrowthToggleAction(raw: unknown) {
   return runAction(async () => {
-    const data = z.object({ key: z.enum(["invite_only", "waitlist_enabled"]), value: z.boolean() }).parse(raw);
+    const data = z.object({ key: z.enum(["invite_only", "waitlist_enabled", "waitlist_only"]), value: z.boolean() }).parse(raw);
     const viewer = await requireAdmin(data.key === "invite_only" ? "invites.manage" : "waitlist.manage");
     const before = await getSetting(data.key);
     await setSetting(data.key, data.value, viewer.userId);

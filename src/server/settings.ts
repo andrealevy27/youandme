@@ -21,6 +21,8 @@ export const SETTING_DEFAULTS = {
   pass_cooldown_days: 45,
   invite_only: false,
   waitlist_enabled: false,
+  /** Pre-launch: signed-out visitors only see the waitlist, and sign-up needs an invite. */
+  waitlist_only: false,
   /** Marketplace commission in basis points (1000 = 10%). */
   platform_fee_bps: 1000,
   /** You&Me Pro paid features stay off until explicitly enabled. */

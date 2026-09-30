@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getMarketingContext } from "@/components/marketing/context";
+import { WaitlistSection } from "@/components/marketing/waitlist-section";
 import { HeroMockup, MockAvatar, MockRing } from "@/components/marketing/hero-mockup";
 import { Eyebrow, Lead, Section, SectionTitle } from "@/components/marketing/section";
 import s from "@/components/marketing/marketing.module.css";
@@ -42,7 +43,8 @@ export const metadata: Metadata = {
 };
 
 export default async function LandingPage() {
-  const { signedIn, showWaitlist, primaryCta: primary } = await getMarketingContext();
+  const { signedIn, showWaitlist, waitlistOnlyView, primaryCta: primary } = await getMarketingContext();
+  if (waitlistOnlyView) return <WaitlistSection />;
 
   return (
     <>

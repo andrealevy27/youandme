@@ -13,10 +13,12 @@ export const metadata: Metadata = {
 
 export default async function SignupPage() {
   if (await getViewer().catch(() => null)) redirect("/home");
-  const [inviteOnly, waitlistEnabled] = await Promise.all([
+  const [inviteOnlySetting, waitlistEnabled, waitlistOnly] = await Promise.all([
     getSetting("invite_only").catch(() => false),
     getSetting("waitlist_enabled").catch(() => false),
+    getSetting("waitlist_only").catch(() => false),
   ]);
+  const inviteOnly = inviteOnlySetting || waitlistOnly;
   const inviteApplied = inviteOnly ? !!(await currentInvite()) : false;
 
   return (

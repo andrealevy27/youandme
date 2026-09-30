@@ -26,10 +26,10 @@ export async function findUsableInvite(code: string | undefined) {
   return invite ?? null;
 }
 
-/** Invite-only mode is enforced here, for every signup path (email and OAuth). */
+/** Invite-only (and waitlist-only) mode is enforced here, for every signup path (email and OAuth). */
 export async function assertSignupAllowed(inviteCode: string | undefined) {
-  const inviteOnly = await getSetting("invite_only");
-  if (!inviteOnly) return;
+  const [inviteOnly, waitlistOnly] = await Promise.all([getSetting("invite_only"), getSetting("waitlist_only")]);
+  if (!inviteOnly && !waitlistOnly) return;
   const invite = await findUsableInvite(inviteCode);
   if (!invite) {
     throw new APIError("FORBIDDEN", {
