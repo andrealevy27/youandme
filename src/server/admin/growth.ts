@@ -1,10 +1,10 @@
 import "server-only";
-import { and, count, desc, eq, sql } from "drizzle-orm";
+import { and, asc, count, desc, eq, sql } from "drizzle-orm";
 import { db } from "../db";
 import { platformInvites, profiles, waitlistEntries } from "../db/schema";
 import { audit } from "../audit";
 import { AppError, notFound } from "../errors";
-import { emailLayout, sendEmail } from "../email";
+import { emailLayout, sendEmail, WAITLIST_FOOTER } from "../email";
 import { env } from "../env";
 import type { Viewer } from "../auth/session";
 import { ADMIN_PAGE_SIZE, escapeHtml, generateInviteCode, pageOffset } from "./utils";
@@ -22,6 +22,10 @@ export async function listWaitlist(opts: { status: WaitlistStatus; page: number 
         name: waitlistEntries.name,
         intent: waitlistEntries.intent,
         note: waitlistEntries.note,
+        phone: waitlistEntries.phone,
+        school: waitlistEntries.school,
+        source: waitlistEntries.source,
+        sourceDetail: waitlistEntries.sourceDetail,
         status: waitlistEntries.status,
         createdAt: waitlistEntries.createdAt,
         inviteCode: platformInvites.code,
@@ -38,6 +42,27 @@ export async function listWaitlist(opts: { status: WaitlistStatus; page: number 
   const byStatus = Object.fromEntries(WAITLIST_STATUSES.map((s) => [s, 0])) as Record<WaitlistStatus, number>;
   for (const c of counts) byStatus[c.status] = c.n;
   return { rows, total: total[0]?.n ?? 0, byStatus };
+}
+
+/** Every entry, oldest first, for the admin CSV export. */
+export async function exportWaitlist() {
+  return db
+    .select({
+      email: waitlistEntries.email,
+      name: waitlistEntries.name,
+      intent: waitlistEntries.intent,
+      note: waitlistEntries.note,
+      phone: waitlistEntries.phone,
+      school: waitlistEntries.school,
+      source: waitlistEntries.source,
+      sourceDetail: waitlistEntries.sourceDetail,
+      status: waitlistEntries.status,
+      createdAt: waitlistEntries.createdAt,
+      inviteCode: platformInvites.code,
+    })
+    .from(waitlistEntries)
+    .leftJoin(platformInvites, eq(platformInvites.id, waitlistEntries.inviteId))
+    .orderBy(asc(waitlistEntries.createdAt), asc(waitlistEntries.id));
 }
 
 export async function listInvites(page: number) {
@@ -139,6 +164,7 @@ export async function inviteFromWaitlist(actor: Viewer, entryId: string) {
       "Your You&Me invite is here",
       `${escapeHtml(greeting)}<br/><br/>A spot opened up. Use your personal invite to create your account — it's valid for 30 days.<br/><br/>Your code: <strong>${invite.code}</strong>`,
       { label: "Accept invite", url },
+      WAITLIST_FOOTER,
     ),
   });
   await audit({
@@ -149,4 +175,30 @@ export async function inviteFromWaitlist(actor: Viewer, entryId: string) {
     metadata: { email: entry.email, inviteId: invite.id, code: invite.code },
   });
   return invite;
+}
+
+export const MAX_WAVE_SIZE = 100;
+
+/** Invites the longest-waiting people, one personal code and email each. */
+export async function inviteNextFromWaitlist(actor: Viewer, count: number) {
+  const size = Math.max(1, Math.min(MAX_WAVE_SIZE, Math.floor(count)));
+  const next = await db
+    .select({ id: waitlistEntries.id })
+    .from(waitlistEntries)
+    .where(eq(waitlistEntries.status, "waiting"))
+    .orderBy(asc(waitlistEntries.createdAt), asc(waitlistEntries.id))
+    .limit(size);
+  if (!next.length) throw new AppError("CONFLICT", "No one is waiting right now.");
+  let invited = 0;
+  for (const entry of next) {
+    try {
+      await inviteFromWaitlist(actor, entry.id);
+      invited += 1;
+    } catch (err) {
+      // Another admin invited this person in the meantime; keep going.
+      if (err instanceof AppError && err.code === "CONFLICT") continue;
+      throw err;
+    }
+  }
+  return { invited };
 }

@@ -5,7 +5,7 @@ import { requireAdmin } from "@/server/auth/session";
 import { runAction } from "@/server/errors";
 import { audit } from "@/server/audit";
 import { getSetting, setSetting } from "@/server/settings";
-import { createInvite, inviteFromWaitlist, revokeInvite } from "@/server/admin/growth";
+import { MAX_WAVE_SIZE, createInvite, inviteFromWaitlist, inviteNextFromWaitlist, revokeInvite } from "@/server/admin/growth";
 
 const id = z.string().trim().min(1).max(128);
 
@@ -20,6 +20,18 @@ export async function inviteWaitlistEntryAction(raw: unknown) {
     const invite = await inviteFromWaitlist(viewer, data.id);
     revalidate();
     return { code: invite.code };
+  });
+}
+
+export async function inviteWaitlistWaveAction(raw: unknown) {
+  return runAction(async () => {
+    const viewer = await requireAdmin("waitlist.manage");
+    const data = z
+      .object({ count: z.coerce.number().int().min(1, "Invite at least one person.").max(MAX_WAVE_SIZE, `Invite at most ${MAX_WAVE_SIZE} people at a time.`) })
+      .parse(raw);
+    const result = await inviteNextFromWaitlist(viewer, data.count);
+    revalidate();
+    return result;
   });
 }
 

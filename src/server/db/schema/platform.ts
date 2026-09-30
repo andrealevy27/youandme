@@ -34,6 +34,12 @@ export const waitlistEntries = pgTable(
     name: text("name"),
     intent: text("intent"),
     note: text("note"),
+    phone: text("phone"),
+    school: text("school"),
+    /** How they heard about You&Me: a WAITLIST_SOURCES value. */
+    source: text("source"),
+    /** Free text when source is "other". */
+    sourceDetail: text("source_detail"),
     status: waitlistStatusEnum("status").notNull().default("waiting"),
     inviteId: text("invite_id").references(() => platformInvites.id, { onDelete: "set null" }),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),

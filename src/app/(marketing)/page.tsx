@@ -42,8 +42,7 @@ export const metadata: Metadata = {
 };
 
 export default async function LandingPage() {
-  const { signedIn, showWaitlist } = await getMarketingContext();
-  const primary = signedIn ? { href: "/home", label: "Open app" } : { href: "/signup", label: "Join You&Me" };
+  const { signedIn, showWaitlist, primaryCta: primary } = await getMarketingContext();
 
   return (
     <>
@@ -54,7 +53,7 @@ export default async function LandingPage() {
       <AI />
       <Startups />
       <Stages />
-      <FinalCta primary={primary} showWaitlist={showWaitlist && !signedIn} />
+      <FinalCta primary={primary} showWaitlist={showWaitlist && !signedIn && primary.href !== "/waitlist"} />
     </>
   );
 }

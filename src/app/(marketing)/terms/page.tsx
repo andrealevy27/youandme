@@ -143,7 +143,7 @@ const sections: LegalSectionDef[] = [
     title: "Contact",
     body: (
       <p>
-        Questions? Email <a href="mailto:hello@youandme.app">hello@youandme.app</a>.
+        Questions? Email <a href="mailto:hello@youandme.company">hello@youandme.company</a>.
       </p>
     ),
   },

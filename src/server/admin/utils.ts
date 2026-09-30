@@ -113,6 +113,20 @@ export function chunk<T>(items: T[], size: number): T[][] {
   return out;
 }
 
+/**
+ * RFC 4180 CSV. Cells starting with a formula character are prefixed with `'`
+ * so spreadsheets don't execute user-supplied text (CSV injection).
+ */
+export function toCsv(rows: readonly (readonly (string | number | null | undefined)[])[]) {
+  const cell = (v: string | number | null | undefined) => {
+    let s = v == null ? "" : String(v);
+    // Phone numbers like "+1 212 555 0100" can't execute anything, so leave them readable.
+    if (/^[=+\-@\t\r]/.test(s) && !/^\+[0-9 ().-]+$/.test(s)) s = `'${s}`;
+    return /[",\r\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+  };
+  return rows.map((r) => r.map(cell).join(",")).join("\r\n") + "\r\n";
+}
+
 export function escapeHtml(s: string) {
   return s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!);
 }

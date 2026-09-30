@@ -1,5 +1,6 @@
-import { Mail, Ticket } from "lucide-react";
+import { Download, Mail, Ticket } from "lucide-react";
 import { PageHeader, SectionHeader } from "@/components/ui/page-header";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Field, Input } from "@/components/ui/input";
@@ -9,9 +10,10 @@ import { StatusBadge, statusLabel } from "@/components/admin/status-badge";
 import { requireAdminPage } from "@/server/auth/session";
 import { hasAdminPermission } from "@/server/authz/admin";
 import { getSetting } from "@/server/settings";
-import { WAITLIST_STATUSES, inviteUrl, listInvites, listWaitlist } from "@/server/admin/growth";
+import { MAX_WAVE_SIZE, WAITLIST_STATUSES, inviteUrl, listInvites, listWaitlist } from "@/server/admin/growth";
 import { inviteState, param, parsePage, pickEnum, type AdminSearchParams } from "@/server/admin/utils";
-import { createInviteAction, inviteWaitlistEntryAction, revokeInviteAction, setGrowthToggleAction } from "./actions";
+import { WAITLIST_SOURCES } from "@/components/marketing/waitlist-intents";
+import { createInviteAction, inviteWaitlistEntryAction, inviteWaitlistWaveAction, revokeInviteAction, setGrowthToggleAction } from "./actions";
 
 export const metadata = { title: "Growth" };
 
@@ -73,7 +75,32 @@ export default async function AdminGrowthPage({ searchParams }: { searchParams: 
 
       {waitlist && (
         <section className="mt-10">
-          <SectionHeader title="Waitlist" description="Inviting someone creates a single-use code (valid 30 days) and emails them the link." />
+          <SectionHeader
+            title="Waitlist"
+            description="Inviting someone creates a single-use code (valid 30 days) and emails them the link."
+            action={
+              <Button asChild variant="secondary" size="sm">
+                <a href="/admin/growth/waitlist.csv" download>
+                  <Download /> Export CSV
+                </a>
+              </Button>
+            }
+          />
+          {waitlist.byStatus.waiting > 0 && (
+            <Card className="mb-4">
+              <CardContent>
+                <AdminActionForm action={inviteWaitlistWaveAction} submitLabel="Send invites" success="Invites sent">
+                  <Field
+                    label="Invite the next wave"
+                    htmlFor="wave-count"
+                    hint={`Longest-waiting first. ${waitlist.byStatus.waiting} ${waitlist.byStatus.waiting === 1 ? "person is" : "people are"} waiting.`}
+                  >
+                    <Input id="wave-count" name="count" type="number" min={1} max={Math.min(MAX_WAVE_SIZE, waitlist.byStatus.waiting)} defaultValue={Math.min(10, waitlist.byStatus.waiting)} required className="max-w-32" />
+                  </Field>
+                </AdminActionForm>
+              </CardContent>
+            </Card>
+          )}
           <FilterTabs
             basePath="/admin/growth"
             params={sp}
@@ -93,11 +120,18 @@ export default async function AdminGrowthPage({ searchParams }: { searchParams: 
                   <div className="max-w-[320px]">
                     <p className="font-medium break-all">{r.name ?? r.email}</p>
                     {r.name && <Muted>{r.email}</Muted>}
+                    {(r.phone || r.school) && <p className="text-[12.5px] text-subtle">{[r.phone, r.school].filter(Boolean).join(" · ")}</p>}
                     {(r.intent || r.note) && <p className="mt-1 text-[12.5px] text-muted">{[r.intent, r.note].filter(Boolean).join(" · ")}</p>}
                   </div>
                 ),
               },
               { key: "status", header: "Status", cell: (r) => <StatusBadge status={r.status} /> },
+              {
+                key: "source",
+                header: "Heard via",
+                hideOnMobile: true,
+                cell: (r) => (r.source ? <span className="text-[13px]">{sourceLabel(r.source, r.sourceDetail)}</span> : <Muted>—</Muted>),
+              },
               { key: "code", header: "Code", hideOnMobile: true, cell: (r) => (r.inviteCode ? <span className="font-mono text-[12.5px]">{r.inviteCode}</span> : <Muted>—</Muted>) },
               { key: "date", header: "Joined list", hideOnMobile: true, cell: (r) => <Muted>{formatDate(r.createdAt)}</Muted> },
               {
@@ -206,4 +240,9 @@ export default async function AdminGrowthPage({ searchParams }: { searchParams: 
       </section>
     </>
   );
+}
+
+function sourceLabel(source: string, detail: string | null) {
+  if (source === "other") return detail ? `Other: ${detail}` : "Other";
+  return WAITLIST_SOURCES.find((s) => s.value === source)?.label ?? source;
 }

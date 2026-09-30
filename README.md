@@ -44,6 +44,32 @@ Every integration is optional in development and is hidden or clearly labelled w
 | S3-compatible storage | `STORAGE_DRIVER=s3`, `S3_*` | Local `./uploads` (dev) |
 | PostHog | `POSTHOG_KEY`, `POSTHOG_HOST` | Events still stored in `analytics_events` |
 
+## Deploying to youandme.company
+
+1. Create a Postgres database (e.g. Neon or Supabase).
+2. Import the GitHub repo into Vercel and set these environment variables:
+   - `DATABASE_URL`: the database connection string.
+   - `BETTER_AUTH_SECRET`: output of `openssl rand -base64 32`.
+   - `BETTER_AUTH_URL` and `NEXT_PUBLIC_APP_URL`: `https://youandme.company`.
+   - `ADMIN_EMAILS`: the founders' emails; these accounts get the admin dashboard.
+   - `RESEND_API_KEY`: from Resend, after verifying `youandme.company` as a sending domain there.
+   - `EMAIL_FROM`: `You&Me <hello@youandme.company>`.
+3. In Vercel → Domains, add `youandme.company` and update the DNS records it shows.
+4. Run `npm run db:migrate` once against the production `DATABASE_URL`.
+5. Sign up at `/signup` with an `ADMIN_EMAILS` address **before** turning on invite-only.
+
+Links once live: waitlist at https://youandme.company/waitlist, admin at https://youandme.company/admin/growth.
+
+## Pre-launch waitlist
+
+Run You&Me as a waitlist until launch, from **Admin → Growth**:
+
+1. Turn on **Invite-only** and **Waitlist**. The site's main CTAs then point to `/waitlist` instead of `/signup`.
+2. The form asks for name and email (required), plus optional phone, school, how they heard about you and what brings them. Sign-ups get a confirmation email (set `RESEND_API_KEY`; without it, emails are only logged).
+3. Let people in with **Invite the next wave** (longest-waiting first, up to 100 at a time) or per person. Each gets a single-use code valid for 30 days, and their entry flips to *joined* when they sign up.
+4. **Export CSV** downloads the whole list.
+5. At launch, turn both switches off to open sign-ups.
+
 ## Scripts
 
 | Command | |

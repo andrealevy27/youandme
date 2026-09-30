@@ -203,7 +203,7 @@ const sections: LegalSectionDef[] = [
     title: "Contact",
     body: (
       <p>
-        Questions about privacy? Email <a href="mailto:privacy@youandme.app">privacy@youandme.app</a>. We&apos;ll post changes to this policy on this
+        Questions about privacy? Email <a href="mailto:privacy@youandme.company">privacy@youandme.company</a>. We&apos;ll post changes to this policy on this
         page and notify you in the app when they&apos;re significant. See also our <Link href="/terms">Terms of Service</Link>.
       </p>
     ),
