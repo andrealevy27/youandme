@@ -4,12 +4,27 @@ import { runAction } from "@/server/errors";
 import { enforceRateLimit } from "@/server/rate-limit";
 import { joinWaitlist } from "@/server/waitlist";
 import { clientIp } from "@/components/auth/request";
-import { WAITLIST_INTENTS } from "@/components/marketing/waitlist-intents";
+import { WAITLIST_INTENTS, WAITLIST_SOURCES } from "@/components/marketing/waitlist-intents";
 
 const input = z.object({
   email: z.string().trim().toLowerCase().pipe(z.email("Enter a valid email address.")).pipe(z.string().max(254)),
   name: z.string().trim().min(1, "Tell us your name.").max(80),
-  intent: z.enum(WAITLIST_INTENTS.map((i) => i.value) as [string, ...string[]], { message: "Choose what brings you here." }),
+  phone: z
+    .string()
+    .trim()
+    .regex(/^\+?[0-9 ().-]{7,20}$/, "Enter a valid phone number, or leave it blank.")
+    .optional()
+    .or(z.literal("").transform(() => undefined)),
+  school: z.string().trim().max(120, "Keep the school name under 120 characters.").optional(),
+  source: z
+    .enum(WAITLIST_SOURCES.map((s) => s.value) as [string, ...string[]], { message: "Choose how you heard about us." })
+    .optional()
+    .or(z.literal("").transform(() => undefined)),
+  sourceDetail: z.string().trim().max(120, "Keep this under 120 characters.").optional(),
+  intent: z
+    .enum(WAITLIST_INTENTS.map((i) => i.value) as [string, ...string[]], { message: "Choose what brings you here." })
+    .optional()
+    .or(z.literal("").transform(() => undefined)),
   note: z.string().trim().max(500, "Keep the note under 500 characters.").optional(),
   /** Honeypot: hidden from people, filled in by naive bots. */
   website: z.string().optional(),

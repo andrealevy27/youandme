@@ -120,7 +120,8 @@ export function chunk<T>(items: T[], size: number): T[][] {
 export function toCsv(rows: readonly (readonly (string | number | null | undefined)[])[]) {
   const cell = (v: string | number | null | undefined) => {
     let s = v == null ? "" : String(v);
-    if (/^[=+\-@\t\r]/.test(s)) s = `'${s}`;
+    // Phone numbers like "+1 212 555 0100" can't execute anything, so leave them readable.
+    if (/^[=+\-@\t\r]/.test(s) && !/^\+[0-9 ().-]+$/.test(s)) s = `'${s}`;
     return /[",\r\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
   };
   return rows.map((r) => r.map(cell).join(",")).join("\r\n") + "\r\n";

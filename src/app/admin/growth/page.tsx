@@ -12,6 +12,7 @@ import { hasAdminPermission } from "@/server/authz/admin";
 import { getSetting } from "@/server/settings";
 import { MAX_WAVE_SIZE, WAITLIST_STATUSES, inviteUrl, listInvites, listWaitlist } from "@/server/admin/growth";
 import { inviteState, param, parsePage, pickEnum, type AdminSearchParams } from "@/server/admin/utils";
+import { WAITLIST_SOURCES } from "@/components/marketing/waitlist-intents";
 import { createInviteAction, inviteWaitlistEntryAction, inviteWaitlistWaveAction, revokeInviteAction, setGrowthToggleAction } from "./actions";
 
 export const metadata = { title: "Growth" };
@@ -119,11 +120,18 @@ export default async function AdminGrowthPage({ searchParams }: { searchParams: 
                   <div className="max-w-[320px]">
                     <p className="font-medium break-all">{r.name ?? r.email}</p>
                     {r.name && <Muted>{r.email}</Muted>}
+                    {(r.phone || r.school) && <p className="text-[12.5px] text-subtle">{[r.phone, r.school].filter(Boolean).join(" · ")}</p>}
                     {(r.intent || r.note) && <p className="mt-1 text-[12.5px] text-muted">{[r.intent, r.note].filter(Boolean).join(" · ")}</p>}
                   </div>
                 ),
               },
               { key: "status", header: "Status", cell: (r) => <StatusBadge status={r.status} /> },
+              {
+                key: "source",
+                header: "Heard via",
+                hideOnMobile: true,
+                cell: (r) => (r.source ? <span className="text-[13px]">{sourceLabel(r.source, r.sourceDetail)}</span> : <Muted>—</Muted>),
+              },
               { key: "code", header: "Code", hideOnMobile: true, cell: (r) => (r.inviteCode ? <span className="font-mono text-[12.5px]">{r.inviteCode}</span> : <Muted>—</Muted>) },
               { key: "date", header: "Joined list", hideOnMobile: true, cell: (r) => <Muted>{formatDate(r.createdAt)}</Muted> },
               {
@@ -232,4 +240,9 @@ export default async function AdminGrowthPage({ searchParams }: { searchParams: 
       </section>
     </>
   );
+}
+
+function sourceLabel(source: string, detail: string | null) {
+  if (source === "other") return detail ? `Other: ${detail}` : "Other";
+  return WAITLIST_SOURCES.find((s) => s.value === source)?.label ?? source;
 }

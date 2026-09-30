@@ -35,6 +35,19 @@ describe("waitlist", () => {
     expect(sent).toEqual([expect.objectContaining({ to: "ada@example.com", subject: "You're on the You&Me waitlist" })]);
   });
 
+  it("stores the optional details and only keeps a source detail for \"other\"", async () => {
+    await joinWaitlist({ email: "min@example.com", name: "Min", phone: "+1 (212) 555-0100", school: "NYU", source: "instagram", sourceDetail: "ignored" });
+    await joinWaitlist({ email: "sam@example.com", name: "Sam", source: "other", sourceDetail: "Hacker News" });
+    await joinWaitlist({ email: "jo@example.com", name: "Jo" });
+
+    const rows = await exportWaitlist();
+    expect(rows.map((r) => [r.email, r.phone, r.school, r.source, r.sourceDetail, r.intent])).toEqual([
+      ["min@example.com", "+1 (212) 555-0100", "NYU", "instagram", null, null],
+      ["sam@example.com", null, null, "other", "Hacker News", null],
+      ["jo@example.com", null, null, null, null, null],
+    ]);
+  });
+
   it("invites the longest-waiting people first and skips anyone already invited", async () => {
     for (const [i, name] of ["First", "Second", "Third"].entries()) {
       await db.insert(s.waitlistEntries).values({ email: `${name.toLowerCase()}@example.com`, name, createdAt: new Date(Date.UTC(2026, 0, i + 1)) });

@@ -4,7 +4,16 @@ import { waitlistEntries } from "./db/schema";
 import { emailLayout, sendEmail, WAITLIST_FOOTER } from "./email";
 import { escapeHtml } from "./admin/utils";
 
-export type WaitlistSignup = { email: string; name: string; intent: string; note?: string };
+export type WaitlistSignup = {
+  email: string;
+  name: string;
+  phone?: string;
+  school?: string;
+  source?: string;
+  sourceDetail?: string;
+  intent?: string;
+  note?: string;
+};
 
 /**
  * Adds someone to the waitlist and confirms by email. Joining twice is a no-op
@@ -15,7 +24,16 @@ export async function joinWaitlist(input: WaitlistSignup) {
   const email = input.email.trim().toLowerCase();
   const [created] = await db
     .insert(waitlistEntries)
-    .values({ email, name: input.name, intent: input.intent, note: input.note || null })
+    .values({
+      email,
+      name: input.name,
+      phone: input.phone || null,
+      school: input.school || null,
+      source: input.source || null,
+      sourceDetail: (input.source === "other" && input.sourceDetail) || null,
+      intent: input.intent || null,
+      note: input.note || null,
+    })
     .onConflictDoNothing()
     .returning({ id: waitlistEntries.id });
 

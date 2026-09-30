@@ -3,14 +3,18 @@ import * as React from "react";
 import Link from "next/link";
 import { CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Field, Input, Textarea } from "@/components/ui/input";
+import { Field, Input, NativeSelect, Textarea } from "@/components/ui/input";
 import { joinWaitlistAction } from "@/app/(marketing)/waitlist/actions";
 import { cn } from "@/lib/utils";
-import { WAITLIST_INTENTS } from "./waitlist-intents";
+import { WAITLIST_INTENTS, WAITLIST_SOURCES } from "./waitlist-intents";
 
 export function WaitlistForm() {
   const [email, setEmail] = React.useState("");
   const [name, setName] = React.useState("");
+  const [phone, setPhone] = React.useState("");
+  const [school, setSchool] = React.useState("");
+  const [source, setSource] = React.useState("");
+  const [sourceDetail, setSourceDetail] = React.useState("");
   const [intent, setIntent] = React.useState<string>("");
   const [note, setNote] = React.useState("");
   const [website, setWebsite] = React.useState("");
@@ -23,12 +27,18 @@ export function WaitlistForm() {
     e.preventDefault();
     setErrors({});
     setFormError(null);
-    if (!intent) {
-      setErrors({ intent: "Choose what brings you here." });
-      return;
-    }
     setPending(true);
-    const res = await joinWaitlistAction({ email, name, intent, note: note || undefined, website: website || undefined }).catch(() => null);
+    const res = await joinWaitlistAction({
+      email,
+      name,
+      phone: phone || undefined,
+      school: school || undefined,
+      source: source || undefined,
+      sourceDetail: source === "other" ? sourceDetail || undefined : undefined,
+      intent: intent || undefined,
+      note: note || undefined,
+      website: website || undefined,
+    }).catch(() => null);
     setPending(false);
     if (!res) return setFormError("We couldn't reach You&Me. Check your connection and try again.");
     if (!res.ok) {
@@ -79,9 +89,49 @@ export function WaitlistForm() {
             aria-invalid={!!errors.email || undefined}
           />
         </Field>
+        <Field label="Phone" htmlFor="wl-phone" optional error={errors.phone}>
+          <Input
+            id="wl-phone"
+            type="tel"
+            inputMode="tel"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            autoComplete="tel"
+            maxLength={20}
+            aria-invalid={!!errors.phone || undefined}
+          />
+        </Field>
+        <Field label="School" htmlFor="wl-school" optional error={errors.school}>
+          <Input
+            id="wl-school"
+            value={school}
+            onChange={(e) => setSchool(e.target.value)}
+            autoComplete="organization"
+            maxLength={120}
+            placeholder="e.g. NYU"
+            aria-invalid={!!errors.school || undefined}
+          />
+        </Field>
       </div>
+      <Field label="How did you hear about us?" htmlFor="wl-source" optional error={errors.source}>
+        <NativeSelect id="wl-source" value={source} onChange={(e) => setSource(e.target.value)} aria-invalid={!!errors.source || undefined}>
+          <option value="">Choose one</option>
+          {WAITLIST_SOURCES.map((o) => (
+            <option key={o.value} value={o.value}>
+              {o.label}
+            </option>
+          ))}
+        </NativeSelect>
+      </Field>
+      {source === "other" && (
+        <Field label="Where exactly?" htmlFor="wl-source-detail" optional error={errors.sourceDetail}>
+          <Input id="wl-source-detail" value={sourceDetail} onChange={(e) => setSourceDetail(e.target.value)} maxLength={120} />
+        </Field>
+      )}
       <fieldset>
-        <legend className="text-[13px] font-medium">What brings you to You&amp;Me?</legend>
+        <legend className="text-[13px] font-medium">
+          What brings you to You&amp;Me?<span className="ml-1.5 font-normal text-subtle">Optional</span>
+        </legend>
         <div role="radiogroup" className="mt-2 grid gap-2 sm:grid-cols-2">
           {WAITLIST_INTENTS.map((i) => (
             <button
@@ -89,7 +139,7 @@ export function WaitlistForm() {
               type="button"
               role="radio"
               aria-checked={intent === i.value}
-              onClick={() => setIntent(i.value)}
+              onClick={() => setIntent(intent === i.value ? "" : i.value)}
               className={cn(
                 "flex h-11 items-center gap-2.5 rounded-[10px] border px-3.5 text-left text-[14px] transition-colors",
                 intent === i.value ? "border-foreground bg-card ring-1 ring-foreground" : "border-border-strong bg-card hover:border-foreground/40",

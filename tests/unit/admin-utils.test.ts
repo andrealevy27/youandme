@@ -171,6 +171,10 @@ describe("toCsv", () => {
   });
 
   it("neutralises spreadsheet formulas", () => {
-    expect(toCsv([["=HYPERLINK(1)", "+1", "-2", "@cmd", "safe=1"]])).toBe("'=HYPERLINK(1),'+1,'-2,'@cmd,safe=1\r\n");
+    expect(toCsv([["=HYPERLINK(1)", "+SUM(A1)", "-2", "@cmd", "safe=1"]])).toBe("'=HYPERLINK(1),'+SUM(A1),'-2,'@cmd,safe=1\r\n");
+  });
+
+  it("leaves phone numbers readable", () => {
+    expect(toCsv([["+1 (212) 555-0100", "+44 20 7946 0958"]])).toBe("+1 (212) 555-0100,+44 20 7946 0958\r\n");
   });
 });

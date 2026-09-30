@@ -13,8 +13,20 @@ export async function GET() {
   }
   const rows = await exportWaitlist();
   const csv = toCsv([
-    ["email", "name", "intent", "note", "status", "invite_code", "joined_at"],
-    ...rows.map((r) => [r.email, r.name, r.intent, r.note, r.status, r.inviteCode, r.createdAt.toISOString()]),
+    ["email", "name", "phone", "school", "heard_about_us", "heard_about_us_detail", "intent", "note", "status", "invite_code", "joined_at"],
+    ...rows.map((r) => [
+      r.email,
+      r.name,
+      r.phone,
+      r.school,
+      r.source,
+      r.sourceDetail,
+      r.intent,
+      r.note,
+      r.status,
+      r.inviteCode,
+      r.createdAt.toISOString(),
+    ]),
   ]);
   const date = new Date().toISOString().slice(0, 10);
   return new Response(csv, {
