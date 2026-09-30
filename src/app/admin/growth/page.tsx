@@ -1,5 +1,6 @@
-import { Mail, Ticket } from "lucide-react";
+import { Download, Mail, Ticket } from "lucide-react";
 import { PageHeader, SectionHeader } from "@/components/ui/page-header";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Field, Input } from "@/components/ui/input";
@@ -9,9 +10,9 @@ import { StatusBadge, statusLabel } from "@/components/admin/status-badge";
 import { requireAdminPage } from "@/server/auth/session";
 import { hasAdminPermission } from "@/server/authz/admin";
 import { getSetting } from "@/server/settings";
-import { WAITLIST_STATUSES, inviteUrl, listInvites, listWaitlist } from "@/server/admin/growth";
+import { MAX_WAVE_SIZE, WAITLIST_STATUSES, inviteUrl, listInvites, listWaitlist } from "@/server/admin/growth";
 import { inviteState, param, parsePage, pickEnum, type AdminSearchParams } from "@/server/admin/utils";
-import { createInviteAction, inviteWaitlistEntryAction, revokeInviteAction, setGrowthToggleAction } from "./actions";
+import { createInviteAction, inviteWaitlistEntryAction, inviteWaitlistWaveAction, revokeInviteAction, setGrowthToggleAction } from "./actions";
 
 export const metadata = { title: "Growth" };
 
@@ -73,7 +74,32 @@ export default async function AdminGrowthPage({ searchParams }: { searchParams: 
 
       {waitlist && (
         <section className="mt-10">
-          <SectionHeader title="Waitlist" description="Inviting someone creates a single-use code (valid 30 days) and emails them the link." />
+          <SectionHeader
+            title="Waitlist"
+            description="Inviting someone creates a single-use code (valid 30 days) and emails them the link."
+            action={
+              <Button asChild variant="secondary" size="sm">
+                <a href="/admin/growth/waitlist.csv" download>
+                  <Download /> Export CSV
+                </a>
+              </Button>
+            }
+          />
+          {waitlist.byStatus.waiting > 0 && (
+            <Card className="mb-4">
+              <CardContent>
+                <AdminActionForm action={inviteWaitlistWaveAction} submitLabel="Send invites" success="Invites sent">
+                  <Field
+                    label="Invite the next wave"
+                    htmlFor="wave-count"
+                    hint={`Longest-waiting first. ${waitlist.byStatus.waiting} ${waitlist.byStatus.waiting === 1 ? "person is" : "people are"} waiting.`}
+                  >
+                    <Input id="wave-count" name="count" type="number" min={1} max={Math.min(MAX_WAVE_SIZE, waitlist.byStatus.waiting)} defaultValue={Math.min(10, waitlist.byStatus.waiting)} required className="max-w-32" />
+                  </Field>
+                </AdminActionForm>
+              </CardContent>
+            </Card>
+          )}
           <FilterTabs
             basePath="/admin/growth"
             params={sp}

@@ -9,9 +9,11 @@ import { Button } from "@/components/ui/button";
 export function MobileMenu({
   links,
   signedIn,
+  cta,
 }: {
   links: readonly { href: string; label: string }[];
   signedIn: boolean;
+  cta: { href: string; label: string };
 }) {
   const [open, setOpen] = React.useState(false);
 
@@ -68,8 +70,8 @@ export function MobileMenu({
               ) : (
                 <>
                   <Button asChild size="lg">
-                    <Link href="/signup" onClick={() => setOpen(false)}>
-                      Join You&amp;Me
+                    <Link href={cta.href} onClick={() => setOpen(false)}>
+                      {cta.label}
                     </Link>
                   </Button>
                   <Button asChild size="lg" variant="secondary">

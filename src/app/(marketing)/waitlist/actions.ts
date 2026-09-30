@@ -1,9 +1,8 @@
 "use server";
 import { z } from "zod";
-import { db } from "@/server/db";
-import { waitlistEntries } from "@/server/db/schema";
 import { runAction } from "@/server/errors";
 import { enforceRateLimit } from "@/server/rate-limit";
+import { joinWaitlist } from "@/server/waitlist";
 import { clientIp } from "@/components/auth/request";
 import { WAITLIST_INTENTS } from "@/components/marketing/waitlist-intents";
 
@@ -12,17 +11,18 @@ const input = z.object({
   name: z.string().trim().min(1, "Tell us your name.").max(80),
   intent: z.enum(WAITLIST_INTENTS.map((i) => i.value) as [string, ...string[]], { message: "Choose what brings you here." }),
   note: z.string().trim().max(500, "Keep the note under 500 characters.").optional(),
+  /** Honeypot: hidden from people, filled in by naive bots. */
+  website: z.string().optional(),
 });
 
 /** Public waitlist signup. Duplicate emails are silently accepted so the form never reveals membership. */
 export async function joinWaitlistAction(raw: z.input<typeof input>) {
   return runAction(async () => {
     enforceRateLimit("waitlist", await clientIp());
-    const data = input.parse(raw);
-    await db
-      .insert(waitlistEntries)
-      .values({ email: data.email, name: data.name, intent: data.intent, note: data.note || null })
-      .onConflictDoNothing();
+    const { website, ...data } = input.parse(raw);
+    // Look successful to bots so they don't retry with a different payload.
+    if (website) return { joined: true as const };
+    await joinWaitlist(data);
     return { joined: true as const };
   });
 }

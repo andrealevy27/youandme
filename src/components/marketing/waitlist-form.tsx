@@ -13,6 +13,7 @@ export function WaitlistForm() {
   const [name, setName] = React.useState("");
   const [intent, setIntent] = React.useState<string>("");
   const [note, setNote] = React.useState("");
+  const [website, setWebsite] = React.useState("");
   const [errors, setErrors] = React.useState<Record<string, string>>({});
   const [formError, setFormError] = React.useState<string | null>(null);
   const [pending, setPending] = React.useState(false);
@@ -27,7 +28,7 @@ export function WaitlistForm() {
       return;
     }
     setPending(true);
-    const res = await joinWaitlistAction({ email, name, intent, note: note || undefined }).catch(() => null);
+    const res = await joinWaitlistAction({ email, name, intent, note: note || undefined, website: website || undefined }).catch(() => null);
     setPending(false);
     if (!res) return setFormError("We couldn't reach You&Me. Check your connection and try again.");
     if (!res.ok) {
@@ -59,6 +60,10 @@ export function WaitlistForm() {
 
   return (
     <form onSubmit={onSubmit} className="space-y-5" noValidate>
+      <div aria-hidden className="absolute -left-[9999px] size-px overflow-hidden">
+        <label htmlFor="wl-website">Website</label>
+        <input id="wl-website" name="website" type="text" tabIndex={-1} autoComplete="off" value={website} onChange={(e) => setWebsite(e.target.value)} />
+      </div>
       <div className="grid gap-4 sm:grid-cols-2">
         <Field label="Name" htmlFor="wl-name" error={errors.name}>
           <Input id="wl-name" value={name} onChange={(e) => setName(e.target.value)} autoComplete="name" maxLength={80} aria-invalid={!!errors.name || undefined} />

@@ -17,6 +17,7 @@ import {
   ratio,
   safeLinkedIn,
   suspensionEnd,
+  toCsv,
 } from "../../src/server/admin/utils";
 import { ADMIN_NAV, visibleAdminNav } from "../../src/server/admin/nav";
 import type { MatchWeights } from "../../src/server/matching/types";
@@ -159,5 +160,17 @@ describe("admin navigation permissions", () => {
 
   it("shows nothing without an admin role", () => {
     expect(visibleAdminNav(null)).toEqual([]);
+  });
+});
+
+describe("toCsv", () => {
+  it("quotes separators, quotes and newlines, and blanks nulls", () => {
+    expect(toCsv([["a", 'say "hi"', "x,y", null, 3], ["line\nbreak", undefined, "", "ok", 0]])).toBe(
+      'a,"say ""hi""","x,y",,3\r\n"line\nbreak",,,ok,0\r\n',
+    );
+  });
+
+  it("neutralises spreadsheet formulas", () => {
+    expect(toCsv([["=HYPERLINK(1)", "+1", "-2", "@cmd", "safe=1"]])).toBe("'=HYPERLINK(1),'+1,'-2,'@cmd,safe=1\r\n");
   });
 });

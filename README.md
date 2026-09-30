@@ -44,6 +44,16 @@ Every integration is optional in development and is hidden or clearly labelled w
 | S3-compatible storage | `STORAGE_DRIVER=s3`, `S3_*` | Local `./uploads` (dev) |
 | PostHog | `POSTHOG_KEY`, `POSTHOG_HOST` | Events still stored in `analytics_events` |
 
+## Pre-launch waitlist
+
+Run You&Me as a waitlist until launch, from **Admin → Growth**:
+
+1. Turn on **Invite-only** and **Waitlist**. The site's main CTAs then point to `/waitlist` instead of `/signup`.
+2. Sign-ups get a confirmation email (set `RESEND_API_KEY`; without it, emails are only logged).
+3. Let people in with **Invite the next wave** (longest-waiting first, up to 100 at a time) or per person. Each gets a single-use code valid for 30 days, and their entry flips to *joined* when they sign up.
+4. **Export CSV** downloads the whole list.
+5. At launch, turn both switches off to open sign-ups.
+
 ## Scripts
 
 | Command | |

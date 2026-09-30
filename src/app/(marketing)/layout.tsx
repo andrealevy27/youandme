@@ -4,10 +4,10 @@ import { SiteNav } from "@/components/marketing/site-nav";
 import { getMarketingContext } from "@/components/marketing/context";
 
 export default async function MarketingLayout({ children }: { children: React.ReactNode }) {
-  const { signedIn, showWaitlist } = await getMarketingContext();
+  const { signedIn, showWaitlist, primaryCta } = await getMarketingContext();
   return (
     <div className="flex min-h-dvh flex-col">
-      <SiteNav signedIn={signedIn} />
+      <SiteNav signedIn={signedIn} cta={primaryCta} />
       <main id="main" className="flex-1">
         {children}
       </main>
