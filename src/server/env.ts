@@ -36,6 +36,11 @@ const schema = z.object({
   POSTHOG_KEY: z.string().optional(),
   POSTHOG_HOST: z.string().optional(),
   ADMIN_EMAILS: z.string().default(""),
+  /** Student pivot: campus-first product. Off by default — turning it off restores the original You&Me. */
+  STUDENT_MODE: z
+    .enum(["true", "false", "1", "0"])
+    .default("false")
+    .transform((v) => v === "true" || v === "1"),
 });
 
 const blankToUndefined = Object.fromEntries(
@@ -55,6 +60,7 @@ export const features = {
   /** Dev payments are refused in production regardless of configuration. */
   devPayments: env.PAYMENTS_PROVIDER === "dev" && env.NODE_ENV !== "production",
   email: has(env.RESEND_API_KEY),
+  studentMode: env.STUDENT_MODE,
   s3: env.STORAGE_DRIVER === "s3" && has(env.S3_BUCKET, env.S3_ACCESS_KEY_ID, env.S3_SECRET_ACCESS_KEY),
 };
 
