@@ -24,5 +24,7 @@ export const ANALYTICS_EVENTS = [
   "invite_sent",
   "event_joined",
   "event_created",
+  "trial_started",
+  "trial_check_in",
 ] as const;
 export type AnalyticsEvent = (typeof ANALYTICS_EVENTS)[number];

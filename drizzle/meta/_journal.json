@@ -36,6 +36,13 @@
       "when": 1794953106878,
       "tag": "0004_student_events",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1794953923543,
+      "tag": "0005_student_trials",
+      "breakpoints": true
     }
   ]
 }

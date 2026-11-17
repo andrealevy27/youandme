@@ -11,3 +11,4 @@ export * from "./social";
 export * from "./trust";
 export * from "./platform";
 export * from "./events";
+export * from "./trials";
