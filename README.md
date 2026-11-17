@@ -16,6 +16,8 @@
 
 See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) for the architecture, sitemap and data model.
 
+**Student mode** (`STUDENT_MODE=true`) turns FoundMate into a campus cofounder-matching product with school-email sign-up, team-hunt events and cofounder trials — see [`docs/STUDENT_MODE.md`](docs/STUDENT_MODE.md).
+
 ## Getting started
 
 Requirements: Node 22+, PostgreSQL 16.
