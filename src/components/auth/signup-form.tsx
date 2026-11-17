@@ -18,6 +18,7 @@ export function SignupForm({
   inviteApplied,
   showWaitlist,
   schoolHint,
+  next = "/home",
 }: {
   oauth: OAuthFlags;
   inviteOnly: boolean;
@@ -25,7 +26,10 @@ export function SignupForm({
   showWaitlist: boolean;
   /** Student mode: e.g. "@nyu.edu or @stanford.edu". Sign-up then requires a school email. */
   schoolHint?: string;
+  /** Where to land after onboarding (e.g. an event page). */
+  next?: string;
 }) {
+  const onboardingUrl = next === "/home" ? "/onboarding" : `/onboarding?next=${encodeURIComponent(next)}`;
   const router = useRouter();
   const [name, setName] = React.useState("");
   const [email, setEmail] = React.useState("");
@@ -62,12 +66,12 @@ export function SignupForm({
     setPending(true);
     try {
       if (!(await ensureInvite())) return;
-      const { error: err } = await authClient.signUp.email({ name: name.trim(), email: email.trim(), password, callbackURL: "/onboarding" });
+      const { error: err } = await authClient.signUp.email({ name: name.trim(), email: email.trim(), password, callbackURL: onboardingUrl });
       if (err) {
         setError(friendlyAuthError(err));
         return;
       }
-      router.push("/onboarding");
+      router.push(onboardingUrl);
       router.refresh();
     } catch {
       setError("We couldn't reach FoundMate. Check your connection and try again.");
@@ -132,7 +136,7 @@ export function SignupForm({
       )}
 
       <div className="space-y-5">
-        <OAuthButtons flags={oauth} callbackURL="/onboarding" beforeRedirect={ensureInvite} onError={setError} verb="Sign up" />
+        <OAuthButtons flags={oauth} callbackURL={onboardingUrl} beforeRedirect={ensureInvite} onError={setError} verb="Sign up" />
         <form onSubmit={onSubmit} className="space-y-4" noValidate>
           <Field label="Full name" htmlFor="name">
             <Input id="name" value={name} onChange={(e) => setName(e.target.value)} autoComplete="name" required maxLength={80} />
@@ -182,7 +186,7 @@ export function SignupForm({
 
       <p className="mt-8 text-center text-[14px] text-muted">
         Already a member?{" "}
-        <Link href="/login" className="font-medium text-foreground underline-offset-4 hover:underline">
+        <Link href={next === "/home" ? "/login" : `/login?next=${encodeURIComponent(next)}`} className="font-medium text-foreground underline-offset-4 hover:underline">
           Sign in
         </Link>
       </p>

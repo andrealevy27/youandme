@@ -15,11 +15,7 @@ import { personalityAnswers, personalityQuestions } from "@/server/db/schema";
 import { SHORT_QUIZ_KEYS } from "@/lib/student";
 import type { CofounderType } from "@/lib/domain";
 
-/** Only same-site relative paths, so `?next=` can't redirect off-site. */
-function safeNext(v: string | string[] | undefined) {
-  const s = Array.isArray(v) ? v[0] : v;
-  return s && s.startsWith("/") && !s.startsWith("//") ? s : "/home";
-}
+import { safeNext } from "@/components/auth/request";
 
 export const metadata: Metadata = { title: "Welcome" };
 

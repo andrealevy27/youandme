@@ -5,6 +5,7 @@ import { eq } from "drizzle-orm";
 import { ArrowRight, Briefcase, MessageCircle, Rocket, Sparkles, Users } from "lucide-react";
 import { requireViewerPage } from "@/server/auth/session";
 import { env } from "@/server/env";
+import { formatEventTime, listMyEvents } from "@/server/events";
 import { VerifiedStudentGate } from "@/components/student/verify-gate";
 import { db } from "@/server/db";
 import { profiles } from "@/server/db/schema";
@@ -239,6 +240,32 @@ async function Actions({ userId }: { userId: string }) {
   );
 }
 
+async function YourEvents({ userId }: { userId: string }) {
+  const rows = (await listMyEvents(userId)).slice(0, 3);
+  if (!rows.length) {
+    return (
+      <p className="rounded-[16px] border border-dashed border-border-strong px-4 py-5 text-sm text-muted">
+        At a team hunt, scan the QR code on screen — your five people to meet will appear here and stay after the event.
+      </p>
+    );
+  }
+  return (
+    <ul className="divide-y divide-border rounded-[16px] border border-border bg-card">
+      {rows.map(({ event }) => (
+        <li key={event.id}>
+          <Link href={`/events/${event.code}`} className="group flex items-center gap-3 px-4 py-3.5">
+            <span className="min-w-0 flex-1">
+              <span className="block text-sm font-medium">{event.name}</span>
+              <span className="block text-[13px] text-muted">{formatEventTime(event)}</span>
+            </span>
+            <ArrowRight className="size-4 shrink-0 text-subtle transition-transform group-hover:translate-x-0.5" aria-hidden />
+          </Link>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
 function SectionFallback() {
   return (
     <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
@@ -294,6 +321,22 @@ export default async function HomePage() {
 
       <div className="grid gap-10 lg:grid-cols-[1fr_340px]">
         <div className="min-w-0 space-y-10">
+          {env.STUDENT_MODE && (
+            <section>
+              <SectionHeader
+                title="Your events"
+                description="Team hunts you've joined."
+                action={
+                  <Link href="/events" className="text-sm font-medium text-brand-ink hover:underline">
+                    All events
+                  </Link>
+                }
+              />
+              <Suspense fallback={<Skeleton className="h-28 w-full" />}>
+                <YourEvents userId={viewer.userId} />
+              </Suspense>
+            </section>
+          )}
           {!env.STUDENT_MODE && (
           <>
           <section>

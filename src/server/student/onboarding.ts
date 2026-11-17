@@ -53,7 +53,8 @@ export async function saveStudentStep(userId: string, raw: StudentStepInput) {
   switch (input.step) {
     case "about": {
       // A readable headline for cards ("Computer Science · Junior"); editable later from the profile.
-      const headline = `${input.data.major} · ${CLASS_YEARS.find((y) => y.key === input.data.classYear)!.label}`;
+      const year = CLASS_YEARS.find((y) => y.key === input.data.classYear)!.label;
+      const headline = input.data.major.toLowerCase() === year.toLowerCase() ? year : `${input.data.major} · ${year}`;
       await db.update(profiles).set({ ...input.data, headline }).where(eq(profiles.userId, userId));
       break;
     }

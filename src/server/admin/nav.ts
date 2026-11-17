@@ -16,6 +16,7 @@ export const ADMIN_NAV: readonly AdminNavEntry[] = [
   { href: "/admin/reviews", label: "Reviews", permission: "reviews.moderate" },
   { href: "/admin/verification", label: "Verification", permission: "verification.review" },
   { href: "/admin/growth", label: "Growth", permission: "invites.manage" },
+  { href: "/admin/events", label: "Events", permission: "events.manage" },
   { href: "/admin/settings", label: "Settings", permission: "settings.manage" },
   { href: "/admin/notifications", label: "Broadcast", permission: "notifications.broadcast" },
   { href: "/admin/audit", label: "Audit log", permission: "audit.read" },

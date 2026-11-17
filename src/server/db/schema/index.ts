@@ -10,3 +10,4 @@ export * from "./messaging";
 export * from "./social";
 export * from "./trust";
 export * from "./platform";
+export * from "./events";

@@ -20,6 +20,8 @@ export const ADMIN_PERMISSIONS = [
   "settings.manage",
   "admins.manage",
   "audit.read",
+  /** Student mode: create and run team-hunt events. Super admins only for now. */
+  "events.manage",
 ] as const;
 export type AdminPermission = (typeof ADMIN_PERMISSIONS)[number];
 

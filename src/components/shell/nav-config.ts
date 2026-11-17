@@ -1,5 +1,6 @@
 import {
   Bell,
+  CalendarDays,
   Bookmark,
   Briefcase,
   Compass,
@@ -39,6 +40,7 @@ export const STUDENT_SIDEBAR_NAV: NavItem[] = [
   { href: "/home", label: "Home", icon: Home },
   { href: "/matches", label: "Matches", icon: Users },
   { href: "/discover", label: "Discover", icon: Compass },
+  { href: "/events", label: "Events", icon: CalendarDays },
   { href: "/messages", label: "Messages", icon: MessageCircle, badge: "messages" },
   { href: "/saved", label: "Saved", icon: Bookmark },
   { href: "/notifications", label: "Notifications", icon: Bell, badge: "notifications" },
@@ -46,8 +48,8 @@ export const STUDENT_SIDEBAR_NAV: NavItem[] = [
 
 export const STUDENT_MOBILE_NAV: NavItem[] = [
   { href: "/home", label: "Home", icon: Home },
-  { href: "/matches", label: "Matches", icon: Users },
   { href: "/discover", label: "Discover", icon: Compass },
+  { href: "/events", label: "Events", icon: CalendarDays },
   { href: "/messages", label: "Messages", icon: MessageCircle, badge: "messages" },
 ];
 

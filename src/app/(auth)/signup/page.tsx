@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { SignupForm } from "@/components/auth/signup-form";
-import { currentInvite } from "@/components/auth/request";
+import { currentInvite, safeNext } from "@/components/auth/request";
 import { getViewer } from "@/server/auth/session";
 import { env, features } from "@/server/env";
 import { SCHOOL_LIST_TEXT } from "@/lib/schools";
@@ -12,8 +12,9 @@ export const metadata: Metadata = {
   description: "Create your FoundMate account and meet the people you need to build your startup.",
 };
 
-export default async function SignupPage() {
-  if (await getViewer().catch(() => null)) redirect("/home");
+export default async function SignupPage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
+  const next = safeNext((await searchParams).next);
+  if (await getViewer().catch(() => null)) redirect(next);
   const [inviteOnly, waitlistEnabled] = await Promise.all([
     getSetting("invite_only").catch(() => false),
     getSetting("waitlist_enabled").catch(() => false),
@@ -27,6 +28,7 @@ export default async function SignupPage() {
       inviteApplied={inviteApplied}
       showWaitlist={inviteOnly || waitlistEnabled}
       schoolHint={env.STUDENT_MODE ? SCHOOL_LIST_TEXT : undefined}
+      next={next}
     />
   );
 }
