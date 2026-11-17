@@ -12,6 +12,8 @@ import { createUser, resetDatabase } from "../support/db";
 import { assertStudentSignupAllowed, canSeeStudents, markSchoolVerified, updateStudentPrefs } from "@/server/student";
 import { searchPeople } from "@/server/search";
 import { canViewProfile } from "@/server/privacy/visibility";
+import { saveStudentStep, finishStudentOnboarding, toMatchingFields } from "@/server/student/onboarding";
+import { SHORT_QUIZ_KEYS } from "@/lib/student";
 
 beforeEach(async () => {
   await resetDatabase();
@@ -70,5 +72,31 @@ describe("student mode", () => {
     const other = await student("other@nyu.edu");
     expect(await canSeeStudents({ userId: viewer.id, adminRole: null })).toBe(false);
     expect(await canViewProfile(viewer.id, other.id)).toBe(false);
+  });
+});
+
+describe("student onboarding", () => {
+  it("maps hours and summer plans onto the matching fields", () => {
+    expect(toMatchingFields(3, "undecided")).toEqual({ availability: "limited", commitment: "exploring" });
+    expect(toMatchingFields(8, "build")).toEqual({ availability: "nights_weekends", commitment: "full_time_soon" });
+    expect(toMatchingFields(25, "internship")).toEqual({ availability: "part_time", commitment: "part_time" });
+  });
+
+  it("saves each step, scores the short quiz and respects the visibility choice", async () => {
+    const u = await student("new@nyu.edu");
+    await saveStudentStep(u.id, { step: "about", index: 0, data: { displayName: "Ana", classYear: "junior", major: "Economics" } });
+    await saveStudentStep(u.id, { step: "idea", index: 2, data: { ideaStatus: "join_one" } });
+    await saveStudentStep(u.id, { step: "time", index: 4, data: { weeklyHours: 15, summerPlans: "build" } });
+    await saveStudentStep(u.id, { step: "quiz", index: 5, answers: Object.fromEntries(SHORT_QUIZ_KEYS.map((k) => [k, 5])) });
+    await finishStudentOnboarding(u.id, { visible: false, campusScope: "my_school" });
+    const [p] = await db.select().from(s.profiles).where(eq(s.profiles.userId, u.id));
+    expect(p).toMatchObject({ headline: "Economics · Junior", ideaStatus: "join_one", lookingForCofounder: true, weeklyHours: 15, commitment: "full_time_soon", visibility: "hidden", campusScope: "my_school" });
+    const [style] = await db.select().from(s.personalityProfiles).where(eq(s.personalityProfiles.userId, u.id));
+    expect(Object.keys(style!.scores as object)).toHaveLength(7);
+  });
+
+  it("rejects an incomplete short quiz", async () => {
+    const u = await student("q@nyu.edu");
+    await expect(saveStudentStep(u.id, { step: "quiz", index: 5, answers: { vision_story: 3 } })).rejects.toThrow(/seven/);
   });
 });

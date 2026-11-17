@@ -17,6 +17,8 @@ import {
 } from "@/server/people/profile";
 import { createNeed, createStartup, getPrimaryStartup, updateStartup } from "@/server/startups";
 import { STARTUP_STAGES } from "@/lib/domain";
+import { finishStudentOnboarding, saveStudentStep, type StudentStepInput } from "@/server/student/onboarding";
+export type { StudentStepInput };
 
 const stepSchema = z.discriminatedUnion("step", [
   z.object({ step: z.literal("profile"), index: z.number().int(), patch: profilePatchSchema }),
@@ -110,6 +112,24 @@ export async function finishOnboarding() {
   return runAction(async () => {
     const viewer = await requireViewer();
     await completeOnboarding(viewer.userId);
+    return { ok: true };
+  });
+}
+
+// ───────── Student mode ─────────
+
+export async function saveStudentStepAction(raw: StudentStepInput) {
+  return runAction(async () => {
+    const viewer = await requireViewer();
+    await saveStudentStep(viewer.userId, raw);
+    return { ok: true };
+  });
+}
+
+export async function finishStudentOnboardingAction(raw: { visible: boolean; campusScope: "all" | "my_school" }) {
+  return runAction(async () => {
+    const viewer = await requireViewer();
+    await finishStudentOnboarding(viewer.userId, raw);
     return { ok: true };
   });
 }

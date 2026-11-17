@@ -66,6 +66,14 @@ export const profiles = pgTable(
     schoolVerifiedAt: timestamp("school_verified_at", { withTimezone: true }),
     /** "all" = open to other campuses, "my_school" = my school only (applies both ways). */
     campusScope: text("campus_scope").notNull().default("all"),
+    classYear: text("class_year"),
+    major: text("major"),
+    /** "have_idea" | "join_one" | "open" — see src/lib/student.ts */
+    ideaStatus: text("idea_status"),
+    ideaSummary: text("idea_summary"),
+    /** Realistic hours per week alongside classes. */
+    weeklyHours: smallint("weekly_hours"),
+    summerPlans: text("summer_plans"),
     featured: boolean("featured").notNull().default(false),
     onboardingStep: integer("onboarding_step").notNull().default(0),
     onboardingCompletedAt: timestamp("onboarding_completed_at", { withTimezone: true }),

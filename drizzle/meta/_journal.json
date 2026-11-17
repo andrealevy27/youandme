@@ -22,6 +22,13 @@
       "when": 1794952135718,
       "tag": "0002_student_school",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1794952536744,
+      "tag": "0003_student_profile",
+      "breakpoints": true
     }
   ]
 }
