@@ -26,8 +26,10 @@ import { HeroMockup, MockAvatar, MockRing } from "@/components/marketing/hero-mo
 import { Eyebrow, Lead, Section, SectionTitle } from "@/components/marketing/section";
 import s from "@/components/marketing/marketing.module.css";
 import { cn } from "@/lib/utils";
+import { StudentLanding } from "@/components/marketing/student-landing";
+import { env } from "@/server/env";
 
-export const metadata: Metadata = {
+const ORIGINAL_METADATA: Metadata = {
   title: { absolute: "You&Me — Build the team behind your startup" },
   description:
     "The network for building startups. Find cofounders, consultants, advisors, and startup talent — intelligently matched to what you're building.",
@@ -41,8 +43,21 @@ export const metadata: Metadata = {
   alternates: { canonical: "/" },
 };
 
+const STUDENT_METADATA: Metadata = {
+  title: { absolute: "You&Me — Find your cofounder on campus" },
+  description: "Student founders at NYU and Stanford: verify your school email and meet classmates worth building a startup with — with plain-language reasons why.",
+  openGraph: { title: "You&Me — Find your cofounder on campus", description: "Meet student founders worth building with.", siteName: "You&Me", type: "website" },
+  twitter: { card: "summary_large_image", title: "You&Me — Find your cofounder on campus" },
+  alternates: { canonical: "/" },
+};
+
+export function generateMetadata(): Metadata {
+  return env.STUDENT_MODE ? STUDENT_METADATA : ORIGINAL_METADATA;
+}
+
 export default async function LandingPage() {
   const { signedIn, showWaitlist, primaryCta: primary } = await getMarketingContext();
+  if (env.STUDENT_MODE) return <StudentLanding primary={primary} signedIn={signedIn} />;
 
   return (
     <>

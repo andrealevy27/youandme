@@ -14,10 +14,10 @@ import {
 import { authClient } from "@/lib/auth-client";
 import { cn } from "@/lib/utils";
 import { Logo } from "./logo";
-import { MOBILE_NAV, SIDEBAR_NAV, type NavItem } from "./nav-config";
+import { MOBILE_NAV, SIDEBAR_NAV, STUDENT_MOBILE_NAV, STUDENT_SIDEBAR_NAV, type NavItem } from "./nav-config";
 import { ThemeToggle } from "./theme-toggle";
 
-export type ShellUser = { name: string; handle: string; avatarUrl: string | null; isAdmin: boolean; isConsultant: boolean };
+export type ShellUser = { name: string; handle: string; avatarUrl: string | null; isAdmin: boolean; isConsultant: boolean; studentMode: boolean };
 export type ShellCounts = { messages: number; notifications: number };
 
 function isActive(pathname: string, href: string) {
@@ -60,11 +60,13 @@ function AccountMenu({ user, children }: { user: ShellUser; children: React.Reac
             <UserCog /> Edit profile
           </Link>
         </DropdownMenuItem>
-        <DropdownMenuItem asChild>
-          <Link href="/consultant">
-            <UserCog /> {user.isConsultant ? "Consultant workspace" : "Offer consulting"}
-          </Link>
-        </DropdownMenuItem>
+        {!user.studentMode && (
+          <DropdownMenuItem asChild>
+            <Link href="/consultant">
+              <UserCog /> {user.isConsultant ? "Consultant workspace" : "Offer consulting"}
+            </Link>
+          </DropdownMenuItem>
+        )}
         <DropdownMenuItem asChild>
           <Link href="/settings">
             <Settings /> Settings
@@ -98,7 +100,7 @@ export function Sidebar({ user, counts }: { user: ShellUser; counts: ShellCounts
         <Logo href="/home" />
       </div>
       <nav className="mt-8 flex flex-1 flex-col gap-0.5">
-        {SIDEBAR_NAV.map((item) => {
+        {(user.studentMode ? STUDENT_SIDEBAR_NAV : SIDEBAR_NAV).map((item) => {
           const active = isActive(pathname, item.href);
           const Icon = item.icon;
           return (
@@ -163,7 +165,7 @@ export function MobileBottomNav({ user, counts }: { user: ShellUser; counts: She
       className="safe-bottom fixed inset-x-0 bottom-0 z-30 border-t border-border bg-background/95 backdrop-blur-md lg:hidden"
     >
       <div className="mx-auto grid h-16 max-w-md grid-cols-5">
-        {MOBILE_NAV.map((item) => {
+        {(user.studentMode ? STUDENT_MOBILE_NAV : MOBILE_NAV).map((item) => {
           const active = isActive(pathname, item.href);
           const Icon = item.icon;
           const isAI = item.href === "/ai";

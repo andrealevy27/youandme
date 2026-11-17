@@ -1,6 +1,7 @@
 import { unreadNotificationCount } from "@/server/notifications";
 import { totalUnreadConversations } from "@/server/messaging";
 import type { Viewer } from "@/server/auth/session";
+import { env } from "@/server/env";
 import { MobileBottomNav, MobileTopBar, Sidebar, type ShellUser } from "./app-nav";
 
 /** Authenticated app chrome: left sidebar on desktop, top bar + bottom tabs on mobile. */
@@ -15,6 +16,7 @@ export async function AppShell({ viewer, children }: { viewer: Viewer; children:
     avatarUrl: viewer.avatarUrl,
     isAdmin: !!viewer.adminRole,
     isConsultant: viewer.roles.includes("consultant"),
+    studentMode: env.STUDENT_MODE,
   };
   const counts = { messages, notifications };
   return (

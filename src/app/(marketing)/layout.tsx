@@ -2,16 +2,17 @@ import { CookieNotice } from "@/components/marketing/cookie-notice";
 import { SiteFooter } from "@/components/marketing/site-footer";
 import { SiteNav } from "@/components/marketing/site-nav";
 import { getMarketingContext } from "@/components/marketing/context";
+import { env } from "@/server/env";
 
 export default async function MarketingLayout({ children }: { children: React.ReactNode }) {
   const { signedIn, showWaitlist, primaryCta } = await getMarketingContext();
   return (
     <div className="flex min-h-dvh flex-col">
-      <SiteNav signedIn={signedIn} cta={primaryCta} />
+      <SiteNav signedIn={signedIn} cta={primaryCta} studentMode={env.STUDENT_MODE} />
       <main id="main" className="flex-1">
         {children}
       </main>
-      <SiteFooter showWaitlist={showWaitlist} />
+      <SiteFooter showWaitlist={showWaitlist} studentMode={env.STUDENT_MODE} />
       <CookieNotice />
     </div>
   );

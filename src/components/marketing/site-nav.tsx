@@ -13,13 +13,20 @@ export const NAV_LINKS = [
   { href: "/#ai", label: "AI" },
 ] as const;
 
-export function SiteNav({ signedIn, cta }: { signedIn: boolean; cta: MarketingCta }) {
+export const STUDENT_NAV_LINKS = [
+  { href: "/#how", label: "How it works" },
+  { href: "/#cofounders", label: "Why you two" },
+  { href: "/#events", label: "Events" },
+] as const;
+
+export function SiteNav({ signedIn, cta, studentMode = false }: { signedIn: boolean; cta: MarketingCta; studentMode?: boolean }) {
+  const links = studentMode ? STUDENT_NAV_LINKS : NAV_LINKS;
   return (
     <header className="sticky top-0 z-40 border-b border-border/70 bg-background/85 backdrop-blur-md supports-[backdrop-filter]:bg-background/70 px-5 sm:px-8">
       <nav aria-label="Main" className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4">
         <Logo />
         <ul className="hidden items-center gap-1 md:flex">
-          {NAV_LINKS.map((l) => (
+          {links.map((l) => (
             <li key={l.href}>
               <Link href={l.href} className="rounded-[8px] px-3 py-2 text-[14px] text-muted transition-colors hover:text-foreground">
                 {l.label}
@@ -45,7 +52,7 @@ export function SiteNav({ signedIn, cta }: { signedIn: boolean; cta: MarketingCt
               </Button>
             </>
           )}
-          <MobileMenu links={NAV_LINKS} signedIn={signedIn} cta={cta} />
+          <MobileMenu links={links} signedIn={signedIn} cta={cta} />
         </div>
       </nav>
     </header>
