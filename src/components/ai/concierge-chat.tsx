@@ -19,7 +19,7 @@ export const CONCIERGE_SUGGESTIONS = [
 ];
 
 const REQUEST_TIMEOUT_MS = 95_000;
-const GENERIC_ERROR = "We couldn't reach You&Me AI. Try again.";
+const GENERIC_ERROR = "We couldn't reach FoundMate AI. Try again.";
 
 type Failure = { text: string; message: string };
 
@@ -114,13 +114,13 @@ export function ConciergeChat({
         <ThreadPanel threads={threads} activeId={threadId} />
       </aside>
 
-      <section className="flex min-w-0 flex-1 flex-col" aria-label="You&Me AI conversation">
+      <section className="flex min-w-0 flex-1 flex-col" aria-label="FoundMate AI conversation">
         <header className="flex h-14 shrink-0 items-center justify-between gap-2 border-b border-border px-4">
           <div className="flex min-w-0 items-center gap-2">
             <span className="flex size-7 items-center justify-center rounded-full bg-brand-gradient text-white">
               <Sparkles className="size-3.5" aria-hidden />
             </span>
-            <h1 className="truncate text-[15px] font-semibold tracking-tight">You&amp;Me AI</h1>
+            <h1 className="truncate text-[15px] font-semibold tracking-tight">FoundMate AI</h1>
             {basicMode && (
               <span className="hidden truncate rounded-full border border-border px-2.5 py-0.5 text-xs text-muted sm:inline" title="No AI provider is configured on this server.">
                 Basic mode — connect an AI provider for richer answers
@@ -164,7 +164,7 @@ export function ConciergeChat({
                         <Sparkles className="size-3.5" />
                       </span>
                       <div className="min-w-0 flex-1">
-                        <span className="sr-only">You&amp;Me AI said:</span>
+                        <span className="sr-only">FoundMate AI said:</span>
                         <MarkdownLite text={m.content} />
                         <ResultCards cards={m.cards} />
                       </div>
@@ -199,7 +199,7 @@ export function ConciergeChat({
         >
           <div className="mx-auto flex max-w-3xl items-end gap-2 rounded-[16px] border border-border-strong bg-card p-2 focus-within:border-brand focus-within:ring-4 focus-within:ring-brand/15">
             <label htmlFor="ai-input" className="sr-only">
-              Message You&amp;Me AI
+              Message FoundMate AI
             </label>
             <textarea
               id="ai-input"
@@ -222,7 +222,7 @@ export function ConciergeChat({
             </Button>
           </div>
           <p className="mx-auto mt-1.5 max-w-3xl px-1 text-[11px] text-subtle">
-            You&amp;Me AI only recommends real members returned by search. It can still be wrong — check profiles before reaching out.
+            FoundMate AI only recommends real members returned by search. It can still be wrong — check profiles before reaching out.
           </p>
         </form>
       </section>
@@ -236,7 +236,7 @@ function Intro({ name, onPick }: { name: string; onPick: (s: string) => void }) 
     <div className="mx-auto flex min-h-full max-w-2xl flex-col justify-center px-5 py-10">
       <p className="text-sm font-medium text-brand-ink">Hi {first}</p>
       <h2 className="mt-1 text-[26px] leading-tight font-semibold tracking-tight sm:text-[30px]">Tell us what you&apos;re working on.</h2>
-      <p className="mt-2 text-[15px] text-muted">Ask for a cofounder, a first hire or a consultant. You&amp;Me AI searches the network and tells you who, why, and what to do next.</p>
+      <p className="mt-2 text-[15px] text-muted">Ask for a cofounder, a first hire or a consultant. FoundMate AI searches the network and tells you who, why, and what to do next.</p>
       <ul className="mt-7 grid gap-2 sm:grid-cols-2">
         {CONCIERGE_SUGGESTIONS.map((s) => (
           <li key={s}>
@@ -276,7 +276,7 @@ function ThreadPanel({ threads, activeId, compact }: { threads: ConciergeThread[
     <div className={cn("flex min-h-0 flex-1 flex-col", !compact && "p-3")}>
       {!compact && <p className="px-2 pt-1 pb-2 text-xs font-medium text-subtle">Recent conversations</p>}
       {threads.length === 0 ? (
-        <p className="px-2 py-3 text-sm text-muted">Your conversations with You&amp;Me AI will show up here.</p>
+        <p className="px-2 py-3 text-sm text-muted">Your conversations with FoundMate AI will show up here.</p>
       ) : (
         <ul className="-mx-1 flex-1 space-y-0.5 overflow-y-auto">
           {threads.map((t) => {

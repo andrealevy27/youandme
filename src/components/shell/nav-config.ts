@@ -19,7 +19,7 @@ export const SIDEBAR_NAV: NavItem[] = [
   { href: "/matches", label: "Matches", icon: Users },
   { href: "/discover", label: "Discover", icon: Compass },
   { href: "/consultants", label: "Consultants", icon: Briefcase },
-  { href: "/ai", label: "You&Me AI", icon: Sparkles },
+  { href: "/ai", label: "FoundMate AI", icon: Sparkles },
   { href: "/messages", label: "Messages", icon: MessageCircle, badge: "messages" },
   { href: "/startup", label: "Startup", icon: Rocket },
   { href: "/saved", label: "Saved", icon: Bookmark },

@@ -189,7 +189,7 @@ function Events() {
       <div className="grid grid-cols-[minmax(0,1fr)] gap-14 lg:grid-cols-2 lg:items-center lg:gap-20">
         <div className="lg:order-2">
           <Eyebrow>For entrepreneurship centers</Eyebrow>
-          <SectionTitle>Run your team hunt on You&amp;Me.</SectionTitle>
+          <SectionTitle>Run your team hunt on FoundMate.</SectionTitle>
           <Lead>
             Create an event and put the QR code on the screen. Students scan it, fill in a short profile on their phone, and get their five people
             to meet that night — with a reason for each. The matches stay in the app after the room empties.

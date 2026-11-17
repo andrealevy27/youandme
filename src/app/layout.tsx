@@ -5,10 +5,10 @@ import { Toaster } from "sonner";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: { default: "You&Me — Build the team behind your startup", template: "%s · You&Me" },
+  title: { default: "FoundMate — Build the team behind your startup", template: "%s · FoundMate" },
   description:
     "Find cofounders, consultants, advisors, and startup talent — intelligently matched to what you're building.",
-  applicationName: "You&Me",
+  applicationName: "FoundMate",
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"),
 };
 

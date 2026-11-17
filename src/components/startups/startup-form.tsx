@@ -287,7 +287,7 @@ export function StartupForm({
             )}
             <Field label="Visibility" htmlFor="visibility" hint="Hidden startups are only visible to your team.">
               <NativeSelect id="visibility" value={v.visibility} onChange={(e) => set("visibility", e.target.value as StartupFormValues["visibility"])}>
-                <option value="public">Public on You&amp;Me</option>
+                <option value="public">Public on FoundMate</option>
                 <option value="hidden">Team only</option>
               </NativeSelect>
             </Field>

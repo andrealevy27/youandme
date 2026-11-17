@@ -8,7 +8,7 @@ import { getSetting } from "@/server/settings";
 
 export const metadata: Metadata = {
   title: "Join",
-  description: "Create your You&Me account and meet the people you need to build your startup.",
+  description: "Create your FoundMate account and meet the people you need to build your startup.",
 };
 
 export default async function SignupPage() {

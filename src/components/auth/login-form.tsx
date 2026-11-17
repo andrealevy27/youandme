@@ -30,7 +30,7 @@ export function LoginForm({ oauth, next, initialError }: { oauth: OAuthFlags; ne
       router.push(next);
       router.refresh();
     } catch {
-      setError("We couldn't reach You&Me. Check your connection and try again.");
+      setError("We couldn't reach FoundMate. Check your connection and try again.");
       setPending(false);
     }
   }
@@ -68,7 +68,7 @@ export function LoginForm({ oauth, next, initialError }: { oauth: OAuthFlags; ne
         </form>
       </div>
       <p className="mt-8 text-center text-[14px] text-muted">
-        New to You&amp;Me?{" "}
+        New to FoundMate?{" "}
         <Link href="/signup" className="font-medium text-foreground underline-offset-4 hover:underline">
           Create an account
         </Link>

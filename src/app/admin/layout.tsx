@@ -12,7 +12,7 @@ import { visibleAdminNav } from "@/server/admin/nav";
 import { adminQueueCounts } from "@/server/admin/queues";
 
 export const metadata: Metadata = {
-  title: { default: "Admin", template: "%s · Admin · You&Me" },
+  title: { default: "Admin", template: "%s · Admin · FoundMate" },
   robots: { index: false, follow: false },
 };
 
@@ -30,7 +30,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
       <aside className="fixed inset-y-0 left-0 z-30 hidden w-[232px] flex-col border-r border-border bg-background px-3 py-5 lg:flex" aria-label="Admin">
         <Link href={items[0]?.href ?? "/admin"} className="flex items-center gap-2 px-3 font-semibold tracking-tight">
           <LogoMark className="size-6" />
-          <span className="text-[15px]">You&amp;Me</span>
+          <span className="text-[15px]">FoundMate</span>
           <span className="rounded-full bg-ink px-2 py-0.5 text-[11px] font-semibold text-ink-foreground">Admin</span>
         </Link>
         <div className="mt-7 flex-1 overflow-y-auto">
@@ -46,7 +46,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
             <ThemeToggle />
           </div>
           <Link href="/home" className="mt-3 flex h-9 items-center gap-2 rounded-[10px] px-3 text-[13px] font-medium text-muted hover:bg-surface hover:text-foreground">
-            <ArrowLeft className="size-4" aria-hidden /> Back to You&amp;Me
+            <ArrowLeft className="size-4" aria-hidden /> Back to FoundMate
           </Link>
         </div>
       </aside>
@@ -55,7 +55,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
         <div className="mb-3 flex items-center justify-between">
           {/* Text wordmark: LogoMark's gradient id lives in the (hidden) desktop sidebar. */}
           <Link href={items[0]?.href ?? "/admin"} className="flex items-center gap-2 font-semibold tracking-tight">
-            <span className="text-[15px]">You&amp;Me</span>
+            <span className="text-[15px]">FoundMate</span>
             <span className="rounded-full bg-ink px-2 py-0.5 text-[11px] font-semibold text-ink-foreground">Admin</span>
           </Link>
           <div className="flex items-center gap-1">

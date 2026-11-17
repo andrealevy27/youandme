@@ -145,7 +145,7 @@ export function HeroMockup() {
               <span className={cn("flex size-6 items-center justify-center rounded-full bg-brand-gradient text-white", s.pulse)}>
                 <Sparkles className="size-3.5" />
               </span>
-              <span className="text-[12px] font-semibold">You&amp;Me AI</span>
+              <span className="text-[12px] font-semibold">FoundMate AI</span>
             </div>
             <p className="mt-2 text-[12.5px] leading-snug text-muted">
               Maya has shipped two payments products. Want a suggested first conversation topic?

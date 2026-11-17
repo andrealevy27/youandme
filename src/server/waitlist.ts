@@ -42,11 +42,11 @@ export async function joinWaitlist(input: WaitlistSignup) {
     const greeting = first ? `Hi ${first},` : "Hi,";
     await sendEmail({
       to: email,
-      subject: "You're on the You&Me waitlist",
-      text: `${greeting}\n\nThanks for joining the You&Me waitlist. We're opening in waves so every match stays worth your time — we'll email you here as soon as your spot opens.\n\nThe You&Me team`,
+      subject: "You're on the FoundMate waitlist",
+      text: `${greeting}\n\nThanks for joining the FoundMate waitlist. We're opening in waves so every match stays worth your time — we'll email you here as soon as your spot opens.\n\nThe FoundMate team`,
       html: emailLayout(
         "You're on the list",
-        `${escapeHtml(greeting)}<br/><br/>Thanks for joining the You&amp;Me waitlist. We're opening in waves so every match stays worth your time — we'll email you here as soon as your spot opens.`,
+        `${escapeHtml(greeting)}<br/><br/>Thanks for joining the FoundMate waitlist. We're opening in waves so every match stays worth your time — we'll email you here as soon as your spot opens.`,
         undefined,
         WAITLIST_FOOTER,
       ),

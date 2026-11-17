@@ -79,7 +79,7 @@ export default async function AdminSettingsPage() {
           <Card>
             <CardContent className="flex items-start justify-between gap-4">
               <div>
-                <p className="font-medium">You&amp;Me Pro</p>
+                <p className="font-medium">FoundMate Pro</p>
                 <p className="mt-0.5 text-[13px] text-muted">Paid tiers stay off unless this is enabled. Turning it on exposes Pro entitlements to members.</p>
                 {pro && (
                   <p className="mt-2 flex items-center gap-1.5 text-[12.5px] font-medium text-warning">
@@ -87,7 +87,7 @@ export default async function AdminSettingsPage() {
                   </p>
                 )}
               </div>
-              <AdminActionSwitch action={setProEnabledAction} payload={{}} checked={pro} label="Enable You&Me Pro" success={{ on: "Pro enabled", off: "Pro disabled" }} />
+              <AdminActionSwitch action={setProEnabledAction} payload={{}} checked={pro} label="Enable FoundMate Pro" success={{ on: "Pro enabled", off: "Pro disabled" }} />
             </CardContent>
           </Card>
         </div>

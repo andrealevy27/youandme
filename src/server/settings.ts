@@ -23,7 +23,7 @@ export const SETTING_DEFAULTS = {
   waitlist_enabled: false,
   /** Marketplace commission in basis points (1000 = 10%). */
   platform_fee_bps: 1000,
-  /** You&Me Pro paid features stay off until explicitly enabled. */
+  /** FoundMate Pro paid features stay off until explicitly enabled. */
   pro_enabled: false,
 } as const;
 

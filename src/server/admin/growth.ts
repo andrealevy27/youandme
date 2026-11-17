@@ -158,10 +158,10 @@ export async function inviteFromWaitlist(actor: Viewer, entryId: string) {
   const greeting = entry.name ? `Hi ${entry.name.split(" ")[0]},` : "Hi,";
   await sendEmail({
     to: entry.email,
-    subject: "Your You&Me invite is here",
-    text: `${greeting}\n\nA spot opened up on You&Me. Use your personal invite to join: ${url}\n\nYour code: ${invite.code} (valid for 30 days).`,
+    subject: "Your FoundMate invite is here",
+    text: `${greeting}\n\nA spot opened up on FoundMate. Use your personal invite to join: ${url}\n\nYour code: ${invite.code} (valid for 30 days).`,
     html: emailLayout(
-      "Your You&Me invite is here",
+      "Your FoundMate invite is here",
       `${escapeHtml(greeting)}<br/><br/>A spot opened up. Use your personal invite to create your account — it's valid for 30 days.<br/><br/>Your code: <strong>${invite.code}</strong>`,
       { label: "Accept invite", url },
       WAITLIST_FOOTER,

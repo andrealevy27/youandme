@@ -22,7 +22,7 @@ export default async function StartupHubPage() {
       <PageHeader
         eyebrow="Startup"
         title="Build the team behind the idea."
-        description="Your startup's home on You&Me: profile, team, needs and open roles."
+        description="Your startup's home on FoundMate: profile, team, needs and open roles."
         actions={
           <Button asChild>
             <Link href="/startups/new">

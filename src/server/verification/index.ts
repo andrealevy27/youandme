@@ -33,7 +33,7 @@ export async function requestUniversityVerification(userId: string, rawEmail: st
   const url = `${env.NEXT_PUBLIC_APP_URL}/verify/university?token=${token}`;
   await sendEmail({
     to: email,
-    subject: "Confirm your university email on You&Me",
+    subject: "Confirm your university email on FoundMate",
     text: `Confirm your university email: ${url}`,
     html: emailLayout("Confirm your university email", `Click below to confirm you have access to an address at ${domain}. The link expires in 24 hours.`, { label: "Confirm email", url }),
   });

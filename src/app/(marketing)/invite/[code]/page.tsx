@@ -30,7 +30,7 @@ export default async function InvitePage({
             <p className="mt-6 text-[13px] font-medium text-brand-ink">Invitation</p>
             <h1 className="mt-2 text-[34px] leading-tight font-semibold tracking-[-0.035em] sm:text-[40px]">You&apos;re invited.</h1>
             <p className="mt-3 text-[16px] leading-relaxed text-muted">
-              Someone thinks you belong on You&amp;Me — the network for building startups. Create your account to meet the people you need.
+              Someone thinks you belong on FoundMate — the network for building startups. Create your account to meet the people you need.
             </p>
             {ctx.signedIn ? (
               <Button asChild size="lg" className="mt-8 h-12 w-full sm:w-auto sm:px-8">

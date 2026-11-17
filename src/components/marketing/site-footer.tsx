@@ -41,7 +41,7 @@ export function SiteFooter({ showWaitlist, studentMode = false }: { showWaitlist
         </nav>
       </div>
       <div className="mx-auto flex max-w-6xl flex-col gap-2 border-t border-border py-6 text-[13px] text-subtle sm:flex-row sm:justify-between">
-        <p>© {year} You&amp;Me. All rights reserved.</p>
+        <p>© {year} FoundMate. All rights reserved.</p>
         <p>The human layer of company building.</p>
       </div>
     </footer>

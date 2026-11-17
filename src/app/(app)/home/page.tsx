@@ -265,7 +265,7 @@ export default async function HomePage() {
           <span className="flex size-8 items-center justify-center rounded-full bg-brand-gradient text-white">
             <Sparkles className="size-4" aria-hidden />
           </span>
-          Tell You&amp;Me AI what you&apos;re working on…
+          Tell FoundMate AI what you&apos;re working on…
         </Link>
       </header>
 

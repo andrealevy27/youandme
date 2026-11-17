@@ -54,7 +54,7 @@ export default async function AdminOverviewPage({ searchParams }: { searchParams
     <>
       <PageHeader
         title="Overview"
-        description="Live numbers from the You&Me database. Nothing here is estimated."
+        description="Live numbers from the FoundMate database. Nothing here is estimated."
         actions={
           <Link
             href={includeDemo ? "/admin" : "/admin?demo=1"}

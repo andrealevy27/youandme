@@ -40,7 +40,7 @@ import { analyzeTeamGaps as analyzeTeamGapsService, type TeamGapAnalysis } from 
 import type { AIToolDefinition } from "./provider";
 
 /**
- * Controlled tools for You&Me AI. The concierge (model or basic mode) can ONLY reach data
+ * Controlled tools for FoundMate AI. The concierge (model or basic mode) can ONLY reach data
  * through these functions. Every tool:
  *  - runs as the viewer (viewerId is bound at construction, never taken from model input),
  *  - applies the same visibility rules as the product UI (discoverable, not blocked,
@@ -160,7 +160,7 @@ export const CONCIERGE_TOOL_DEFINITIONS: AIToolDefinition[] = [
   {
     name: "searchPeople",
     description:
-      "Search discoverable members of the You&Me network (cofounder candidates, founders, talent, advisors). Keyword search over headline, role, company, university and 'looking for', boosted by skill, industry and university terms in the query. Returns public profile fields only. Use tab 'cofounders' for people actively looking for a cofounder, 'founders' for people building a startup, 'talent' for people who want to join a startup.",
+      "Search discoverable members of the FoundMate network (cofounder candidates, founders, talent, advisors). Keyword search over headline, role, company, university and 'looking for', boosted by skill, industry and university terms in the query. Returns public profile fields only. Use tab 'cofounders' for people actively looking for a cofounder, 'founders' for people building a startup, 'talent' for people who want to join a startup.",
     inputSchema: {
       type: "object",
       properties: {
@@ -178,7 +178,7 @@ export const CONCIERGE_TOOL_DEFINITIONS: AIToolDefinition[] = [
   {
     name: "searchConsultants",
     description:
-      "Search approved consultants in the You&Me marketplace. Returns headline, categories, rating (only if reviewed), from-price and a few services. maxBudgetCents keeps only consultants with at least one service at or under that price (USD cents; $500 = 50000).",
+      "Search approved consultants in the FoundMate marketplace. Returns headline, categories, rating (only if reviewed), from-price and a few services. maxBudgetCents keeps only consultants with at least one service at or under that price (USD cents; $500 = 50000).",
     inputSchema: {
       type: "object",
       properties: {

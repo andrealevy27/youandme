@@ -4,7 +4,7 @@ import { LegalPage, type LegalSectionDef } from "@/components/marketing/legal";
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
-  description: "What You&Me collects, why, how AI features use it, and the controls you have.",
+  description: "What FoundMate collects, why, how AI features use it, and the controls you have.",
 };
 
 const sections: LegalSectionDef[] = [
@@ -72,7 +72,7 @@ const sections: LegalSectionDef[] = [
     body: (
       <>
         <p>
-          You&amp;Me uses AI (currently a model provided by Anthropic) for the You&amp;Me AI concierge and to phrase match explanations. It is built
+          FoundMate uses AI (currently a model provided by Anthropic) for the FoundMate AI concierge and to phrase match explanations. It is built
           with strict limits:
         </p>
         <ul>
@@ -119,7 +119,7 @@ const sections: LegalSectionDef[] = [
       <>
         <p>
           We don&apos;t sell your personal data and we don&apos;t share it with advertisers. We share data only with service providers that help us
-          run You&amp;Me, under contracts that limit their use of it:
+          run FoundMate, under contracts that limit their use of it:
         </p>
         <ul>
           <li>Hosting, database and file storage providers.</li>
@@ -217,7 +217,7 @@ export default function PrivacyPage() {
       updated="September 2026"
       intro={
         <p>
-          You&amp;Me helps people find the right people to build startups with. That only works if you trust us with information about you. This
+          FoundMate helps people find the right people to build startups with. That only works if you trust us with information about you. This
           policy explains, in plain language, what we collect, how we use it — including in AI features — and the controls you have.
         </p>
       }

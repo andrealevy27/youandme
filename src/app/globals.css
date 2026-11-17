@@ -3,7 +3,7 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 /*
- * You&Me design tokens. Warm neutral base, near-black ink, one restrained
+ * FoundMate design tokens. Warm neutral base, near-black ink, one restrained
  * indigo→blue accent. All text/background pairs target WCAG AA.
  */
 :root {

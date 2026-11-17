@@ -1,5 +1,5 @@
 /**
- * Schools You&Me accepts in student mode.
+ * Schools FoundMate accepts in student mode.
  *
  * To add a school, add one entry. `domains` are the email domains its students
  * sign up with; subdomains (e.g. cs.stanford.edu) are accepted automatically.

@@ -15,7 +15,7 @@ export function LegalPage({ title, updated, intro, sections }: { title: string; 
           <div className="mt-8 flex gap-3 rounded-[14px] border border-warning/25 bg-warning-soft px-4 py-3.5 text-[13.5px] leading-relaxed text-warning">
             <Info className="mt-0.5 size-4 shrink-0" aria-hidden />
             <p>
-              <span className="font-semibold">Template — review with counsel before launch.</span> This document describes how You&amp;Me is designed to
+              <span className="font-semibold">Template — review with counsel before launch.</span> This document describes how FoundMate is designed to
               work, but it has not yet been reviewed by a lawyer and is not final legal advice.
             </p>
           </div>

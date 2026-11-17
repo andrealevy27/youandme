@@ -25,7 +25,7 @@ const schema = z.object({
   STRIPE_WEBHOOK_SECRET: z.string().optional(),
   PAYMENTS_PROVIDER: z.enum(["stripe", "dev"]).default("stripe"),
   RESEND_API_KEY: z.string().optional(),
-  EMAIL_FROM: z.string().default("You&Me <hello@youandme.company>"),
+  EMAIL_FROM: z.string().default("FoundMate <hello@youandme.company>"),
   STORAGE_DRIVER: z.enum(["local", "s3"]).default("local"),
   S3_BUCKET: z.string().optional(),
   S3_REGION: z.string().optional(),
@@ -36,7 +36,7 @@ const schema = z.object({
   POSTHOG_KEY: z.string().optional(),
   POSTHOG_HOST: z.string().optional(),
   ADMIN_EMAILS: z.string().default(""),
-  /** Student pivot: campus-first product. Off by default — turning it off restores the original You&Me. */
+  /** Student pivot: campus-first product. Off by default — turning it off restores the original FoundMate. */
   STUDENT_MODE: z
     .enum(["true", "false", "1", "0"])
     .default("false")

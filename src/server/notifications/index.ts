@@ -56,7 +56,7 @@ export async function notify(input: NotifyInput, conn: DbOrTx = db) {
         to: recipient.email,
         subject: input.title,
         text: `${input.body ?? ""}\n\n${url}`,
-        html: emailLayout(input.title, input.body ?? "", { label: "Open You&Me", url }),
+        html: emailLayout(input.title, input.body ?? "", { label: "Open FoundMate", url }),
       }).catch((err) => logger.warn("notification_email_failed", { err }));
     }
   }

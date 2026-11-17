@@ -3,7 +3,7 @@ import { WaitlistForm } from "@/components/marketing/waitlist-form";
 
 export const metadata: Metadata = {
   title: "Join the waitlist",
-  description: "You&Me is letting people in carefully. Join the waitlist and we'll let you know when your spot opens.",
+  description: "FoundMate is letting people in carefully. Join the waitlist and we'll let you know when your spot opens.",
 };
 
 export default function WaitlistPage() {
@@ -16,7 +16,7 @@ export default function WaitlistPage() {
             Good networks grow carefully.
           </h1>
           <p className="mx-auto mt-4 max-w-md text-[16px] leading-relaxed text-muted sm:text-[17px]">
-            We&apos;re opening You&amp;Me in waves so every match stays worth your time. Tell us a little about you.
+            We&apos;re opening FoundMate in waves so every match stays worth your time. Tell us a little about you.
           </p>
         </div>
         <div className="mt-10 rounded-[24px] border border-border bg-card p-6 shadow-soft sm:p-8">

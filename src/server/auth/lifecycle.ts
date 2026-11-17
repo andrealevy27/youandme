@@ -33,7 +33,7 @@ export async function assertSignupAllowed(inviteCode: string | undefined) {
   const invite = await findUsableInvite(inviteCode);
   if (!invite) {
     throw new APIError("FORBIDDEN", {
-      message: "You&Me is invite-only right now. Join the waitlist and we'll let you know when a spot opens.",
+      message: "FoundMate is invite-only right now. Join the waitlist and we'll let you know when a spot opens.",
     });
   }
 }

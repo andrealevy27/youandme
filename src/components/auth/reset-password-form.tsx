@@ -27,7 +27,7 @@ export function ResetPasswordForm({ token }: { token: string }) {
       if (err) setError(friendlyAuthError(err));
       else setDone(true);
     } catch {
-      setError("We couldn't reach You&Me. Check your connection and try again.");
+      setError("We couldn't reach FoundMate. Check your connection and try again.");
     } finally {
       setPending(false);
     }

@@ -67,7 +67,7 @@ export function SignupForm({
       router.push("/onboarding");
       router.refresh();
     } catch {
-      setError("We couldn't reach You&Me. Check your connection and try again.");
+      setError("We couldn't reach FoundMate. Check your connection and try again.");
     } finally {
       setPending(false);
     }
@@ -76,8 +76,8 @@ export function SignupForm({
   return (
     <>
       <AuthHeading
-        title="Join You&Me"
-        description={inviteOnly ? "You&Me is invite-only while we grow carefully." : "Tell us who you are. We'll help you find who you need."}
+        title="Join FoundMate"
+        description={inviteOnly ? "FoundMate is invite-only while we grow carefully." : "Tell us who you are. We'll help you find who you need."}
       />
 
       {inviteOnly && inviteApplied && (

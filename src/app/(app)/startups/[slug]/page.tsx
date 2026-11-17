@@ -214,7 +214,7 @@ export default async function StartupPage({ params }: Props) {
               ) : null}
               <div>
                 <dt className="text-xs text-subtle">Team</dt>
-                <dd className="mt-0.5 font-medium">{members.length} on You&amp;Me</dd>
+                <dd className="mt-0.5 font-medium">{members.length} on FoundMate</dd>
               </div>
               {s.foundedOn && (
                 <div>

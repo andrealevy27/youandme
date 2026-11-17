@@ -1,6 +1,6 @@
-# You&Me
+# FoundMate
 
-**The network for building startups.** Tell You&Me what you're building — it helps you find the people you need to build it: cofounders, consultants, advisors and startup talent, intelligently matched and explained.
+**The network for building startups.** Tell FoundMate what you're building — it helps you find the people you need to build it: cofounders, consultants, advisors and startup talent, intelligently matched and explained.
 
 ## What's inside
 
@@ -9,7 +9,7 @@
 - **Working-style quiz** — 21 statements across seven dimensions (visionary↔operator, fast↔deliberate, …) used in matching. Not a clinical assessment.
 - **Startups** — profiles, teams with role-based permissions, invites, needs and open roles, team group chat.
 - **Consultant marketplace** — AI-assisted "describe what you need" search, services (fixed, hourly, package, monthly), real availability, booking with teammates, Stripe Connect payments, verified reviews.
-- **You&Me AI** — a concierge that answers only from real profiles via controlled, permission-aware tools, plus team-gap detection.
+- **FoundMate AI** — a concierge that answers only from real profiles via controlled, permission-aware tools, plus team-gap detection.
 - **Messaging** — direct, match, consultant, booking and startup group threads with reactions, attachments, read receipts and typing indicators.
 - **Trust & safety** — honest verification badges, reports, blocks, moderation queue, audit log.
 - **Admin** — permission-based dashboard with real metrics, moderation, marketplace ops, growth (waitlist/invites) and platform settings (matching weights, commission).
@@ -38,7 +38,7 @@ Every integration is optional in development and is hidden or clearly labelled w
 | Integration | Env | When missing |
 |---|---|---|
 | Google / Apple / LinkedIn sign-in | `*_CLIENT_ID`, `*_CLIENT_SECRET` | Buttons hidden |
-| Claude (You&Me AI, explanation writing) | `ANTHROPIC_API_KEY`, `AI_MODEL` | "Basic mode" label; rule-based answers from real data |
+| Claude (FoundMate AI, explanation writing) | `ANTHROPIC_API_KEY`, `AI_MODEL` | "Basic mode" label; rule-based answers from real data |
 | Stripe Connect | `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET` | Paid booking unavailable (set `PAYMENTS_PROVIDER=dev` locally for a labelled no-charge test mode; refused in production) |
 | Resend | `RESEND_API_KEY` | Emails logged to the server console |
 | S3-compatible storage | `STORAGE_DRIVER=s3`, `S3_*` | Local `./uploads` (dev) |
@@ -53,7 +53,7 @@ Every integration is optional in development and is hidden or clearly labelled w
    - `BETTER_AUTH_URL` and `NEXT_PUBLIC_APP_URL`: `https://youandme.company`.
    - `ADMIN_EMAILS`: the founders' emails; these accounts get the admin dashboard.
    - `RESEND_API_KEY`: from Resend, after verifying `youandme.company` as a sending domain there.
-   - `EMAIL_FROM`: `You&Me <hello@youandme.company>`.
+   - `EMAIL_FROM`: `FoundMate <hello@youandme.company>`.
 3. In Vercel → Domains, add `youandme.company` and update the DNS records it shows.
 4. Run `npm run db:migrate` once against the production `DATABASE_URL`.
 5. Sign up at `/signup` with an `ADMIN_EMAILS` address **before** turning on invite-only.
@@ -62,7 +62,7 @@ Links once live: waitlist at https://youandme.company/waitlist, admin at https:/
 
 ## Pre-launch waitlist
 
-Run You&Me as a waitlist until launch, from **Admin → Growth**:
+Run FoundMate as a waitlist until launch, from **Admin → Growth**:
 
 1. Turn on **Invite-only** and **Waitlist**. The site's main CTAs then point to `/waitlist` instead of `/signup`.
 2. The form asks for name and email (required), plus optional phone, school, how they heard about you and what brings them. Sign-ups get a confirmation email (set `RESEND_API_KEY`; without it, emails are only logged).

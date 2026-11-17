@@ -88,7 +88,7 @@ export async function reviewConsultant(
   const copy = {
     approved: {
       title: "Your consultant profile is live",
-      body: "You've been approved. Founders can now find and book you on You&Me.",
+      body: "You've been approved. Founders can now find and book you on FoundMate.",
     },
     rejected: {
       title: "Your consultant profile needs changes",

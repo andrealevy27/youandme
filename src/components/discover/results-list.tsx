@@ -45,7 +45,7 @@ export function ResultsList(props: Props) {
       <EmptyState
         icon={<Search />}
         title="No one matches that yet. Try fewer filters."
-        description="Broaden your words, remove a filter or two, or ask You&Me AI to search for you."
+        description="Broaden your words, remove a filter or two, or ask FoundMate AI to search for you."
         action={
           <Button asChild variant="secondary" size="sm">
             <Link href={props.clearHref}>Clear filters</Link>

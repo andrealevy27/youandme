@@ -17,7 +17,7 @@ export const getMarketingContext = cache(async () => {
     ? { href: "/home", label: "Open app" }
     : inviteOnly
       ? { href: "/waitlist", label: "Join the waitlist" }
-      : { href: "/signup", label: "Join You&Me" };
+      : { href: "/signup", label: "Join FoundMate" };
   return {
     signedIn: !!viewer,
     primaryCta,

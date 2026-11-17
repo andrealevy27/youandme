@@ -155,7 +155,7 @@ export async function suspendUser(actor: Viewer, input: { userId: string; days: 
   await notify({
     userId: input.userId,
     type: "system",
-    title: "Your You&Me account has been suspended",
+    title: "Your FoundMate account has been suspended",
     body: `${until ? `Your account is suspended until ${until.toUTCString()}.` : "Your account is suspended until further notice."} Reason: ${input.reason}`,
     actorId: actor.userId,
   });
@@ -170,7 +170,7 @@ export async function unsuspendUser(actor: Viewer, userId: string) {
   await notify({
     userId,
     type: "system",
-    title: "Your You&Me account is active again",
+    title: "Your FoundMate account is active again",
     body: "Your suspension has been lifted. Welcome back.",
     href: "/home",
     actorId: actor.userId,
@@ -193,7 +193,7 @@ export async function banUser(actor: Viewer, input: { userId: string; reason: st
   await notify({
     userId: input.userId,
     type: "system",
-    title: "Your You&Me account has been closed",
+    title: "Your FoundMate account has been closed",
     body: `Your account was banned for violating our community guidelines. Reason: ${input.reason}`,
     actorId: actor.userId,
   });
@@ -220,7 +220,7 @@ export async function setAdminRole(actor: Viewer, input: { userId: string; role:
 
   if (previous === "super_admin" && input.role !== "super_admin") {
     const [row] = await db.select({ n: count() }).from(adminUsers).where(eq(adminUsers.role, "super_admin"));
-    if ((row?.n ?? 0) <= 1) throw new AppError("CONFLICT", "You&Me needs at least one super admin.");
+    if ((row?.n ?? 0) <= 1) throw new AppError("CONFLICT", "FoundMate needs at least one super admin.");
   }
 
   if (input.role === null) {

@@ -36,7 +36,7 @@ export const waitlistEntries = pgTable(
     note: text("note"),
     phone: text("phone"),
     school: text("school"),
-    /** How they heard about You&Me: a WAITLIST_SOURCES value. */
+    /** How they heard about FoundMate: a WAITLIST_SOURCES value. */
     source: text("source"),
     /** Free text when source is "other". */
     sourceDetail: text("source_detail"),
@@ -136,7 +136,7 @@ export const fileUploads = pgTable(
   (t) => [index("file_uploads_user_idx").on(t.userId)],
 );
 
-/** You&Me Pro — architecture only; entitlements are gated by the `pro_enabled` setting. */
+/** FoundMate Pro — architecture only; entitlements are gated by the `pro_enabled` setting. */
 export const subscriptions = pgTable("subscriptions", {
   userId: text("user_id")
     .primaryKey()

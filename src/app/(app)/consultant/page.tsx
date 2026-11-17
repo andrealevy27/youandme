@@ -82,7 +82,7 @@ export default async function ConsultantWorkspacePage({ searchParams }: { search
                 <p className="font-medium">How it works</p>
                 <ol className="mt-2 list-decimal space-y-1.5 pl-4 text-muted">
                   <li>Tell founders what you help with.</li>
-                  <li>The You&amp;Me team reviews every consultant before they&apos;re listed.</li>
+                  <li>The FoundMate team reviews every consultant before they&apos;re listed.</li>
                   <li>Add services, weekly hours and payouts.</li>
                   <li>Get booked — with context up front and a chat for every session.</li>
                 </ol>
@@ -259,7 +259,7 @@ export default async function ConsultantWorkspacePage({ searchParams }: { search
 function StatusBanner({ status }: { status: string }) {
   const map: Record<string, { tone: string; icon: React.ReactNode; title: string; body: string }> = {
     draft: { tone: "border-border bg-surface", icon: <Clock />, title: "Draft", body: "Save your profile to submit it for review." },
-    pending_review: { tone: "border-warning/30 bg-warning-soft text-warning", icon: <Clock />, title: "In review", body: "The You&Me team is reviewing your profile. You'll get a notification when you're listed — keep setting up services and hours meanwhile." },
+    pending_review: { tone: "border-warning/30 bg-warning-soft text-warning", icon: <Clock />, title: "In review", body: "The FoundMate team is reviewing your profile. You'll get a notification when you're listed — keep setting up services and hours meanwhile." },
     approved: { tone: "border-success/30 bg-success-soft text-success", icon: <CheckCircle2 />, title: "Listed", body: "Your profile is live in the marketplace." },
     rejected: { tone: "border-danger/30 bg-danger-soft text-danger", icon: <XCircle />, title: "Not approved yet", body: "Update your profile with more detail and save it to resubmit for review." },
     suspended: { tone: "border-danger/30 bg-danger-soft text-danger", icon: <AlertCircle />, title: "Suspended", body: "Your consultant profile is hidden. Contact support for details." },

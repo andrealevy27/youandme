@@ -129,7 +129,7 @@ export default async function ConsultantProfilePage({ params }: { params: Params
                     </span>
                   </Fact>
                 )}
-                {profile.engagementCount > 0 && <Fact label="Sessions on You&Me">{profile.engagementCount}</Fact>}
+                {profile.engagementCount > 0 && <Fact label="Sessions on FoundMate">{profile.engagementCount}</Fact>}
               </dl>
             </div>
           </Section>
@@ -202,7 +202,7 @@ export default async function ConsultantProfilePage({ params }: { params: Params
 
           <Section title="Reviews" id="reviews">
             {aggregate.count === 0 ? (
-              <EmptyState icon={<Sparkles />} title="No reviews yet" description={`${c.name.split(" ")[0]} is new to You&Me. Reviews appear here after completed sessions — only from clients who actually booked.`} />
+              <EmptyState icon={<Sparkles />} title="No reviews yet" description={`${c.name.split(" ")[0]} is new to FoundMate. Reviews appear here after completed sessions — only from clients who actually booked.`} />
             ) : (
               <div className="flex flex-col gap-6">
                 <div className="grid gap-6 rounded-[16px] border border-border bg-card p-5 sm:grid-cols-[auto_1fr] sm:items-center">
@@ -285,7 +285,7 @@ export default async function ConsultantProfilePage({ params }: { params: Params
             <Card>
               <CardContent>
                 <h2 className="text-[15px] font-semibold">Working style</h2>
-                <p className="mt-1 text-xs text-subtle">Self-reported via the You&amp;Me working-style quiz.</p>
+                <p className="mt-1 text-xs text-subtle">Self-reported via the FoundMate working-style quiz.</p>
                 <ul className="mt-3 flex flex-col gap-2.5">
                   {DIMENSION_KEYS.filter((k) => typeof personality[k] === "number")
                     .slice(0, 5)

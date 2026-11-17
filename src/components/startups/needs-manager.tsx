@@ -150,7 +150,7 @@ export function NeedsManager({
         </Button>
       )}
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent title="What do you need?" description="Needs drive your recommendations across people, consultants and You&Me AI.">
+        <DialogContent title="What do you need?" description="Needs drive your recommendations across people, consultants and FoundMate AI.">
           <div className="space-y-4">
             <div className="flex flex-wrap gap-2">
               {NEED_TYPES.map((t) => (

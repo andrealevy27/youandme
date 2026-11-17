@@ -4,7 +4,7 @@ export default function Loading() {
   return (
     <div
       aria-busy="true"
-      aria-label="Loading You&Me AI"
+      aria-label="Loading FoundMate AI"
       className="-mx-4 flex h-[calc(100dvh-12.5rem)] min-h-[440px] overflow-hidden border-y border-border sm:mx-0 sm:rounded-[20px] sm:border lg:h-[calc(100dvh-5rem)]"
     >
       <div className="hidden w-64 shrink-0 space-y-2 border-r border-border p-4 lg:block">

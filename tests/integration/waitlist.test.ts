@@ -32,7 +32,7 @@ describe("waitlist", () => {
     const rows = await db.select().from(s.waitlistEntries);
     expect(rows).toHaveLength(1);
     expect(rows[0]).toMatchObject({ email: "ada@example.com", name: "Ada Lovelace", status: "waiting" });
-    expect(sent).toEqual([expect.objectContaining({ to: "ada@example.com", subject: "You're on the You&Me waitlist" })]);
+    expect(sent).toEqual([expect.objectContaining({ to: "ada@example.com", subject: "You're on the FoundMate waitlist" })]);
   });
 
   it("stores the optional details and only keeps a source detail for \"other\"", async () => {

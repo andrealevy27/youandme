@@ -1,5 +1,5 @@
 /**
- * You&Me working-style model. This is a self-reported description of how someone
+ * FoundMate working-style model. This is a self-reported description of how someone
  * likes to build — not a clinical or psychometric instrument.
  *
  * Scores per dimension live in [-100, 100]: negative leans to the left pole.

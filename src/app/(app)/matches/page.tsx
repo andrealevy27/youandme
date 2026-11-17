@@ -89,10 +89,10 @@ export default async function MatchesPage() {
         <EmptyState
           icon={<Moon />}
           title="No new people today"
-          description="We only recommend people who genuinely fit. As more founders join, you'll see new picks here — meanwhile, tell You&Me AI exactly who you're looking for."
+          description="We only recommend people who genuinely fit. As more founders join, you'll see new picks here — meanwhile, tell FoundMate AI exactly who you're looking for."
           action={
             <Button asChild>
-              <Link href="/ai">Ask You&amp;Me AI</Link>
+              <Link href="/ai">Ask FoundMate AI</Link>
             </Button>
           }
         />

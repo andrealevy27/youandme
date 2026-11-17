@@ -46,7 +46,7 @@ export function PayoutsPanel({
   if (!status.connected) {
     return (
       <div className="text-sm">
-        <p className="text-muted">Connect a Stripe account to get paid. You&amp;Me keeps a transparent platform fee; the rest goes straight to you.</p>
+        <p className="text-muted">Connect a Stripe account to get paid. FoundMate keeps a transparent platform fee; the rest goes straight to you.</p>
         <Button className="mt-3" loading={pending} onClick={() => go(connect)}>
           Set up payouts with Stripe
         </Button>

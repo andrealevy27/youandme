@@ -111,7 +111,7 @@ export async function TeamGapsCard({
       <div className="mt-5 flex flex-wrap gap-2 border-t border-border pt-4">
         <Button asChild size="sm" variant="soft">
           <Link href={`/ai?q=${encodeURIComponent(`What are the biggest gaps in ${a.startup?.name ?? "my founding team"}?`)}`}>
-            Ask You&amp;Me AI <ArrowRight />
+            Ask FoundMate AI <ArrowRight />
           </Link>
         </Button>
         {a.gaps.length > maxGaps && <span className="self-center text-xs text-subtle">+{a.gaps.length - maxGaps} more gaps</span>}

@@ -35,15 +35,15 @@ export async function sendEmail(msg: EmailMessage) {
   }
 }
 
-const MEMBER_FOOTER = "You're receiving this because you have a You&amp;Me account. Manage email preferences in Settings.";
-export const WAITLIST_FOOTER = "You're receiving this because you joined the You&amp;Me waitlist. If that wasn't you, you can ignore this email.";
+const MEMBER_FOOTER = "You're receiving this because you have a FoundMate account. Manage email preferences in Settings.";
+export const WAITLIST_FOOTER = "You're receiving this because you joined the FoundMate waitlist. If that wasn't you, you can ignore this email.";
 
 export function emailLayout(title: string, body: string, cta?: { label: string; url: string }, footer = MEMBER_FOOTER) {
   const button = cta
     ? `<p style="margin:28px 0"><a href="${cta.url}" style="background:#17161c;color:#fff;padding:12px 20px;border-radius:10px;text-decoration:none;font-weight:600">${cta.label}</a></p>`
     : "";
   return `<div style="font-family:Inter,Helvetica,Arial,sans-serif;max-width:520px;margin:0 auto;padding:32px;color:#17161c">
-<p style="font-weight:700;letter-spacing:-0.02em;font-size:18px">You&amp;Me</p>
+<p style="font-weight:700;letter-spacing:-0.02em;font-size:18px">FoundMate</p>
 <h1 style="font-size:22px;letter-spacing:-0.02em">${title}</h1>
 <div style="font-size:15px;line-height:1.6;color:#3f3d47">${body}</div>${button}
 <p style="font-size:12px;color:#8a8794;margin-top:40px">${footer}</p></div>`;

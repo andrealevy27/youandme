@@ -9,7 +9,7 @@ let client: Stripe | null = null;
 /** Lazily constructed Stripe client; null when Stripe isn't configured. */
 export function getStripe(): Stripe | null {
   if (!features.stripe) return null;
-  client ??= new Stripe(env.STRIPE_SECRET_KEY!, { appInfo: { name: "You&Me" }, maxNetworkRetries: 2 });
+  client ??= new Stripe(env.STRIPE_SECRET_KEY!, { appInfo: { name: "FoundMate" }, maxNetworkRetries: 2 });
   return client;
 }
 

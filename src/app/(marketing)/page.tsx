@@ -30,24 +30,24 @@ import { StudentLanding } from "@/components/marketing/student-landing";
 import { env } from "@/server/env";
 
 const ORIGINAL_METADATA: Metadata = {
-  title: { absolute: "You&Me — Build the team behind your startup" },
+  title: { absolute: "FoundMate — Build the team behind your startup" },
   description:
     "The network for building startups. Find cofounders, consultants, advisors, and startup talent — intelligently matched to what you're building.",
   openGraph: {
-    title: "You&Me — Build the team behind your startup",
+    title: "FoundMate — Build the team behind your startup",
     description: "Find cofounders, consultants, advisors, and startup talent — intelligently matched to what you're building.",
-    siteName: "You&Me",
+    siteName: "FoundMate",
     type: "website",
   },
-  twitter: { card: "summary_large_image", title: "You&Me — Build the team behind your startup" },
+  twitter: { card: "summary_large_image", title: "FoundMate — Build the team behind your startup" },
   alternates: { canonical: "/" },
 };
 
 const STUDENT_METADATA: Metadata = {
-  title: { absolute: "You&Me — Find your cofounder on campus" },
+  title: { absolute: "FoundMate — Find your cofounder on campus" },
   description: "Student founders at NYU and Stanford: verify your school email and meet classmates worth building a startup with — with plain-language reasons why.",
-  openGraph: { title: "You&Me — Find your cofounder on campus", description: "Meet student founders worth building with.", siteName: "You&Me", type: "website" },
-  twitter: { card: "summary_large_image", title: "You&Me — Find your cofounder on campus" },
+  openGraph: { title: "FoundMate — Find your cofounder on campus", description: "Meet student founders worth building with.", siteName: "FoundMate", type: "website" },
+  twitter: { card: "summary_large_image", title: "FoundMate — Find your cofounder on campus" },
   alternates: { canonical: "/" },
 };
 
@@ -190,7 +190,7 @@ function HowItWorks() {
   return (
     <Section id="how" className="border-t border-border">
       <div className="max-w-2xl">
-        <Eyebrow>How You&amp;Me works</Eyebrow>
+        <Eyebrow>How FoundMate works</Eyebrow>
         <SectionTitle>Three steps to the people you need.</SectionTitle>
       </div>
       <ol className="mt-14 grid gap-4 md:grid-cols-3">
@@ -225,7 +225,7 @@ function Cofounders() {
           <Eyebrow>Cofounders</Eyebrow>
           <SectionTitle>Find someone you can actually build with.</SectionTitle>
           <Lead>
-            A great cofounder isn&apos;t just a great résumé. You&amp;Me looks at how your skills fit together, how committed you each are, how you
+            A great cofounder isn&apos;t just a great résumé. FoundMate looks at how your skills fit together, how committed you each are, how you
             work, and where you want to go — then tells you exactly why.
           </Lead>
           <ul className="mt-10 grid gap-x-8 gap-y-7 sm:grid-cols-2">
@@ -381,13 +381,13 @@ function AI() {
           <div>
             <p className="inline-flex items-center gap-2 text-[13px] font-medium text-[#b3abff]">
               <Sparkles className="size-3.5" aria-hidden />
-              You&amp;Me AI
+              FoundMate AI
             </p>
             <h2 className="mt-4 text-[34px] leading-[1.04] font-semibold tracking-[-0.035em] text-balance sm:text-[48px] lg:text-[54px]">
-              Describe what you need. You&amp;Me finds who can help.
+              Describe what you need. FoundMate finds who can help.
             </h2>
             <p className="mt-5 max-w-lg text-[17px] leading-relaxed text-white/65">
-              Ask in plain language. The concierge searches real profiles on You&amp;Me — people, consultants, and startups — and explains why each
+              Ask in plain language. The concierge searches real profiles on FoundMate — people, consultants, and startups — and explains why each
               one fits. It never invents people, and it only uses what members choose to share.
             </p>
           </div>
@@ -533,7 +533,7 @@ function Stages() {
       <div className="mx-auto max-w-3xl text-center">
         <Eyebrow className="justify-center">For every stage</Eyebrow>
         <SectionTitle>Built for founders at every stage.</SectionTitle>
-        <Lead className="mx-auto">From a notebook sketch to a scaling team — the people you need change. You&amp;Me changes with you.</Lead>
+        <Lead className="mx-auto">From a notebook sketch to a scaling team — the people you need change. FoundMate changes with you.</Lead>
       </div>
       <ol className="mx-auto mt-12 flex max-w-3xl flex-wrap items-center justify-center gap-2 sm:gap-0">
         {stages.map((st, i) => (

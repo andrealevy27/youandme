@@ -184,7 +184,7 @@ export function MobileBottomNav({ user, counts }: { user: ShellUser; counts: She
                 <Icon className="size-[22px]" strokeWidth={active ? 2.2 : 1.8} aria-hidden />
               )}
               {!isAI && <span>{item.label}</span>}
-              {isAI && <span className="sr-only">You&amp;Me AI</span>}
+              {isAI && <span className="sr-only">FoundMate AI</span>}
               {badgeCount(item, counts) > 0 && <CountBadge n={badgeCount(item, counts)} className="absolute top-1.5 left-1/2 ml-1" />}
             </Link>
           );

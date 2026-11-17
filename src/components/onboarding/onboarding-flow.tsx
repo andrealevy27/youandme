@@ -183,8 +183,8 @@ export function OnboardingFlow({
     const list: Step[] = [
       {
         key: "intents",
-        eyebrow: "Welcome to You&Me",
-        title: "What brings you to You&Me?",
+        eyebrow: "Welcome to FoundMate",
+        title: "What brings you to FoundMate?",
         subtitle: "Pick everything that applies. This shapes who we introduce you to.",
         canContinue: d.intents.length > 0,
         body: (
@@ -547,7 +547,7 @@ export function OnboardingFlow({
     list.push({
       key: "looking-for",
       title: "What are you looking for right now?",
-      subtitle: "In your own words. This appears on your profile and helps You&Me AI find the right people.",
+      subtitle: "In your own words. This appears on your profile and helps FoundMate AI find the right people.",
       optional: true,
       canContinue: true,
       body: (

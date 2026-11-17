@@ -351,7 +351,7 @@ export function BookingStepper(props: {
                   <span className="tabular-nums">{formatServicePrice(service.priceCents, service.currency, service.pricingType, service.billingInterval)}</span>
                 </div>
                 <div className="flex justify-between text-[13px]">
-                  <span className="text-muted">You&amp;Me platform fee ({props.feePercentLabel}, included)</span>
+                  <span className="text-muted">FoundMate platform fee ({props.feePercentLabel}, included)</span>
                   <span className="text-muted tabular-nums">{formatMoney(service.feeCents, service.currency)}</span>
                 </div>
                 <div className="flex justify-between border-t border-border pt-2 font-semibold">
@@ -364,7 +364,7 @@ export function BookingStepper(props: {
               <Lock className="mt-0.5 size-3 shrink-0" aria-hidden />
               {props.testMode
                 ? "Test payment — nothing is charged."
-                : "Payment is handled securely by Stripe; You&Me never sees your card details."}{" "}
+                : "Payment is handled securely by Stripe; FoundMate never sees your card details."}{" "}
               Free cancellation up to 24 hours before the session.
             </p>
             <Button size="lg" className="mt-5 w-full" onClick={pay} loading={paying} disabled={!startsAt}>

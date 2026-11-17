@@ -33,7 +33,7 @@ export function buildBookingIcs(input: {
   const lines = [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
-    "PRODID:-//You&Me//Bookings//EN",
+    "PRODID:-//FoundMate//Bookings//EN",
     "CALSCALE:GREGORIAN",
     `METHOD:${input.cancelled ? "CANCEL" : "PUBLISH"}`,
     "BEGIN:VEVENT",

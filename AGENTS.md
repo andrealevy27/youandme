@@ -8,7 +8,7 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 <!-- END:nextjs-agent-rules -->
 
-# You&Me project notes
+# FoundMate project notes
 
 - Architecture, sitemap, data model and implementation sequence: `docs/ARCHITECTURE.md`.
 - Engineering conventions (layering, server actions, UI tokens, honesty rules): `docs/CONVENTIONS.md`.

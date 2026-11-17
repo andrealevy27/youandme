@@ -23,7 +23,7 @@ export default async function NeedsPage() {
       <PageHeader
         eyebrow="Needs"
         title="What does your startup need?"
-        description="Every need you add shapes your recommendations — people, consultants and You&Me AI answers."
+        description="Every need you add shapes your recommendations — people, consultants and FoundMate AI answers."
       />
       <Card>
         <CardContent>

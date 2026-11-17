@@ -131,7 +131,7 @@ export function TeamManager(props: {
       )}
 
       <Dialog open={inviteOpen} onOpenChange={setInviteOpen}>
-        <DialogContent title="Invite to the team" description="Invite by email. If they're already on You&Me, they'll get a notification too.">
+        <DialogContent title="Invite to the team" description="Invite by email. If they're already on FoundMate, they'll get a notification too.">
           <div className="space-y-4">
             <Field label="Email" htmlFor="invite-email">
               <Input id="invite-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="off" />

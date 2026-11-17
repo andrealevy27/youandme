@@ -195,7 +195,7 @@ export async function seedDemo() {
 
   // Demo admin account (granted super_admin through ADMIN_EMAILS in .env).
   await createDemoUser(
-    { key: "admin", name: "You&Me Admin", headline: "Platform administrator", bio: "Demo administrator account.", city: "New York", country: "United States", timezone: "America/New_York", roles: [], intents: ["exploring"], skills: [], industries: [] },
+    { key: "admin", name: "FoundMate Admin", headline: "Platform administrator", bio: "Demo administrator account.", city: "New York", country: "United States", timezone: "America/New_York", roles: [], intents: ["exploring"], skills: [], industries: [] },
     passwordHash,
   );
   await db.update(s.profiles).set({ visibility: "hidden" }).where(and(eq(s.profiles.handle, "you-me-admin")));

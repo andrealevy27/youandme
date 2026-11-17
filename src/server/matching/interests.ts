@@ -53,7 +53,7 @@ export async function expressInterest(viewerId: string, targetId: string, note?:
       const convo = await createConversation({ type: "match", memberIds: [a, b], createdById: viewerId, matchId: match!.id }, tx);
       conversationId = convo.id;
       await tx.update(matches).set({ conversationId }).where(eq(matches.id, match!.id));
-      await addSystemMessage(conversationId, "You matched on You&Me. Say hello — a good first message mentions what you're building.", tx);
+      await addSystemMessage(conversationId, "You matched on FoundMate. Say hello — a good first message mentions what you're building.", tx);
     }
     return { matchId: match!.id, conversationId };
   });

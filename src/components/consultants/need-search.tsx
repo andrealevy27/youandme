@@ -45,7 +45,7 @@ export function NeedSearch({ initial, aiEnabled }: { initial?: string; aiEnabled
       <div className="flex flex-wrap items-center justify-between gap-2 px-2 pb-1">
         <p className="inline-flex items-center gap-1.5 text-[12px] text-subtle">
           <Sparkles className="size-3.5" aria-hidden />
-          {aiEnabled ? "Interpreted by You&Me AI — results are always real consultants." : "Basic mode — matched by keywords, budget and stage."}
+          {aiEnabled ? "Interpreted by FoundMate AI — results are always real consultants." : "Basic mode — matched by keywords, budget and stage."}
         </p>
         <div className="flex items-center gap-2">
           {!value && (

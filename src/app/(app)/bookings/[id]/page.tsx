@@ -268,7 +268,7 @@ function Timeline({ detail, tz }: { detail: Detail; tz: string }) {
   ];
   if (b.status === "completed" || b.completedAt) events.push({ label: "Completed", at: b.completedAt ?? undefined, done: true });
   if (b.cancelledAt) events.push({ label: `Cancelled${cancelledBy ? ` by ${cancelledBy}` : ""}${b.cancelReason ? ` — “${b.cancelReason}”` : ""}`, at: b.cancelledAt, done: true, tone: "danger" });
-  if (b.status === "disputed") events.push({ label: "Dispute opened — the You&Me team is reviewing", done: true, tone: "danger" });
+  if (b.status === "disputed") events.push({ label: "Dispute opened — the FoundMate team is reviewing", done: true, tone: "danger" });
   if (b.status === "refunded") events.push({ label: "Refunded in full", done: true });
 
   return (

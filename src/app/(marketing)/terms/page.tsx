@@ -4,7 +4,7 @@ import { LegalPage, type LegalSectionDef } from "@/components/marketing/legal";
 
 export const metadata: Metadata = {
   title: "Terms of Service",
-  description: "The rules for using You&Me — the network for building startups.",
+  description: "The rules for using FoundMate — the network for building startups.",
 };
 
 const sections: LegalSectionDef[] = [
@@ -13,7 +13,7 @@ const sections: LegalSectionDef[] = [
     title: "Agreement",
     body: (
       <p>
-        By creating an account or using You&amp;Me you agree to these Terms and our <Link href="/privacy">Privacy Policy</Link>. If you use You&amp;Me
+        By creating an account or using FoundMate you agree to these Terms and our <Link href="/privacy">Privacy Policy</Link>. If you use FoundMate
         on behalf of a company, you confirm you&apos;re authorised to accept these Terms for it.
       </p>
     ),
@@ -26,7 +26,7 @@ const sections: LegalSectionDef[] = [
         <li>You must be at least 18 years old and able to form a binding contract.</li>
         <li>Use your real identity. One person, one account.</li>
         <li>Keep your credentials secure — you&apos;re responsible for activity on your account.</li>
-        <li>While You&amp;Me is invite-only, access may require a valid invite.</li>
+        <li>While FoundMate is invite-only, access may require a valid invite.</li>
       </ul>
     ),
   },
@@ -35,7 +35,7 @@ const sections: LegalSectionDef[] = [
     title: "How to behave",
     body: (
       <>
-        <p>You&amp;Me is a professional network. You agree not to:</p>
+        <p>FoundMate is a professional network. You agree not to:</p>
         <ul>
           <li>Misrepresent who you are, your experience, or your startup.</li>
           <li>Harass, discriminate against, threaten or spam other members.</li>
@@ -53,7 +53,7 @@ const sections: LegalSectionDef[] = [
     title: "Your content",
     body: (
       <p>
-        You own what you post. You grant You&amp;Me a limited licence to host, display and process it to operate the service — for example to show your
+        You own what you post. You grant FoundMate a limited licence to host, display and process it to operate the service — for example to show your
         profile according to your visibility settings and to compute matches. This licence ends when you delete the content or your account, except
         for anonymised records described in our Privacy Policy.
       </p>
@@ -66,7 +66,7 @@ const sections: LegalSectionDef[] = [
       <>
         <p>
           Compatibility scores, recommendations and AI answers are guidance to help you decide who to meet — not guarantees about any person or
-          outcome. Always do your own diligence before starting a company, sharing equity, or signing agreements with anyone you meet on You&amp;Me.
+          outcome. Always do your own diligence before starting a company, sharing equity, or signing agreements with anyone you meet on FoundMate.
         </p>
         <p>AI features can make mistakes. They only surface real members, but explanations may be imperfect.</p>
       </>
@@ -79,11 +79,11 @@ const sections: LegalSectionDef[] = [
       <>
         <ul>
           <li>
-            Consultants are independent professionals, not employees or agents of You&amp;Me. They are responsible for their services, qualifications
+            Consultants are independent professionals, not employees or agents of FoundMate. They are responsible for their services, qualifications
             and any required licences.
           </li>
           <li>
-            When you book a session, you enter into an agreement directly with the consultant. You&amp;Me facilitates booking and payment and charges a
+            When you book a session, you enter into an agreement directly with the consultant. FoundMate facilitates booking and payment and charges a
             platform fee, shown before you pay.
           </li>
           <li>Cancellation and refund terms are shown on each service before booking.</li>
@@ -105,7 +105,7 @@ const sections: LegalSectionDef[] = [
   {
     id: "ip",
     title: "Our intellectual property",
-    body: <p>The You&amp;Me name, logo, software and design are ours. Don&apos;t copy, modify or reverse-engineer them except as allowed by law.</p>,
+    body: <p>The FoundMate name, logo, software and design are ours. Don&apos;t copy, modify or reverse-engineer them except as allowed by law.</p>,
   },
   {
     id: "termination",
@@ -123,11 +123,11 @@ const sections: LegalSectionDef[] = [
     body: (
       <>
         <p>
-          You&amp;Me is provided &ldquo;as is&rdquo;. We don&apos;t guarantee that you&apos;ll find a cofounder, that any member is who they say they
+          FoundMate is provided &ldquo;as is&rdquo;. We don&apos;t guarantee that you&apos;ll find a cofounder, that any member is who they say they
           are, or that the service will always be available or error-free.
         </p>
         <p>
-          To the extent permitted by law, You&amp;Me is not liable for indirect or consequential losses, or for disputes between members, and our total
+          To the extent permitted by law, FoundMate is not liable for indirect or consequential losses, or for disputes between members, and our total
           liability is limited to the amount you paid us in the 12 months before the claim.
         </p>
       </>
@@ -156,7 +156,7 @@ export default function TermsPage() {
       updated="September 2026"
       intro={
         <p>
-          These Terms set the ground rules for using You&amp;Me. We&apos;ve tried to keep them short and readable — the goal is a trusted network where
+          These Terms set the ground rules for using FoundMate. We&apos;ve tried to keep them short and readable — the goal is a trusted network where
           founders, operators and experts can build together.
         </p>
       }

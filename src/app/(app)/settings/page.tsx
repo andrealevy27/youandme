@@ -73,7 +73,7 @@ export default async function SettingsPage() {
         <Section id="notifications" title="Notifications" description="Choose what reaches you, and where. Account and security notices are always sent.">
           <NotificationPreferences />
         </Section>
-        <Section id="privacy" title="Privacy & visibility" description="Control who can find you. Hidden profiles never appear in search, recommendations or You&Me AI results.">
+        <Section id="privacy" title="Privacy & visibility" description="Control who can find you. Hidden profiles never appear in search, recommendations or FoundMate AI results.">
           <VisibilityForm initial={profile?.visibility ?? "public"} />
         </Section>
         <Section id="verification" title="Verification" description="Badges only claim what was actually checked.">

@@ -40,7 +40,7 @@ export function WaitlistForm() {
       website: website || undefined,
     }).catch(() => null);
     setPending(false);
-    if (!res) return setFormError("We couldn't reach You&Me. Check your connection and try again.");
+    if (!res) return setFormError("We couldn't reach FoundMate. Check your connection and try again.");
     if (!res.ok) {
       const fe = Object.fromEntries(Object.entries(res.fieldErrors ?? {}).map(([k, v]) => [k, v[0] ?? ""]));
       setErrors(fe);
@@ -130,7 +130,7 @@ export function WaitlistForm() {
       )}
       <fieldset>
         <legend className="text-[13px] font-medium">
-          What brings you to You&amp;Me?<span className="ml-1.5 font-normal text-subtle">Optional</span>
+          What brings you to FoundMate?<span className="ml-1.5 font-normal text-subtle">Optional</span>
         </legend>
         <div role="radiogroup" className="mt-2 grid gap-2 sm:grid-cols-2">
           {WAITLIST_INTENTS.map((i) => (

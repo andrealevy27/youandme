@@ -24,7 +24,7 @@ function isDismissed() {
 }
 
 /**
- * Informational only: You&Me uses essential cookies (sign-in) and stores the
+ * Informational only: FoundMate uses essential cookies (sign-in) and stores the
  * theme preference locally. There are no advertising or tracking cookies, so
  * there is nothing to opt in or out of.
  */

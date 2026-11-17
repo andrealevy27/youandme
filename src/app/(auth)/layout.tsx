@@ -15,7 +15,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
           <div className="w-full max-w-[400px] animate-fade-up">{children}</div>
         </main>
         <footer className="flex flex-wrap items-center justify-between gap-3 py-6 text-[12.5px] text-subtle">
-          <p>© {new Date().getFullYear()} You&amp;Me</p>
+          <p>© {new Date().getFullYear()} FoundMate</p>
           <nav aria-label="Legal" className="flex gap-4">
             <Link href="/privacy" className="hover:text-foreground">
               Privacy

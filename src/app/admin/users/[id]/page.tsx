@@ -255,7 +255,7 @@ export default async function AdminUserDetailPage({ params }: { params: Promise<
                       success="Member banned and signed out"
                       confirm={{
                         title: `Ban ${p.displayName}?`,
-                        description: "Permanent removal from You&Me: all sessions are revoked and they can't sign in again.",
+                        description: "Permanent removal from FoundMate: all sessions are revoked and they can't sign in again.",
                         confirmLabel: "Ban account",
                         destructive: true,
                         fields: [{ name: "reason", label: "Reason", type: "textarea", required: true, hint: "Shared with the member and saved to the audit log." }],

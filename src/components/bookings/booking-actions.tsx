@@ -124,7 +124,7 @@ export function BookingActions({
                   Never mind
                 </Button>
                 <Button type="submit" variant={dialog === "dispute" ? "primary" : "danger"} loading={pending}>
-                  {dialog === "cancel" ? "Cancel booking" : dialog === "refund" ? "Refund in full" : "Send to You&Me"}
+                  {dialog === "cancel" ? "Cancel booking" : dialog === "refund" ? "Refund in full" : "Send to FoundMate"}
                 </Button>
               </div>
             </form>

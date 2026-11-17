@@ -23,7 +23,7 @@ export function ForgotPasswordForm() {
       if (err?.status === 429) setError("Too many requests. Please wait a few minutes and try again.");
       else setSent(true);
     } catch {
-      setError("We couldn't reach You&Me. Check your connection and try again.");
+      setError("We couldn't reach FoundMate. Check your connection and try again.");
     } finally {
       setPending(false);
     }
@@ -60,7 +60,7 @@ export function ForgotPasswordForm() {
 
   return (
     <>
-      <AuthHeading title="Reset your password" description="Enter the email you use for You&Me and we'll send you a reset link." />
+      <AuthHeading title="Reset your password" description="Enter the email you use for FoundMate and we'll send you a reset link." />
       <form onSubmit={onSubmit} className="space-y-4" noValidate>
         <Field label="Email" htmlFor="email">
           <Input id="email" type="email" inputMode="email" value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" required />

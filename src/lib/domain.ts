@@ -218,7 +218,7 @@ export type ConversationType = (typeof CONVERSATION_TYPES)[number];
 export const VISIBILITY = ["public", "members", "hidden"] as const;
 export type Visibility = (typeof VISIBILITY)[number];
 export const VISIBILITY_LABELS: Labels<typeof VISIBILITY> = {
-  public: "Anyone on You&Me",
+  public: "Anyone on FoundMate",
   members: "Only people I'm connected or matched with",
   hidden: "Hidden from discovery and recommendations",
 };
@@ -234,7 +234,7 @@ export const VERIFICATION_LABELS: Labels<typeof VERIFICATION_TYPES> = {
   phone: "Phone confirmed",
   university_email: "University email confirmed",
   linkedin: "LinkedIn linked",
-  identity: "Identity reviewed by You&Me",
+  identity: "Identity reviewed by FoundMate",
 };
 
 export const REPORT_TARGETS = ["user", "message", "consultant", "startup", "review"] as const;
@@ -277,7 +277,7 @@ export const NOTIFICATION_TYPE_LABELS: Labels<typeof NOTIFICATION_TYPES> = {
   startup_invite: "Startup invites",
   review_request: "Review requests",
   profile_view: "Profile views",
-  ai_recommendation: "You&Me AI suggestions",
+  ai_recommendation: "FoundMate AI suggestions",
   system: "Account & security",
 };
 

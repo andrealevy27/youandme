@@ -44,7 +44,7 @@ export function AuthBrandPanel() {
             <span className="flex size-6 items-center justify-center rounded-full bg-brand-gradient text-white">
               <Sparkles className="size-3.5" />
             </span>
-            <span className="text-[12px] font-semibold">You&amp;Me AI</span>
+            <span className="text-[12px] font-semibold">FoundMate AI</span>
           </div>
           <p className="mt-2 text-[12.5px] leading-snug text-muted">Five people worth meeting are ready for you today.</p>
         </div>

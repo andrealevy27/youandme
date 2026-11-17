@@ -3,7 +3,7 @@ import { expect, test } from "@playwright/test";
 test("landing page presents the product and routes to signup @mobile", async ({ page }) => {
   await page.goto("/");
   await expect(page.getByRole("heading", { level: 1 })).toContainText("Build the team behind your startup");
-  await page.getByRole("link", { name: "Join You&Me" }).first().click();
+  await page.getByRole("link", { name: "Join FoundMate" }).first().click();
   await expect(page).toHaveURL(/\/signup/);
 });
 

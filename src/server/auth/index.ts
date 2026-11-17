@@ -26,7 +26,7 @@ function readCookie(headers: Headers | undefined, name: string) {
 }
 
 export const auth = betterAuth({
-  appName: "You&Me",
+  appName: "FoundMate",
   baseURL: env.BETTER_AUTH_URL ?? env.NEXT_PUBLIC_APP_URL,
   secret: env.BETTER_AUTH_SECRET,
   // Extra origins allowed to call auth endpoints (e.g. preview deploys, alternate local ports).
@@ -43,7 +43,7 @@ export const auth = betterAuth({
     async sendResetPassword({ user, url }) {
       await sendEmail({
         to: user.email,
-        subject: "Reset your You&Me password",
+        subject: "Reset your FoundMate password",
         text: `Reset your password: ${url}`,
         html: emailLayout("Reset your password", "Use the button below to choose a new password. The link expires in one hour.", {
           label: "Reset password",
@@ -58,7 +58,7 @@ export const auth = betterAuth({
     async sendVerificationEmail({ user, url }) {
       await sendEmail({
         to: user.email,
-        subject: "Confirm your email for You&Me",
+        subject: "Confirm your email for FoundMate",
         text: `Confirm your email: ${url}`,
         html: emailLayout("Confirm your email", "One click and you're verified.", { label: "Confirm email", url }),
       });

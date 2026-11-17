@@ -5,7 +5,7 @@ import { getConciergeThread, listConciergeThreads, type ConciergeMessage } from 
 import { AppError } from "@/server/errors";
 import { features } from "@/server/env";
 
-export const metadata: Metadata = { title: "You&Me AI" };
+export const metadata: Metadata = { title: "FoundMate AI" };
 
 export default async function AIPage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
   const viewer = await requireViewerPage();

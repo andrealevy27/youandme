@@ -364,7 +364,7 @@ export async function disputeBooking(viewerId: string, raw: z.input<typeof dispu
     return updated;
   });
   await audit({ actorId: viewerId, action: "booking.disputed", targetType: "booking", targetId: booking.id, metadata: { reason } });
-  await notifyAll(booking, { title: `A dispute was opened for ${booking.serviceTitle}`, body: "The You&Me team will review it and follow up.", actorId: viewerId, exclude: [viewerId] });
+  await notifyAll(booking, { title: `A dispute was opened for ${booking.serviceTitle}`, body: "The FoundMate team will review it and follow up.", actorId: viewerId, exclude: [viewerId] });
   return booking;
 }
 
@@ -427,10 +427,10 @@ export async function getBookingIcs(viewerId: string, bookingId: string, appUrl:
   return buildBookingIcs({
     uid: b.id,
     title: `${b.serviceTitle}${consultant && consultant.userId !== viewerId ? ` with ${consultant.name}` : ""}`,
-    description: `You&Me session${others.length ? ` with ${others.join(", ")}` : ""}.\nDetails and chat: ${url}`,
+    description: `FoundMate session${others.length ? ` with ${others.join(", ")}` : ""}.\nDetails and chat: ${url}`,
     startsAt: b.startsAt,
     endsAt: b.endsAt,
     url,
-    organizerName: consultant?.name ?? "You&Me",
+    organizerName: consultant?.name ?? "FoundMate",
   });
 }

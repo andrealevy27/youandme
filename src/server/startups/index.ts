@@ -250,7 +250,7 @@ export async function inviteMember(actorId: string, startupId: string, raw: z.in
   const [inviter] = await db.select({ name: profiles.displayName }).from(profiles).where(eq(profiles.userId, actorId));
   const link = `/team-invite/${token}`;
   const title = `${inviter?.name ?? "A founder"} invited you to join ${s.name}`;
-  const body = `You've been invited as ${STARTUP_MEMBER_ROLE_LABELS[data.role].toLowerCase()} on You&Me.`;
+  const body = `You've been invited as ${STARTUP_MEMBER_ROLE_LABELS[data.role].toLowerCase()} on FoundMate.`;
   if (invitedUserId) {
     await notify({ userId: invitedUserId, type: "startup_invite", title, body, href: link, actorId });
   } else if (email) {

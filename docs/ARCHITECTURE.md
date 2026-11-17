@@ -1,6 +1,6 @@
-# You&Me — Architecture
+# FoundMate — Architecture
 
-> The network for building startups. Tell You&Me what you're building; we help you find the people you need to build it.
+> The network for building startups. Tell FoundMate what you're building; we help you find the people you need to build it.
 
 ## 1. Stack
 
@@ -56,7 +56,7 @@ App:
 - `/matches` — five daily cofounder recommendations · `/matches/connections` — mutual matches, likes, saved
 - `/discover` — people, founders, cofounders, consultants, startups, talent (keyword + filters)
 - `/consultants` — marketplace + "describe what you need" · `/consultants/[handle]` · `/consultants/[handle]/book/[serviceId]`
-- `/ai` — You&Me AI concierge
+- `/ai` — FoundMate AI concierge
 - `/messages` · `/messages/[id]` — direct, match, consultant, startup group, booking threads
 - `/people/[handle]` — profile (context-aware CTA) · `/profile` → own profile · `/profile/edit`
 - `/quiz` · `/working-style` — working-style quiz and results
@@ -142,4 +142,4 @@ Follow-ups:
 - Hourly services book one hour at a time; multi-hour quantity is not exposed yet.
 - Consultants whose profile visibility is "members" still appear in the public marketplace (only "hidden" is excluded) — decide the intended policy.
 - Semantic search: `SemanticIndex` seam exists (`server/search/semantic.ts`); add pgvector embeddings for bios, startup descriptions, expertise and needs.
-- You&Me Pro entitlements are gated off (`pro_enabled`); no paid features are active.
+- FoundMate Pro entitlements are gated off (`pro_enabled`); no paid features are active.
