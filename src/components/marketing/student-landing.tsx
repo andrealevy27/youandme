@@ -58,7 +58,7 @@ function Hero({ primary, signedIn }: { primary: Cta; signedIn: boolean }) {
               </Link>
             </Button>
             <Button asChild size="lg" variant="secondary" className="h-12 px-6">
-              <Link href="/#how">How it works</Link>
+              <Link href="/demo">See a demo — no sign-up</Link>
             </Button>
           </div>
           <ul className={cn("mt-10 flex flex-wrap gap-x-6 gap-y-2 text-[13px] text-muted", s.rise)} style={{ animationDelay: "320ms" }}>

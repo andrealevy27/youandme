@@ -17,6 +17,7 @@ export const STUDENT_NAV_LINKS = [
   { href: "/#how", label: "How it works" },
   { href: "/#cofounders", label: "Why you two" },
   { href: "/#events", label: "Events" },
+  { href: "/demo", label: "Demo" },
 ] as const;
 
 export function SiteNav({ signedIn, cta, studentMode = false }: { signedIn: boolean; cta: MarketingCta; studentMode?: boolean }) {
