@@ -3,7 +3,8 @@ import { redirect } from "next/navigation";
 import { SignupForm } from "@/components/auth/signup-form";
 import { currentInvite } from "@/components/auth/request";
 import { getViewer } from "@/server/auth/session";
-import { features } from "@/server/env";
+import { env, features } from "@/server/env";
+import { SCHOOL_LIST_TEXT } from "@/lib/schools";
 import { getSetting } from "@/server/settings";
 
 export const metadata: Metadata = {
@@ -25,6 +26,7 @@ export default async function SignupPage() {
       inviteOnly={inviteOnly}
       inviteApplied={inviteApplied}
       showWaitlist={inviteOnly || waitlistEnabled}
+      schoolHint={env.STUDENT_MODE ? SCHOOL_LIST_TEXT : undefined}
     />
   );
 }

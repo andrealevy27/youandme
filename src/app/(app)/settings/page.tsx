@@ -17,6 +17,10 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { PageHeader } from "@/components/ui/page-header";
 import { VERIFICATION_LABELS } from "@/lib/domain";
+import { env } from "@/server/env";
+import { getStudentStatus } from "@/server/student";
+import { StudentPrivacyForm } from "@/components/student/student-privacy-form";
+import { StudentPrivacyNote } from "@/components/student/privacy-note";
 
 export const metadata: Metadata = { title: "Settings" };
 
@@ -51,6 +55,7 @@ export default async function SettingsPage() {
     listBlocked(viewer.userId),
     listMyVerifications(viewer.userId),
   ]);
+  const student = env.STUDENT_MODE ? await getStudentStatus(viewer.userId) : null;
   const hasPassword = accounts.some((a) => a.providerId === "credential");
   const verified = verifications.filter((v) => v.status === "verified");
   return (
@@ -73,9 +78,16 @@ export default async function SettingsPage() {
         <Section id="notifications" title="Notifications" description="Choose what reaches you, and where. Account and security notices are always sent.">
           <NotificationPreferences />
         </Section>
-        <Section id="privacy" title="Privacy & visibility" description="Control who can find you. Hidden profiles never appear in search, recommendations or FoundMate AI results.">
-          <VisibilityForm initial={profile?.visibility ?? "public"} />
-        </Section>
+        {student ? (
+          <Section id="privacy" title="Privacy & visibility" description="Control who can find you.">
+            <StudentPrivacyForm initial={{ visible: student.visible, campusScope: student.campusScope }} schoolName={student.school?.shortName ?? null} />
+            <StudentPrivacyNote className="mt-5" />
+          </Section>
+        ) : (
+          <Section id="privacy" title="Privacy & visibility" description="Control who can find you. Hidden profiles never appear in search, recommendations or FoundMate AI results.">
+            <VisibilityForm initial={profile?.visibility ?? "public"} />
+          </Section>
+        )}
         <Section id="verification" title="Verification" description="Badges only claim what was actually checked.">
           {verified.length > 0 && (
             <ul className="mb-5 space-y-1.5 text-sm">
@@ -87,7 +99,14 @@ export default async function SettingsPage() {
               ))}
             </ul>
           )}
-          <UniversityVerification />
+          {student ? (
+            <p className="text-sm text-muted">
+              {student.school ? `School: ${student.school.name}. ` : ""}
+              {student.verified ? "✓ School email confirmed." : "School email not confirmed yet — check your inbox for the link."}
+            </p>
+          ) : (
+            <UniversityVerification />
+          )}
         </Section>
         <Section id="blocked" title="Blocked people" description="Blocked people can't see your profile or message you, and you won't see them.">
           <BlockedList people={blocked.map((b) => ({ userId: b.userId, name: b.name, handle: b.handle, avatarUrl: b.avatarUrl }))} />

@@ -7,6 +7,8 @@ import { ResultsList } from "@/components/discover/results-list";
 import { ResultsSkeleton } from "@/components/discover/results-skeleton";
 import { isDiscoverTab, type DiscoverTab } from "@/components/discover/config";
 import { requireViewerPage } from "@/server/auth/session";
+import { env } from "@/server/env";
+import { getStudentStatus } from "@/server/student";
 import { listIndustries, peopleFiltersSchema, searchPeople, searchStartups, searchStartupsSchema } from "@/server/search";
 
 export const metadata: Metadata = { title: "Discover" };
@@ -25,20 +27,26 @@ function pick(sp: SP, keys: string[]) {
 }
 
 export default async function DiscoverPage({ searchParams }: { searchParams: Promise<SP> }) {
-  await requireViewerPage();
+  const viewer = await requireViewerPage();
   const sp = await searchParams;
-  const params = pick(sp, ["q", "tab", "cat", "industry", "commitment", "availability", "location", "stage", "lookingFor"]);
-  const tab: DiscoverTab = isDiscoverTab(params.tab) ? params.tab : "people";
+  const params = pick(sp, ["q", "tab", "cat", "industry", "commitment", "availability", "location", "stage", "lookingFor", "school"]);
+  let tab: DiscoverTab = isDiscoverTab(params.tab) ? params.tab : "people";
+  if (env.STUDENT_MODE && !["people", "cofounders"].includes(tab)) tab = "people";
+  const student = env.STUDENT_MODE ? { schoolName: (await getStudentStatus(viewer.userId)).school?.shortName ?? null } : undefined;
   const industries = await listIndustries();
 
   return (
     <div>
       <PageHeader
         eyebrow="Discover"
-        title="Find the people you need"
-        description="Search cofounders, founders, talent and startups by what they do, what they care about and where they studied."
+        title={student ? "Find student founders" : "Find the people you need"}
+        description={
+          student
+            ? "Search verified students by what they do, what they care about and how much time they have."
+            : "Search cofounders, founders, talent and startups by what they do, what they care about and where they studied."
+        }
       />
-      <DiscoverControls tab={tab} params={params} industries={industries.map(({ slug, name }) => ({ slug, name }))} />
+      <DiscoverControls tab={tab} params={params} industries={industries.map(({ slug, name }) => ({ slug, name }))} student={student} />
       <div className="mt-6">
         {tab === "consultants" ? (
           <ConsultantsCta q={params.q ?? ""} />
@@ -76,6 +84,7 @@ async function Results({ tab, params }: { tab: Exclude<DiscoverTab, "consultants
     availability: params.availability,
     location: params.location,
     stage: params.stage,
+    school: params.school,
   });
   const filters = parsedFilters.success ? parsedFilters.data : {};
   const page = await searchPeople(viewer.userId, { q: params.q ?? "", tab, filters, limit: PAGE_SIZE });
@@ -87,5 +96,6 @@ async function Results({ tab, params }: { tab: Exclude<DiscoverTab, "consultants
   if (filters.availability) api.set("availability", filters.availability);
   if (filters.location) api.set("location", filters.location);
   if (filters.stage) api.set("stage", filters.stage);
+  if (filters.school) api.set("school", filters.school);
   return <ResultsList kind="people" initialItems={page.items} initialCursor={page.nextCursor} apiQuery={api.toString()} clearHref={clearHref} />;
 }

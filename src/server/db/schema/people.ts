@@ -61,6 +61,11 @@ export const profiles = pgTable(
     visibility: visibilityEnum("visibility").notNull().default("public"),
     status: accountStatusEnum("status").notNull().default("active"),
     isDemo: boolean("is_demo").notNull().default(false),
+    // Student mode (additive). `school` is a slug from src/lib/schools.ts; verified when the school email is confirmed.
+    school: text("school"),
+    schoolVerifiedAt: timestamp("school_verified_at", { withTimezone: true }),
+    /** "all" = open to other campuses, "my_school" = my school only (applies both ways). */
+    campusScope: text("campus_scope").notNull().default("all"),
     featured: boolean("featured").notNull().default(false),
     onboardingStep: integer("onboarding_step").notNull().default(0),
     onboardingCompletedAt: timestamp("onboarding_completed_at", { withTimezone: true }),

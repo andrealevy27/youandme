@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { LegalPage, type LegalSectionDef } from "@/components/marketing/legal";
+import { env } from "@/server/env";
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
@@ -210,6 +211,25 @@ const sections: LegalSectionDef[] = [
   },
 ];
 
+/** Student mode adds this section first: who can see a student's profile. */
+const studentSection: LegalSectionDef = {
+  id: "students",
+  title: "Students: who can see your profile",
+  body: (
+    <>
+      <p>
+        FoundMate for students is only open to people who sign up with a school email we accept. Your profile is shown only to other students who have
+        confirmed their school email and chosen to be visible. It is never public on the web and is not indexed by search engines.
+      </p>
+      <ul>
+        <li>You choose whether to be visible, and whether to be seen only at your own school or across campuses. Change either in Settings.</li>
+        <li>At events, other attendees who are verified students can see your profile and an introduction reason. Organizers see counts, not your profile details.</li>
+        <li>FoundMate staff can view profiles to handle reports and keep the community safe.</li>
+      </ul>
+    </>
+  ),
+};
+
 export default function PrivacyPage() {
   return (
     <LegalPage
@@ -221,7 +241,7 @@ export default function PrivacyPage() {
           policy explains, in plain language, what we collect, how we use it — including in AI features — and the controls you have.
         </p>
       }
-      sections={sections}
+      sections={env.STUDENT_MODE ? [studentSection, ...sections] : sections}
     />
   );
 }

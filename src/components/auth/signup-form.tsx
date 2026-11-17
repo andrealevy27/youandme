@@ -17,11 +17,14 @@ export function SignupForm({
   inviteOnly,
   inviteApplied,
   showWaitlist,
+  schoolHint,
 }: {
   oauth: OAuthFlags;
   inviteOnly: boolean;
   inviteApplied: boolean;
   showWaitlist: boolean;
+  /** Student mode: e.g. "@nyu.edu or @stanford.edu". Sign-up then requires a school email. */
+  schoolHint?: string;
 }) {
   const router = useRouter();
   const [name, setName] = React.useState("");
@@ -77,7 +80,13 @@ export function SignupForm({
     <>
       <AuthHeading
         title="Join FoundMate"
-        description={inviteOnly ? "FoundMate is invite-only while we grow carefully." : "Tell us who you are. We'll help you find who you need."}
+        description={
+          inviteOnly
+            ? "FoundMate is invite-only while we grow carefully."
+            : schoolHint
+              ? `For student founders. Use your school email (${schoolHint}).`
+              : "Tell us who you are. We'll help you find who you need."
+        }
       />
 
       {inviteOnly && inviteApplied && (
@@ -128,9 +137,10 @@ export function SignupForm({
           <Field label="Full name" htmlFor="name">
             <Input id="name" value={name} onChange={(e) => setName(e.target.value)} autoComplete="name" required maxLength={80} />
           </Field>
-          <Field label="Email" htmlFor="email">
+          <Field label={schoolHint ? "School email" : "Email"} htmlFor="email">
             <Input
               id="email"
+              placeholder={schoolHint ? `you${schoolHint.split(" ")[0]}` : undefined}
               type="email"
               inputMode="email"
               value={email}

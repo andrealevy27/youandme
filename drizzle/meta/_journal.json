@@ -15,6 +15,13 @@
       "when": 1790740004496,
       "tag": "0001_waitlist_details",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1794952135718,
+      "tag": "0002_student_school",
+      "breakpoints": true
     }
   ]
 }

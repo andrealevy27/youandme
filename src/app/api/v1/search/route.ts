@@ -40,6 +40,7 @@ export const GET = jsonRoute(async ({ req, viewer }) => {
       availability: get("availability") as never,
       location: get("location"),
       stage: get("stage") as never,
+      school: get("school") as never,
     },
   });
   return { items: page.items, nextCursor: page.nextCursor };

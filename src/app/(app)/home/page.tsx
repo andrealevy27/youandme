@@ -5,6 +5,7 @@ import { eq } from "drizzle-orm";
 import { ArrowRight, Briefcase, MessageCircle, Rocket, Sparkles, Users } from "lucide-react";
 import { requireViewerPage } from "@/server/auth/session";
 import { env } from "@/server/env";
+import { VerifiedStudentGate } from "@/components/student/verify-gate";
 import { db } from "@/server/db";
 import { profiles } from "@/server/db/schema";
 import { getDailyRecommendations } from "@/server/recommendations";
@@ -284,9 +285,11 @@ export default async function HomePage() {
             </Link>
           }
         />
-        <Suspense fallback={<SectionFallback />}>
-          <TodaysMatches userId={viewer.userId} seeking={profile?.lookingForCofounder ?? false} />
-        </Suspense>
+        <VerifiedStudentGate>
+          <Suspense fallback={<SectionFallback />}>
+            <TodaysMatches userId={viewer.userId} seeking={profile?.lookingForCofounder ?? false} />
+          </Suspense>
+        </VerifiedStudentGate>
       </section>
 
       <div className="grid gap-10 lg:grid-cols-[1fr_340px]">

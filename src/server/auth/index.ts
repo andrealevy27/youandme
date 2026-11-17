@@ -8,6 +8,7 @@ import * as schema from "../db/schema";
 import { emailLayout, sendEmail } from "../email";
 import { env, features } from "../env";
 import { onUserCreated, assertSignupAllowed, INVITE_COOKIE, recordVerification } from "./lifecycle";
+import { assertStudentSignupAllowed, initStudentProfile, markSchoolVerified } from "../student";
 
 const socialProviders = {
   ...(features.google && { google: { clientId: env.GOOGLE_CLIENT_ID!, clientSecret: env.GOOGLE_CLIENT_SECRET! } }),
@@ -88,17 +89,25 @@ export const auth = betterAuth({
   databaseHooks: {
     user: {
       create: {
-        async before(_user, ctx) {
+        async before(newUser, ctx) {
+          assertStudentSignupAllowed(newUser.email);
           await assertSignupAllowed(readCookie(ctx?.request?.headers ?? ctx?.headers, INVITE_COOKIE));
         },
         async after(user, ctx) {
           await onUserCreated(user, readCookie(ctx?.request?.headers ?? ctx?.headers, INVITE_COOKIE));
-          if (user.emailVerified) await recordVerification(user.id, "email", user.email);
+          await initStudentProfile(user.id, user.email);
+          if (user.emailVerified) {
+            await recordVerification(user.id, "email", user.email);
+            await markSchoolVerified(user.id, user.email);
+          }
         },
       },
       update: {
         async after(user) {
-          if (user.emailVerified) await recordVerification(user.id, "email", user.email);
+          if (user.emailVerified) {
+            await recordVerification(user.id, "email", user.email);
+            await markSchoolVerified(user.id, user.email);
+          }
         },
       },
     },

@@ -19,7 +19,7 @@ import {
   type SkillCategory,
 } from "@/lib/domain";
 import { cn } from "@/lib/utils";
-import { DISCOVER_EXAMPLE, DISCOVER_TABS, type DiscoverTab } from "./config";
+import { DISCOVER_EXAMPLE, DISCOVER_TABS, STUDENT_DISCOVER_TABS, type DiscoverTab } from "./config";
 
 const CATEGORY_CHIPS: SkillCategory[] = ["engineering", "ai_ml", "design", "product", "growth", "sales", "finance", "operations"];
 
@@ -44,16 +44,20 @@ export function DiscoverControls({
   tab,
   params,
   industries,
+  student,
 }: {
   tab: DiscoverTab;
   params: Params;
   industries: { slug: string; name: string }[];
+  /** Student mode: people tabs only, plus a campus filter. `schoolName` is the viewer's school. */
+  student?: { schoolName: string | null };
 }) {
+  const tabs = student ? DISCOVER_TABS.filter((t) => (STUDENT_DISCOVER_TABS as readonly string[]).includes(t.key)) : DISCOVER_TABS;
   const router = useRouter();
   const pathname = usePathname();
   const [pending, startTransition] = React.useTransition();
   const [q, setQ] = React.useState(params.q ?? "");
-  const filterKeys = tab === "startups" ? ["stage", "industry", "lookingFor"] : ["cat", "industry", "commitment", "availability", "location", "stage"];
+  const filterKeys = tab === "startups" ? ["stage", "industry", "lookingFor"] : ["cat", "industry", "commitment", "availability", "location", "stage", "school"];
   const activeCount = filterKeys.filter((k) => params[k]).length;
   const [open, setOpen] = React.useState(activeCount > 0);
 
@@ -83,7 +87,7 @@ export function DiscoverControls({
           id="discover-q"
           value={q}
           onChange={(e) => setQ(e.target.value)}
-          placeholder={`Try: ${DISCOVER_EXAMPLE}`}
+          placeholder={`Try: ${student ? "designer interested in climate" : DISCOVER_EXAMPLE}`}
           className="h-14 rounded-[14px] pr-28 pl-12 text-base shadow-soft"
           maxLength={200}
           autoComplete="off"
@@ -109,7 +113,7 @@ export function DiscoverControls({
       </form>
 
       <nav aria-label="Discover sections" className="scrollbar-none -mx-1 flex gap-1 overflow-x-auto border-b border-border px-1">
-        {DISCOVER_TABS.map((t) => {
+        {tabs.map((t) => {
           const active = t.key === tab;
           // Switching tabs keeps the query but drops filters that don't apply.
           const href = buildHref(pathname, { q: params.q, tab: t.key === "people" ? undefined : t.key });
@@ -133,6 +137,27 @@ export function DiscoverControls({
       {tab !== "consultants" && (
         <div className={cn("space-y-3 transition-opacity", pending && "opacity-60")}>
           <div className="flex flex-wrap items-center gap-2">
+            {student?.schoolName && (
+              <div role="group" aria-label="Campus" className="mr-1 inline-flex rounded-full border border-border p-0.5">
+                {[
+                  { v: undefined, label: "All campuses" },
+                  { v: "mine", label: `${student.schoolName} only` },
+                ].map((o) => (
+                  <button
+                    key={o.label}
+                    type="button"
+                    aria-pressed={params.school === o.v}
+                    onClick={() => set("school", o.v)}
+                    className={cn(
+                      "rounded-full px-3 py-1 text-[13px] font-medium transition-colors",
+                      params.school === o.v ? "bg-ink text-ink-foreground" : "text-muted hover:text-foreground",
+                    )}
+                  >
+                    {o.label}
+                  </button>
+                ))}
+              </div>
+            )}
             {tab !== "startups" &&
               CATEGORY_CHIPS.map((c) => (
                 <Chip key={c} size="sm" selected={(params.cat ?? "").split(",").includes(c)} onToggle={() => set("cat", toggleCsv(params.cat, c))}>
@@ -182,6 +207,7 @@ export function DiscoverControls({
                       </Chip>
                     ))}
                   </FilterRow>
+                  {!student && (
                   <FilterRow label="Stage they want to join">
                     {STARTUP_STAGES.map((s) => (
                       <Chip key={s} size="sm" selected={params.stage === s} onToggle={() => set("stage", params.stage === s ? undefined : s)}>
@@ -189,6 +215,7 @@ export function DiscoverControls({
                       </Chip>
                     ))}
                   </FilterRow>
+                  )}
                 </>
               )}
               <FilterRow label="Industry">

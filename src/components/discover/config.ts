@@ -8,6 +8,9 @@ export const DISCOVER_TABS = [
 ] as const;
 export type DiscoverTab = (typeof DISCOVER_TABS)[number]["key"];
 
+/** Student mode shows people only; consultants, startups and talent are "coming soon". */
+export const STUDENT_DISCOVER_TABS = ["people", "cofounders"] as const;
+
 export const DISCOVER_EXAMPLE = "AI engineer at NYU interested in health startups";
 
 /** URL params the Discover page understands. Everything is a plain string in the URL. */

@@ -10,6 +10,7 @@ import { deleteAccount } from "@/server/privacy/account";
 import { requestUniversityVerification } from "@/server/verification";
 import { unblockUser } from "@/server/moderation";
 import { VISIBILITY } from "@/lib/domain";
+import { updateStudentPrefs, type CampusScope } from "@/server/student";
 
 export async function setVisibilityAction(visibility: (typeof VISIBILITY)[number]) {
   return runAction(async () => {
@@ -17,6 +18,15 @@ export async function setVisibilityAction(visibility: (typeof VISIBILITY)[number
     await updateProfile(viewer.userId, { visibility: z.enum(VISIBILITY).parse(visibility) });
     revalidatePath("/settings");
     return { ok: true };
+  });
+}
+
+export async function updateStudentPrefsAction(input: { visible?: boolean; campusScope?: CampusScope }) {
+  return runAction(async () => {
+    const viewer = await requireViewer();
+    const status = await updateStudentPrefs(viewer.userId, input);
+    revalidatePath("/settings");
+    return status;
   });
 }
 

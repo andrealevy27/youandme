@@ -60,6 +60,8 @@ export const peopleFiltersSchema = z.object({
   availability: z.enum(AVAILABILITY).optional(),
   location: z.string().trim().max(80).optional(),
   stage: z.enum(STARTUP_STAGES).optional(),
+  /** Student mode: "mine" = only students at the viewer's school. */
+  school: z.enum(["mine"]).optional(),
 });
 export type PeopleFilters = z.infer<typeof peopleFiltersSchema>;
 
@@ -179,7 +181,7 @@ export async function searchPeople(
   const terms = q && vocab ? extractSearchTerms(q, vocab) : null;
 
   const conditions: (SQL | undefined)[] = [
-    discoverableProfile(),
+    discoverableProfile(viewerId),
     ne(profiles.userId, viewerId),
     exclude.length ? notInArray(profiles.userId, exclude) : undefined,
     tabCondition(tab),
@@ -192,6 +194,7 @@ export async function searchPeople(
       ? or(ilike(profiles.location, likeTerm(filters.location)), ilike(profiles.city, likeTerm(filters.location)), ilike(profiles.country, likeTerm(filters.location)))
       : undefined,
     filters.stage ? sql`${filters.stage} = any(${profiles.stagePreferences})` : undefined,
+    filters.school === "mine" ? sql`${profiles.school} = (select vp.school from profiles vp where vp.user_id = ${viewerId})` : undefined,
   ];
 
   const scoreParts: SQL[] = [];

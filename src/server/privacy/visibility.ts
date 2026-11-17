@@ -1,6 +1,8 @@
 import { and, eq, inArray, isNull, or, sql, type SQL } from "drizzle-orm";
 import { db, type DbOrTx } from "../db";
-import { blocks, connections, conversationMembers, matches, profiles, startupMembers } from "../db/schema";
+import { adminUsers, blocks, connections, conversationMembers, matches, profiles, startupMembers } from "../db/schema";
+import { env } from "../env";
+import { studentVisibilityCondition } from "../student";
 
 /** Users hidden from the viewer in both directions because of a block. */
 export async function getBlockedIds(viewerId: string, conn: DbOrTx = db): Promise<Set<string>> {
@@ -20,13 +22,17 @@ export async function isBlockedEitherWay(a: string, b: string, conn: DbOrTx = db
   return !!row;
 }
 
-/** SQL condition: profile is an active, discoverable account (used by search, recommendations, AI tools). */
-export function discoverableProfile(): SQL {
+/**
+ * SQL condition: profile is an active, discoverable account (used by search, recommendations, AI tools).
+ * In student mode, also: a verified student, within the campus scope both people chose (pass `viewerId`).
+ */
+export function discoverableProfile(viewerId?: string): SQL {
   return and(
     eq(profiles.status, "active"),
     isNull(profiles.deletedAt),
     eq(profiles.visibility, "public"),
     sql`${profiles.onboardingCompletedAt} is not null`,
+    studentVisibilityCondition(viewerId),
   )!;
 }
 
@@ -71,6 +77,22 @@ export async function canViewProfile(viewerId: string | null, targetId: string, 
   if (!p || p.status !== "active" || p.deletedAt) return false;
   if (!viewerId) return false;
   if (await isBlockedEitherWay(viewerId, targetId, conn)) return false;
+  if (env.STUDENT_MODE) {
+    // Only verified students (and FoundMate admins) can view students; people you've matched or
+    // talked with stay visible to you.
+    if (await haveRelationship(viewerId, targetId, conn)) return true;
+    const [admin] = await conn.select({ id: adminUsers.userId }).from(adminUsers).where(eq(adminUsers.userId, viewerId)).limit(1);
+    if (!admin) {
+      const [me] = await conn.select({ v: profiles.schoolVerifiedAt }).from(profiles).where(eq(profiles.userId, viewerId)).limit(1);
+      if (!me?.v) return false;
+    }
+    const [ok] = await conn
+      .select({ id: profiles.userId })
+      .from(profiles)
+      .where(and(eq(profiles.userId, targetId), eq(profiles.visibility, "public"), studentVisibilityCondition(admin ? undefined : viewerId)))
+      .limit(1);
+    return !!ok;
+  }
   if (p.visibility === "public") return true;
   return haveRelationship(viewerId, targetId, conn);
 }
@@ -81,7 +103,7 @@ export async function filterVisibleIds(viewerId: string, ids: string[], conn: Db
   const rows = await conn
     .select({ id: profiles.userId })
     .from(profiles)
-    .where(and(inArray(profiles.userId, ids), discoverableProfile()));
+    .where(and(inArray(profiles.userId, ids), discoverableProfile(viewerId)));
   const ok = new Set(rows.map((r) => r.id));
   return ids.filter((id) => ok.has(id) && !blocked.has(id));
 }

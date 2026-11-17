@@ -71,7 +71,7 @@ async function candidateIds(viewerId: string, cooldownDays: number) {
     .from(profiles)
     .where(
       and(
-        discoverableProfile(),
+        discoverableProfile(viewerId),
         ne(profiles.userId, viewerId),
         or(eq(profiles.lookingForCofounder, true), inArray(profiles.userId, seekingRoles)),
         notInArray(profiles.userId, acted),
