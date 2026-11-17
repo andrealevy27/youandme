@@ -14,6 +14,7 @@ import { interestedAction, passAction, recommendationViewedAction, saveAction } 
 import { AVAILABILITY_LABELS, COMMITMENT_LABELS, STAGE_LABELS, type StartupStage } from "@/lib/domain";
 import type { DailyRecommendation } from "@/server/recommendations";
 import { cn } from "@/lib/utils";
+import { WhyYouTwo } from "@/components/student/why-you-two";
 
 type Action = DailyRecommendation["action"];
 
@@ -102,26 +103,32 @@ export function RecommendationCard({ rec, compact = false }: { rec: DailyRecomme
 
         {/* Reasoning column */}
         <div className="flex flex-col p-5 sm:p-7">
-          <div className="flex items-start gap-4">
-            <ScoreRing score={rec.score} size={60} />
-            <div className="min-w-0">
-              <p className="text-[13px] font-medium text-brand-ink">{rec.score}% compatibility</p>
-              <p className="mt-1 text-[15px] leading-relaxed text-foreground">{rec.explanation}</p>
-            </div>
-          </div>
+          {rec.whyYouTwo ? (
+            <WhyYouTwo reasons={rec.whyYouTwo} score={rec.score} />
+          ) : (
+            <>
+              <div className="flex items-start gap-4">
+                <ScoreRing score={rec.score} size={60} />
+                <div className="min-w-0">
+                  <p className="text-[13px] font-medium text-brand-ink">{rec.score}% compatibility</p>
+                  <p className="mt-1 text-[15px] leading-relaxed text-foreground">{rec.explanation}</p>
+                </div>
+              </div>
 
-          <div className="mt-5 flex items-start gap-2.5 rounded-[12px] bg-brand-soft/60 px-4 py-3 text-sm">
-            <Sparkles className="mt-0.5 size-4 shrink-0 text-brand-ink" aria-hidden />
-            <p>
-              <span className="font-medium">Why {first}: </span>
-              <span className="text-muted">{rec.reason}</span>
-            </p>
-          </div>
+              <div className="mt-5 flex items-start gap-2.5 rounded-[12px] bg-brand-soft/60 px-4 py-3 text-sm">
+                <Sparkles className="mt-0.5 size-4 shrink-0 text-brand-ink" aria-hidden />
+                <p>
+                  <span className="font-medium">Why {first}: </span>
+                  <span className="text-muted">{rec.reason}</span>
+                </p>
+              </div>
+            </>
+          )}
 
           {!compact && p.bio && <p className="mt-5 line-clamp-3 text-sm leading-relaxed text-muted">{p.bio}</p>}
 
           <dl className="mt-5 grid gap-4 text-sm sm:grid-cols-2">
-            {rec.strengths.length > 0 && (
+            {rec.strengths.length > 0 && !rec.whyYouTwo && (
               <div>
                 <dt className="mb-2 text-xs font-medium tracking-wide text-subtle uppercase">Strong alignment</dt>
                 <dd className="flex flex-wrap gap-1.5">
@@ -165,7 +172,7 @@ export function RecommendationCard({ rec, compact = false }: { rec: DailyRecomme
 
           {rec.frictions.length > 0 && (
             <div className="mt-5">
-              <p className="mb-2 text-xs font-medium tracking-wide text-subtle uppercase">Potential friction</p>
+              <p className="mb-2 text-xs font-medium tracking-wide text-subtle uppercase">{rec.whyYouTwo ? "Talk about early" : "Potential friction"}</p>
               <ul className="space-y-1.5">
                 {rec.frictions.slice(0, compact ? 1 : 3).map((f, i) => (
                   <li key={i} className="flex gap-2 text-sm text-muted">

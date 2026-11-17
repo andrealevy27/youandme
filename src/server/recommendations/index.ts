@@ -10,6 +10,9 @@ import { getSetting } from "../settings";
 import { COFOUNDER_TYPE_LABELS, SKILL_CATEGORY_LABELS, type SkillCategory } from "@/lib/domain";
 import { COFOUNDER_TYPE_SKILL_CATEGORIES } from "@/lib/domain";
 import { explanationWriter } from "./explanations";
+import { env } from "../env";
+import { loadStudentFacts } from "../student/facts";
+import { studentReasons } from "../student/reasons";
 
 /** Max candidates scored per generation. Candidates are pre-filtered and ordered in SQL. */
 const CANDIDATE_POOL = 300;
@@ -184,6 +187,8 @@ async function hydrate(rows: (typeof recommendations.$inferSelect)[], viewerId: 
     .where(and(inArray(profiles.userId, ids), eq(profiles.status, "active"), isNull(profiles.deletedAt)));
   const matchProfiles = await loadMatchProfiles([viewerId, ...ids]);
   const viewer = matchProfiles.get(viewerId);
+  const facts = env.STUDENT_MODE ? await loadStudentFacts([viewerId, ...ids]) : null;
+  const viewerFacts = facts?.get(viewerId);
   return rows
     .map((r) => {
       const p = profileRows.find((x) => x.userId === r.candidateId);
@@ -191,7 +196,14 @@ async function hydrate(rows: (typeof recommendations.$inferSelect)[], viewerId: 
       if (!p || !mp || !viewer) return null;
       const overlap = overlapDetails(viewer, mp);
       const strengths = r.factors.filter((f) => f.known && f.score >= 0.75).sort((a, b) => b.score * b.weight - a.score * a.weight);
+      const candidateFacts = facts?.get(r.candidateId);
+      // Student mode: plain reasons lead; the score becomes secondary.
+      const whyYouTwo =
+        viewerFacts && candidateFacts
+          ? studentReasons(viewerFacts, candidateFacts, { ...overlap, explanation: r.explanation } as CompatibilityResult)
+          : null;
       return {
+        whyYouTwo,
         id: r.id,
         rank: r.rank,
         score: r.score,

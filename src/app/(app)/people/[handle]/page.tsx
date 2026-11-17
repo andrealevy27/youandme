@@ -13,6 +13,8 @@ import { startupMembers } from "@/server/db/schema";
 import { ProfileActions } from "@/components/people/profile-actions";
 import { WorkingStyleBars } from "@/components/people/working-style";
 import { CompatibilityBreakdown } from "@/components/matching/compatibility-breakdown";
+import { env } from "@/server/env";
+import { whyYouTwo } from "@/server/student/facts";
 import { Avatar } from "@/components/ui/avatar";
 import { Badge, DemoBadge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -84,6 +86,8 @@ export default async function PersonPage({ params }: Props) {
     isSelf ? null : getWorkingStyle(viewer.userId),
     isSelf ? [] : listMyStartups(viewer.userId).then((rows) => rows.filter((r) => r.isAdmin || r.role === "founder").map((r) => ({ startupId: r.startup.id, name: r.startup.name }))),
   ]);
+
+  const whyReasons = env.STUDENT_MODE && compat ? await whyYouTwo(viewer.userId, targetId, compat) : null;
 
   const [saved, blocked] = isSelf
     ? [false, false]
@@ -209,7 +213,7 @@ export default async function PersonPage({ params }: Props) {
         <div className="space-y-5">
           {compat && (
             <Section title="Your compatibility">
-              <CompatibilityBreakdown result={compat} />
+              <CompatibilityBreakdown result={compat} reasons={whyReasons} />
             </Section>
           )}
           {(p.bio || p.lookingFor) && (

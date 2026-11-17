@@ -11,7 +11,8 @@ import { getMatchWeights } from "../matching/weights";
 import { discoverableProfile, getBlockedIds } from "../privacy/visibility";
 import { getPersonSummaries, type PersonSummary } from "../people";
 import { canSeeStudents } from "../student";
-import { oneLineReason, studentReasons, type StudentFacts } from "../student/reasons";
+import { oneLineReason, studentReasons } from "../student/reasons";
+import { loadStudentFacts } from "../student/facts";
 import { SCHOOLS, schoolBySlug } from "@/lib/schools";
 
 export const INTROS_PER_EVENT = 5;
@@ -134,30 +135,13 @@ export async function listMyEvents(userId: string) {
     .orderBy(desc(events.startsAt));
 }
 
-async function studentFacts(ids: string[]): Promise<Map<string, StudentFacts>> {
-  if (!ids.length) return new Map();
-  const rows = await db
-    .select({
-      id: profiles.userId,
-      name: profiles.displayName,
-      school: profiles.school,
-      ideaStatus: profiles.ideaStatus,
-      ideaSummary: profiles.ideaSummary,
-      weeklyHours: profiles.weeklyHours,
-      summerPlans: profiles.summerPlans,
-    })
-    .from(profiles)
-    .where(inArray(profiles.userId, ids));
-  return new Map(rows.map(({ id, ...f }) => [id, f]));
-}
-
 /**
  * Score `candidateIds` for the viewer and return them best-first with plain reasons.
  * Shared by event introductions and the demo; pure scoring lives in the matching engine.
  */
 export async function rankWithReasons(viewerId: string, candidateIds: string[]) {
   if (!candidateIds.length) return [];
-  const [profilesMap, facts, weights] = await Promise.all([loadMatchProfiles([viewerId, ...candidateIds]), studentFacts([viewerId, ...candidateIds]), getMatchWeights()]);
+  const [profilesMap, facts, weights] = await Promise.all([loadMatchProfiles([viewerId, ...candidateIds]), loadStudentFacts([viewerId, ...candidateIds]), getMatchWeights()]);
   const viewer = profilesMap.get(viewerId);
   const viewerFacts = facts.get(viewerId);
   if (!viewer || !viewerFacts) return [];

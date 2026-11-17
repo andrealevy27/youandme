@@ -2,17 +2,13 @@ import { AlertTriangle, Check } from "lucide-react";
 import { ScoreRing } from "@/components/ui/progress";
 import type { CompatibilityResult } from "@/server/matching/types";
 import { cn } from "@/lib/utils";
+import { WhyYouTwo } from "@/components/student/why-you-two";
 
 /** Explained compatibility: never a bare percentage. */
-export function CompatibilityBreakdown({ result }: { result: CompatibilityResult }) {
+export function CompatibilityBreakdown({ result, reasons }: { result: CompatibilityResult; reasons?: string[] | null }) {
   const known = result.factors.filter((f) => f.known && f.weight > 0).sort((a, b) => b.weight - a.weight);
   const unknown = result.factors.filter((f) => !f.known);
-  return (
-    <div>
-      <div className="flex items-start gap-4">
-        <ScoreRing score={result.score} size={64} />
-        <p className="text-[15px] leading-relaxed">{result.explanation}</p>
-      </div>
+  const bars = (
       <ul className="mt-6 grid gap-x-8 gap-y-4 sm:grid-cols-2">
         {known.map((f) => (
           <li key={f.key}>
@@ -30,9 +26,30 @@ export function CompatibilityBreakdown({ result }: { result: CompatibilityResult
           </li>
         ))}
       </ul>
+  );
+  return (
+    <div>
+      {reasons ? (
+        <>
+          <WhyYouTwo reasons={reasons} score={result.score} max={4} />
+          <details className="mt-4">
+            <summary className="cursor-pointer text-[13px] font-medium text-brand-ink hover:underline">See the full breakdown</summary>
+            {bars}
+            {unknown.length > 0 && <p className="mt-4 text-xs text-subtle">Not enough data yet for: {unknown.map((f) => f.label.toLowerCase()).join(", ")}.</p>}
+          </details>
+        </>
+      ) : (
+        <>
+          <div className="flex items-start gap-4">
+            <ScoreRing score={result.score} size={64} />
+            <p className="text-[15px] leading-relaxed">{result.explanation}</p>
+          </div>
+          {bars}
+        </>
+      )}
       {result.frictions.length > 0 && (
         <div className="mt-6 rounded-[12px] border border-warning/25 bg-warning-soft/60 p-4">
-          <p className="mb-2 text-xs font-medium tracking-wide text-warning uppercase">Potential friction</p>
+          <p className="mb-2 text-xs font-medium tracking-wide text-warning uppercase">{reasons ? "Talk about early" : "Potential friction"}</p>
           <ul className="space-y-2">
             {result.frictions.map((f, i) => (
               <li key={i} className="flex gap-2 text-sm">
@@ -50,7 +67,7 @@ export function CompatibilityBreakdown({ result }: { result: CompatibilityResult
           <Check className="size-4" aria-hidden /> No obvious friction points from your profiles.
         </p>
       )}
-      {unknown.length > 0 && (
+      {unknown.length > 0 && !reasons && (
         <p className="mt-4 text-xs text-subtle">Not enough data yet for: {unknown.map((f) => f.label.toLowerCase()).join(", ")}.</p>
       )}
     </div>

@@ -1,3 +1,4 @@
+import { env } from "@/server/env";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Heart, MessageCircle } from "lucide-react";
@@ -46,7 +47,7 @@ export default async function ConnectionsPage() {
                   {m.person.isDemo && <DemoBadge className="ml-2" />}
                   <p className="truncate text-sm text-muted">{m.person.headline ?? m.person.currentRole}</p>
                   <p className="mt-0.5 text-xs text-subtle">
-                    Matched {formatRelative(m.createdAt)} {m.score !== null && `· ${m.score}% compatibility`}
+                    Matched {formatRelative(m.createdAt)} {m.score !== null && !env.STUDENT_MODE && `· ${m.score}% compatibility`}
                   </p>
                 </div>
                 <div className="flex flex-col gap-1.5">

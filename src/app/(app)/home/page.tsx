@@ -5,8 +5,10 @@ import { eq } from "drizzle-orm";
 import { ArrowRight, Briefcase, MessageCircle, Rocket, Sparkles, Users } from "lucide-react";
 import { requireViewerPage } from "@/server/auth/session";
 import { env } from "@/server/env";
+import { cn } from "@/lib/utils";
 import { formatEventTime, listMyEvents } from "@/server/events";
 import { VerifiedStudentGate } from "@/components/student/verify-gate";
+import { ScoreNote } from "@/components/student/why-you-two";
 import { db } from "@/server/db";
 import { profiles } from "@/server/db/schema";
 import { getDailyRecommendations } from "@/server/recommendations";
@@ -81,9 +83,10 @@ async function TodaysMatches({ userId, seeking }: { userId: string; seeking: boo
                 <p className="truncate text-[13px] text-muted">{r.person.currentRole ?? r.person.headline}</p>
                 {r.person.isDemo && <DemoBadge className="mt-1" />}
               </div>
-              <ScoreRing score={r.score} size={44} />
+              {!r.whyYouTwo && <ScoreRing score={r.score} size={44} />}
             </div>
-            <p className="mt-3 line-clamp-2 text-[13px] text-muted">{r.reason}</p>
+            <p className={cn("mt-3 line-clamp-2 text-[13px]", r.whyYouTwo ? "text-foreground" : "text-muted")}>{r.whyYouTwo?.[0] ?? r.reason}</p>
+            {r.whyYouTwo && <ScoreNote score={r.score} className="mt-2" />}
             {r.action !== "none" && (
               <Badge className="mt-3 self-start" variant={r.action === "interested" ? "brand" : "neutral"}>
                 {r.action === "interested" ? "You're interested" : r.action === "saved" ? "Saved" : "Passed"}
