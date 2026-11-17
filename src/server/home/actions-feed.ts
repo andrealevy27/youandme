@@ -3,6 +3,8 @@ import { db } from "../db";
 import { bookings, needs, personalityProfiles, profiles, startupMembers } from "../db/schema";
 import { getProfileCompletion } from "../people";
 import { getPrimaryStartup } from "../startups";
+import { env } from "../env";
+import { STUDENT_HIDDEN_ROUTES } from "@/components/shell/nav-config";
 
 export type RecommendedAction = { key: string; title: string; description: string; href: string; cta: string };
 
@@ -63,5 +65,7 @@ export async function getRecommendedActions(userId: string): Promise<Recommended
     if (["quiz", "linkedin"].includes(m.key)) continue;
     out.push({ key: `complete-${m.key}`, title: m.label, description: "Makes your matches more accurate.", href: m.href, cta: "Update" });
   }
-  return out.slice(0, 5);
+  // Student mode: never point at features that are hidden ("Coming soon").
+  const visible = env.STUDENT_MODE ? out.filter((a) => !STUDENT_HIDDEN_ROUTES.some((r) => a.href === r || a.href.startsWith(`${r}/`))) : out;
+  return visible.slice(0, 5);
 }

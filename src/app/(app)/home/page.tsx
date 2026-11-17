@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import { eq } from "drizzle-orm";
 import { ArrowRight, Briefcase, MessageCircle, Rocket, Sparkles, Users } from "lucide-react";
 import { requireViewerPage } from "@/server/auth/session";
+import { env } from "@/server/env";
 import { db } from "@/server/db";
 import { profiles } from "@/server/db/schema";
 import { getDailyRecommendations } from "@/server/recommendations";
@@ -121,7 +122,7 @@ async function RecommendedConsultants({ userId }: { userId: string }) {
 async function Conversations({ userId }: { userId: string }) {
   const inbox = (await listInbox(userId, { limit: 6 })).slice(0, 4);
   if (!inbox.length) {
-    return <p className="text-sm text-muted">No conversations yet. When you match or book a consultant, your threads appear here.</p>;
+    return <p className="text-sm text-muted">No conversations yet. {env.STUDENT_MODE ? "When you match with someone, your conversation appears here." : "When you match or book a consultant, your threads appear here."}</p>;
   }
   return (
     <ul className="-mx-2">
@@ -257,8 +258,11 @@ export default async function HomePage() {
         <h1 className="text-[30px] leading-tight font-semibold tracking-tight sm:text-[40px]">
           {greeting(viewer.timezone)}, {first}.
         </h1>
-        <p className="mt-2 text-[15px] text-muted sm:text-base">Here&apos;s who and what could move your startup forward today.</p>
-        <Link
+        <p className="mt-2 text-[15px] text-muted sm:text-base">
+          {env.STUDENT_MODE ? "Here's who's worth meeting today." : "Here's who and what could move your startup forward today."}
+        </p>
+        {!env.STUDENT_MODE && (
+          <Link
           href="/ai"
           className="mt-6 flex items-center gap-3 rounded-[16px] border border-border bg-card px-4 py-3.5 text-[15px] text-subtle shadow-soft transition-colors hover:border-border-strong sm:max-w-xl"
         >
@@ -266,7 +270,8 @@ export default async function HomePage() {
             <Sparkles className="size-4" aria-hidden />
           </span>
           Tell FoundMate AI what you&apos;re working on…
-        </Link>
+          </Link>
+        )}
       </header>
 
       <section aria-labelledby="matches-h">
@@ -286,6 +291,8 @@ export default async function HomePage() {
 
       <div className="grid gap-10 lg:grid-cols-[1fr_340px]">
         <div className="min-w-0 space-y-10">
+          {!env.STUDENT_MODE && (
+          <>
           <section>
             <SectionHeader
               title="Recommended consultants"
@@ -303,15 +310,19 @@ export default async function HomePage() {
           <Suspense fallback={<CardSkeleton lines={3} />}>
             <Gaps userId={viewer.userId} />
           </Suspense>
+          </>
+          )}
         </div>
 
         <aside className="space-y-10">
+          {!env.STUDENT_MODE && (
           <section>
             <SectionHeader title="Your startup" />
             <Suspense fallback={<CardSkeleton />}>
               <YourStartup userId={viewer.userId} />
             </Suspense>
           </section>
+          )}
           <section>
             <SectionHeader
               title="Conversations"
