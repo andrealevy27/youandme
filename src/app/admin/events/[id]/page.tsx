@@ -45,10 +45,11 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
       </div>
       <div className="grid gap-6 lg:grid-cols-[1fr_320px]">
         <div className="space-y-6">
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
             <StatCard label="Attendees" value={stats.attendees} />
             <StatCard label="Introductions" value={stats.introductions} />
             <StatCard label="Matches" value={stats.matches} hint="Both said yes" tone="brand" />
+            <StatCard label="Cofounder trials" value={stats.trialsStarted} hint={`${stats.trialsContinuing} continuing`} />
           </div>
           <Card>
             <CardHeader>

@@ -246,16 +246,4 @@ export async function getEventIntroductions(viewer: { userId: string; adminRole:
     }));
 }
 
-/** Organizer numbers for one event (counts only — no profile details). */
-export async function getEventStats(eventId: string) {
-  const attendeeIds = db.select({ id: eventAttendees.userId }).from(eventAttendees).where(eq(eventAttendees.eventId, eventId));
-  const [[a], [intro], [m]] = await Promise.all([
-    db.select({ n: sql<number>`count(*)::int` }).from(eventAttendees).where(eq(eventAttendees.eventId, eventId)),
-    db.select({ n: sql<number>`count(*)::int` }).from(eventIntroductions).where(eq(eventIntroductions.eventId, eventId)),
-    db
-      .select({ n: sql<number>`count(*)::int` })
-      .from(matches)
-      .where(and(inArray(matches.userAId, attendeeIds), inArray(matches.userBId, attendeeIds))),
-  ]);
-  return { attendees: a?.n ?? 0, introductions: intro?.n ?? 0, matches: m?.n ?? 0 };
-}
+export { getEventFunnel as getEventStats } from "./dashboard";
