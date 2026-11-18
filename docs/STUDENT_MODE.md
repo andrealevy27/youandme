@@ -41,3 +41,18 @@ Add one line to `SCHOOLS` in `src/lib/schools.ts` (slug, name, short name, email
 
 Set `STUDENT_MODE=false` (or remove it) and redeploy. Student data stays in the database,
 unused, and reappears if you turn the flag back on.
+
+## Deploying on Vercel (fresh project)
+
+1. Neon: create a project and copy the **pooled** connection string.
+2. Vercel project settings:
+   - **Environment Variables:** `DATABASE_URL`, `BETTER_AUTH_SECRET` (`openssl rand -base64 32`),
+     `BETTER_AUTH_URL` and `NEXT_PUBLIC_APP_URL` (the site URL, e.g. `https://foundmate.vercel.app`),
+     `STUDENT_MODE=true`, `ADMIN_EMAILS`, and `RESEND_API_KEY` once your sending domain is verified.
+     `NEXT_PUBLIC_*` variables must be type **Config**, not Secret.
+   - **Build and Deployment → Build Command (Override):**
+     `npm run db:migrate && npx tsx src/server/db/seed/index.ts --reference-only && next build`
+     — applies migrations and loads reference data (skills, industries, quiz questions) on each deploy.
+     Demo data is never seeded in production.
+   - **Environments → Production → Branch Tracking:** `student-pivot`.
+3. Sign up at the site with an `ADMIN_EMAILS` address to get the admin dashboard and Events.
